@@ -47,6 +47,7 @@ class TimoneiroBaseController extends Controller
         }
 
         $data = $query->paginate();
+        $data->defaultView('timoneiro::pagination');
 
         $view = 'timoneiro::_models.index';
         if (view()->exists("timoneiro::$slug.index")) {

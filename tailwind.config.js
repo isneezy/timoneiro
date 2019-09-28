@@ -31,6 +31,9 @@ module.exports = {
             }),
             maxHeight: theme => ({
                 'top-bar-h': theme('spacing.top-bar-h')
+            }),
+            minWidth: theme => ({
+                8: theme('spacing.8')
             })
         },
     },

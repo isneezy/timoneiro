@@ -48,19 +48,13 @@
                 </label>
             </div>
         </div>
-        <div>
+        <div class="overflow-x-auto w-full">
             <table class="w-full">
                 <thead>
                     @foreach($dataType->list_display as $column)
-                        <th class="p-3 pr-8 cursor-pointer relative whitespace-no-wrap border-b-2">
+                        <th class="p-3 cursor-pointer relative whitespace-no-wrap border-b-2">
                             <div class="flex items-center">
                                 <span class="flex-1">{{ $column }}</span>
-                                <span class="w-1">
-                                    <svg class="h-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 65.492 123.358" width="65.492" height="123.358"><defs><clipPath id="_clipPath_SDK7jcufiwZNkxPa0N26w1e9UKFCNL1d"><rect width="65.492" height="123.358"/></clipPath></defs><g clip-path="url(#_clipPath_SDK7jcufiwZNkxPa0N26w1e9UKFCNL1d)"><g><g><path d=" M 0.331 80.267 C 0.108 80.564 0 80.915 0 81.261 C 0 81.613 0.113 81.97 0.342 82.267 L 31.437 122.715 C 31.75 123.121 32.236 123.358 32.745 123.358 C 33.258 123.358 33.741 123.119 34.055 122.715 L 65.149 82.268 C 65.603 81.678 65.605 80.863 65.158 80.267 C 64.712 79.677 63.926 79.456 63.236 79.727 L 42.645 87.86 L 42.645 1.65 C 42.645 0.736 41.908 0 40.997 0 L 24.495 0 C 23.585 0 22.844 0.736 22.844 1.65 L 22.844 87.86 L 2.255 79.727 C 1.566 79.456 0.781 79.678 0.331 80.267 Z " fill="currentColor"/></g></g></g></svg>
-                                </span>
-                                <span class="w-1">
-                                    <svg class="h-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 65.492 123.358" width="65.492" height="123.358"><defs><clipPath id="_clipPath_f583ZFfHPYybMgwXZXG8c9teiBO9vQFn"><rect width="65.492" height="123.358"/></clipPath></defs><g clip-path="url(#_clipPath_f583ZFfHPYybMgwXZXG8c9teiBO9vQFn)"><g><g><path d=" M 65.161 43.091 C 65.383 42.794 65.492 42.442 65.492 42.097 C 65.492 41.745 65.378 41.388 65.15 41.091 L 34.054 0.643 C 33.742 0.237 33.256 0 32.747 0 C 32.234 0 31.75 0.239 31.436 0.643 L 0.343 41.09 C -0.112 41.68 -0.114 42.495 0.334 43.091 C 0.779 43.681 1.566 43.902 2.256 43.631 L 22.846 35.498 L 22.846 121.708 C 22.846 122.622 23.584 123.358 24.495 123.358 L 40.996 123.358 C 41.907 123.358 42.647 122.622 42.647 121.708 L 42.647 35.498 L 63.237 43.631 C 63.925 43.902 64.711 43.68 65.161 43.091 Z " fill="currentColor"/></g></g></g></svg>
-                                </span>
                             </div>
                         </th>
                     @endforeach
@@ -77,6 +71,23 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="flex items-center mt-3">
+            @php
+                $total = $data->total();
+                $currentPage = $data->currentPage();
+                $perPage = $data->perPage();
+                $to = ($currentPage * $perPage);
+                $from = $to  - $perPage + 1;
+            @endphp
+            <div>Showing {{ $from  }} to {{ $to < $total ? $to : $total }} of {{ $total }} entries</div>
+            {{--<div class="flex-1">--}}
+                {{--<ul class="flex">--}}
+                    {{--<li><a class="rounded text-white p-2 bg-primary mr-3 text-center" href="javascript:void(0)"><i class="mdi mdi-chevron-left"></i></a></li>--}}
+                    {{--<li><a class="rounded text-white p-2 bg-primary mr-3 text-center" href="javascript:void(0)"><i class="mdi mdi-chevron-right"></i></a></li>--}}
+                {{--</ul>--}}
+            {{--</div>--}}
+            {{ $data->links() }}
         </div>
     </div>
 @stop

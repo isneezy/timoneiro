@@ -3,3 +3,23 @@
 @tailwind components;
 
 @tailwind utilities;
+
+
+/**===== Pagination ======**/
+.page-link {
+    @apply block bg-gray-300 rounded p-2 min-w-8 text-white text-center;
+    @apply text-gray-700;
+}
+
+.page-link.disabled {
+    @apply text-gray-500;
+}
+
+.page-link.active {
+    @apply bg-primary;
+    @apply text-white;
+}
+
+li:not(:last-child) .page-link {
+    @apply mr-3;
+}
