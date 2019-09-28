@@ -1,0 +1,23 @@
+{
+    "name": "isneezy/timoneiro",
+    "description": "A Laravel Admin Package to make your life esier",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Vilanculo",
+            "email": "vilanculoivan@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "arrilot/laravel-widgets": "^3.13",
+        "doctrine/dbal": "^2.9"
+    },
+    "autoload": {
+        "classmap": [],
+        "psr-4": {
+            "Isneezy\\Timoneiro\\": "src/"
+        }
+    }
+}
