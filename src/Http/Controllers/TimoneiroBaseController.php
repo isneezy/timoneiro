@@ -3,6 +3,7 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -24,13 +25,20 @@ class TimoneiroBaseController extends Controller
         $model = app($dataType->model_name);
         // Todo check for permission
         // $this->authorize('browse', app($dataType->model_name));
-        $searchNames = [];
-        $searchable = array_keys(DatabaseSchemaManager::describeTable($model->getTable())->toArray());
-        foreach ($searchable as $value) {
-            $searchNames[$value] = null ?: ucwords(str_replace('_', ' ', $value));
-        }
+        $search = $request->get('s');
+
 
         $query = $model->newQuery();
+
+        if ($search) {
+            $searchable = array_keys(DatabaseSchemaManager::describeTable($model->getTable())->toArray());
+            $query->where(function (Builder $query) use ($search, $searchable) {
+                foreach ($searchable as $column) {
+                    $query->orWhere($column, 'LIKE', "%$search%");
+                }
+            });
+        }
+
         foreach ($dataType->scopes as $scope) {
             $query->{$scope}();
         }
@@ -46,7 +54,8 @@ class TimoneiroBaseController extends Controller
             }
         }
 
-        $data = $query->paginate();
+        $perPage = $request->get('limit', 10);
+        $data = $query->paginate($perPage);
         $data->defaultView('timoneiro::pagination');
 
         $view = 'timoneiro::_models.index';
@@ -58,12 +67,9 @@ class TimoneiroBaseController extends Controller
             'dataType',
             'data',
             'useSoftDeletes',
-            'showSoftDeleted'
+            'showSoftDeleted',
+            'perPage'
         );
-
-        if ($request->wantsJson()) {
-            return response()->json($viewData);
-        }
 
         return Timoneiro::view($view, $viewData);
     }
