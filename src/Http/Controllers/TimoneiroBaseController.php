@@ -43,6 +43,13 @@ class TimoneiroBaseController extends Controller
             $query->{$scope}();
         }
 
+        $orderBy = request('sort.column', null);
+        $sortOrder = request('sort.direction', null);
+
+        if ($orderBy && $sortOrder) {
+            $query->orderBy($orderBy, $sortOrder);
+        }
+
         $useSoftDeletes = false;
         $showSoftDeleted = false;
 
@@ -66,6 +73,8 @@ class TimoneiroBaseController extends Controller
         $viewData = compact(
             'dataType',
             'data',
+            'orderBy',
+            'sortOrder',
             'useSoftDeletes',
             'showSoftDeleted',
             'perPage'
