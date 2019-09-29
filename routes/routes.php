@@ -12,8 +12,8 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
         try {
             foreach (Isneezy\Timoneiro\Timoneiro::dataTypes() as $dataType) {
                 /** @var $dataType \Isneezy\Timoneiro\DataType */
-                $breadController = $dataType->controller();
-                $slug = $dataType->slug();
+                $breadController = $dataType->controller;
+                $slug = $dataType->slug;
 
                 Route::resource($slug, $breadController);
             }

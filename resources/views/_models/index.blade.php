@@ -1,6 +1,6 @@
 @extends('timoneiro::master')
 
-@section('title', 'Visualizando '.$dataType->display_name_plural)
+@section('title', 'Viewing '.$dataType->display_name_plural)
 @section('page_title', $dataType->display_name_plural)
 
 @section('page_content')
@@ -11,7 +11,7 @@
                 <a
                     class="text-white px-3 py-2 bg-primary leading-normal rounded"
                     href="{{ route("timoneiro.$dataType->slug.create") }}">
-                    <i class="mdi mdi-plus-circle"></i> Add {{ $dataType->display_name_plural }}
+                    <i class="mdi mdi-plus-circle"></i> Add {{ $dataType->display_name_singular }}
                 </a>
             </div>
         </div>
@@ -54,7 +54,7 @@
                     @foreach($dataType->list_display as $column)
                         <th class="p-3 cursor-pointer relative whitespace-no-wrap border-b-2">
                             <div class="flex items-center">
-                                <span class="flex-1">{{ $column }}</span>
+                                <span class="flex-1">{{ $dataType->getColumnLabel($column) }}</span>
                             </div>
                         </th>
                     @endforeach

@@ -7,15 +7,20 @@ use isneezy\timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
+    protected static $isDataTypesLoaded = false;
     protected static $dataTypes = [];
 
-    public static function dataTypes() {
-        if (empty(self::$dataTypes)) {
+    public static function loadDataTypes() {
+        if (!self::$isDataTypesLoaded) {
             foreach (config('timoneiro.models') as $key => $model) {
                 $dataType = DataType::make($key, $model);
-                self::$dataTypes[$dataType->slug()] = $dataType;
+                self::useDataType($dataType);
             }
         }
+    }
+
+    public static function dataTypes() {
+        self::loadDataTypes();
         return self::$dataTypes;
     }
 
@@ -24,7 +29,18 @@ class Timoneiro
      * @return DataType
      */
     public static function dataType($slug) {
+        self::loadDataTypes();
         return self::$dataTypes[$slug];
+    }
+
+    /**
+     * @param string | AbstractDataType $dataType
+     */
+    public static function useDataType($dataType) {
+        if (is_string($dataType)) {
+            $dataType = app($dataType);
+        }
+        self::$dataTypes[$dataType->slug] = $dataType;
     }
 
     public static function routes() {

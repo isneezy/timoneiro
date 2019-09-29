@@ -5,17 +5,17 @@ return [
     ],
     'models' => [
         'Users' => [
-            'model' => \App\User::class,
+            'model_name' => \App\User::class,
             // 'list_display' => ['name', 'email', 'verified'],
-            'icon-class' => 'mdi mdi-account-multiple'
+            'icon_class' => 'mdi mdi-account-multiple'
         ],
         'Roles' => [
-            'model' => \Isneezy\Timoneiro\Models\Role::class,
-            'icon-class' => 'mdi mdi-lock'
+            'model_name' => \Isneezy\Timoneiro\Models\Role::class,
+            'icon_class' => 'mdi mdi-lock'
         ],
         'Settings' => [
-            'model' => \Isneezy\Timoneiro\Models\Role::class,
-            'icon-class' => 'mdi mdi-settings'
+            'model_name' => \Isneezy\Timoneiro\Models\Role::class,
+            'icon_class' => 'mdi mdi-settings'
         ]
     ],
     'dashboard' => [

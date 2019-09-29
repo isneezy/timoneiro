@@ -19,5 +19,8 @@
         "psr-4": {
             "Isneezy\\Timoneiro\\": "src/"
         }
+    },
+    "require-dev": {
+        "laravel/framework": "^6.0"
     }
 }
