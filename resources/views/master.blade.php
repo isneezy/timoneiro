@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,400,600" rel="stylesheet">
 
     <!-- Material design Icons -->
-    <link href="https://cdn.materialdesignicons.com/1.1.34/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@mdi/font@4.4.95/css/materialdesignicons.min.css" rel="stylesheet">
 
     <!-- App css -->
     <link rel="stylesheet" href="{{ timoneiro_assets('css/style.css') }}">
@@ -24,7 +24,7 @@
     <div class="h-screen pt-16 flex">
         @include('timoneiro::dashboard.sidebar')
         <div class="overflow-auto px-4 flex-1">
-            <div class="container w-full px-2">
+            <div class="container w-full px-2 mx-auto">
                 <div class="flex -mx-2">
                     <div class="w-full px-2 flex items-center">
                         <h4 class="flex-1 text-2xl font-bold text-dark my-6">@yield('page_title')</h4>

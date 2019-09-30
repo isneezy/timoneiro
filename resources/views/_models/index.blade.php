@@ -19,9 +19,10 @@
         <div class="overflow-x-auto w-full">
             <table class="w-full">
                 <thead>
-                    @foreach($dataType->list_display as $column)
-                        <th class="p-3 cursor-pointer relative whitespace-no-wrap border-b-2">
-                            @php
+                    <tr>
+                        @foreach($dataType->list_display as $column)
+                            <th class="p-3 cursor-pointer relative whitespace-no-wrap border-b-2">
+                                @php
                                     $sort_column = $orderBy;
                                     $sort_direction = $sortOrder ?? 'asc';
                                     $sort_direction = $sort_direction === 'asc' && $column === $sort_column  ? 'desc': 'asc';
@@ -33,30 +34,37 @@
                                      );
                                     array_push($classes, $sort_column === $column ? 'text-gray-700' : 'text-gray-400');
                                     $classes = implode(' ', $classes);
-                            @endphp
-                            <a
-                                class="flex items-center"
-                                href="{{
+                                @endphp
+                                <a
+                                    class="flex items-center"
+                                    href="{{
                                  request()->fullUrlWithQuery(['sort' => [
                                     'column' => $column,
                                      'direction' => $sort_direction
                                  ]])
                                 }}"
-                            >
-                                <span class="flex-1">{{ $dataType->getColumnLabel($column) }}</span>
-                                <i class="{{ $classes }}"></i>
-                            </a>
-                        </th>
-                    @endforeach
+                                >
+                                    <span class="flex-1">{{ $dataType->getColumnLabel($column) }}</span>
+                                    <i class="{{ $classes }}"></i>
+                                </a>
+                            </th>
+                        @endforeach
+                        <th class="p-3 cursor-pointer relative whitespace-no-wrap border-b-2">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach($data->items() as $item)
                         <tr class="bg-black hover:bg-gray-200  hover:text-gray-700">
                             @foreach($dataType->list_display as $column)
-                                <td class="relative cursor-pointer whitespace-no-wrap p-3 border-t">
+                                <td class="relative whitespace-no-wrap p-3 border-t">
                                     {{ $item->{$column} }}
                                 </td>
                             @endforeach
+                            <th class="relative cursor-pointer whitespace-no-wrap p-3 border-t text-right text-lg">
+                                @foreach($actions as $action)
+                                    @include('timoneiro::_models.partials.actions')
+                                @endforeach
+                            </th>
                         </tr>
                     @endforeach
                 </tbody>

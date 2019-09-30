@@ -38643,6 +38643,12 @@ window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jqu
 
 __webpack_require__(/*! datatables.net */ "./node_modules/datatables.net/js/jquery.dataTables.js");
 
+$(document).ready(function () {
+  var searchForm = $('#search-form');
+  $('#search-form select').change(function () {
+    searchForm.submit();
+  });
+});
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app'
 });

@@ -3,12 +3,22 @@
 namespace Isneezy\Timoneiro;
 
 use Arrilot\Widgets\Facade as Widget;
+use Isneezy\Timoneiro\Actions\DeleteAction;
+use Isneezy\Timoneiro\Actions\EditAction;
+use Isneezy\Timoneiro\Actions\RestoreAction;
+use Isneezy\Timoneiro\Actions\ViewAction;
 use isneezy\timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
     protected static $isDataTypesLoaded = false;
     protected static $dataTypes = [];
+    protected static $actions = [
+        ViewAction::class,
+        EditAction::class,
+        DeleteAction::class,
+        RestoreAction::class
+    ];
 
     public static function loadDataTypes() {
         if (!self::$isDataTypesLoaded) {
@@ -50,6 +60,20 @@ class Timoneiro
     public static function view($name, array $params = [])
     {
         return view($name, $params);
+    }
+
+    public static function actions() {
+        return self::$actions;
+    }
+
+    public static function addAction($action) {
+        array_push(self::$actions, $action);
+    }
+
+    public static function replaceAction($actionToReplace, $action)
+    {
+        $key = array_search($actionToReplace, self::$actions);
+        self::$actions[$key] = $action;
     }
 
     public static function dimmers() {

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Isneezy\Timoneiro\Actions\AbstractAction;
 use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
 use Isneezy\Timoneiro\Timoneiro;
 
@@ -65,12 +66,25 @@ class TimoneiroBaseController extends Controller
         $data = $query->paginate($perPage);
         $data->defaultView('timoneiro::pagination');
 
+        // Actions
+        $actions = [];
+        if (!empty($data->first())) {
+            foreach (Timoneiro::actions() as $action) {
+                /** @var AbstractAction $action */
+                $action = new $action($dataType, $data->first());
+                if ($action->shouldActionDisplayOnDataType()) {
+                    $actions[] = $action;
+                }
+            }
+        }
+
         $view = 'timoneiro::_models.index';
         if (view()->exists("timoneiro::$slug.index")) {
             $view = "timoneiro::$slug.index";
         }
 
         $viewData = compact(
+            'actions',
             'dataType',
             'data',
             'orderBy',
@@ -81,5 +95,12 @@ class TimoneiroBaseController extends Controller
         );
 
         return Timoneiro::view($view, $viewData);
+    }
+
+    public function edit(Request $request, $id) {
+        $slug = $this->getSlug($request);
+        $dataType = Timoneiro::dataType($slug);
+
+        $model = app($dataType->model_name);
     }
 }
