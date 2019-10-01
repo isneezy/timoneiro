@@ -4,6 +4,7 @@ namespace Isneezy\Timoneiro;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use isneezy\timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 
 class TimoneiroServiceProvider extends ServiceProvider
@@ -16,6 +17,7 @@ class TimoneiroServiceProvider extends ServiceProvider
     public function register()
     {
         $this->loadHelpers();
+        $this->registerFormFields();
         $this->registerConfigs();
     }
 
@@ -39,5 +41,14 @@ class TimoneiroServiceProvider extends ServiceProvider
 
     public function registerConfigs() {
         $this->mergeConfigFrom(dirname(__DIR__).'/publishable/config/timoneiro.php', 'timoneiro');
+    }
+
+    public function registerFormFields() {
+        $formFields = ['date', 'number', 'text'];
+
+        foreach ($formFields as $formField) {
+            $class = Str::studly("{$formField}_handler");
+            Timoneiro::addFormField("\\Isneezy\\Timoneiro\\FormFields\\{$class}");
+        }
     }
 }

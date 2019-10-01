@@ -101,6 +101,43 @@ class TimoneiroBaseController extends Controller
         $slug = $this->getSlug($request);
         $dataType = Timoneiro::dataType($slug);
 
+        /** @var Model $model */
         $model = app($dataType->model_name);
+        foreach ($dataType->scopes as $scope) {
+            $model = $model->{$scope}();
+        }
+
+        $data = $model->findOrFail($id);
+
+        // foreach ($dataType->field_set) {}
+        // todo check permissions
+
+        $view = 'timoneiro::_models.edit-add';
+
+        if (view()->exists("timoneiro::$slug.edit-add")) {
+            $view = "timoneiro::$slug.edit-add";
+        }
+
+        return Timoneiro::view($view, compact('dataType', 'data'));
+    }
+
+    public function update(Request $request, $id) {
+        $slug = $this->getSlug($request);
+
+        $dataType = Timoneiro::dataType($slug);
+        /** @var Model $model */
+        $model = app($dataType->model_name);
+
+        foreach ($dataType->scopes as $scope) {
+            $model = $model->{$scope}();
+        }
+
+        /** @var Model $data */
+        $data = $model->findOrFail($id);
+
+        // todo Check permission
+        // todo validate fields
+        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
+        return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 }

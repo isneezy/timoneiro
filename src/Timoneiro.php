@@ -3,16 +3,24 @@
 namespace Isneezy\Timoneiro;
 
 use Arrilot\Widgets\Facade as Widget;
+use ErrorException;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Isneezy\Timoneiro\Actions\DeleteAction;
 use Isneezy\Timoneiro\Actions\EditAction;
 use Isneezy\Timoneiro\Actions\RestoreAction;
 use Isneezy\Timoneiro\Actions\ViewAction;
+use Isneezy\Timoneiro\DataType\AbstractDataType;
+use Isneezy\Timoneiro\DataType\DataType;
+use Isneezy\Timoneiro\DataType\DataTypeField;
+use Isneezy\Timoneiro\FormFields\HandlerInterface;
 use isneezy\timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
     protected static $isDataTypesLoaded = false;
     protected static $dataTypes = [];
+    protected static $formFields = [];
     protected static $actions = [
         ViewAction::class,
         EditAction::class,
@@ -74,6 +82,28 @@ class Timoneiro
     {
         $key = array_search($actionToReplace, self::$actions);
         self::$actions[$key] = $action;
+    }
+
+    /**
+     * @param DataTypeField $field
+     * @param DataType $dataType
+     * @param Model $data
+     * @return string
+     * @throws ErrorException
+     */
+    public static function formField($field, $dataType, $data) {
+        $formField = Arr::get(self::$formFields, $field->type);
+        if ($formField) {
+            return $formField->handle($field, $dataType, $data);
+        }
+        throw new ErrorException("No Handler for `$field->type` found.");
+    }
+
+    public static function addFormField($handler) {
+        if (!$handler instanceof HandlerInterface) {
+            $handler = app($handler);
+        }
+        self::$formFields[$handler->getCodename()] = $handler;
     }
 
     public static function dimmers() {

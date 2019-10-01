@@ -3,7 +3,7 @@ namespace Isneezy\Timoneiro\Actions;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Isneezy\Timoneiro\DataType;
+use Isneezy\Timoneiro\DataType\DataType;
 
 abstract class AbstractAction implements ActionInterface
 {

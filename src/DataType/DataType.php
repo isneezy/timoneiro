@@ -1,6 +1,6 @@
 <?php
 
-namespace Isneezy\Timoneiro;
+namespace Isneezy\Timoneiro\DataType;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -12,11 +12,11 @@ use Illuminate\Support\Str;
 class DataType extends AbstractDataType
 {
     /**
-     * @param $key
+     * @param $slug
      * @param $options array | string
      * @return DataType
      */
-    public static function make($key, $options)
+    public static function make($slug, $options)
     {
         if (is_string($options)) {
             $options = ['model_name' => $options];
@@ -24,7 +24,7 @@ class DataType extends AbstractDataType
 
         $options['slug'] = value_fallback(
             Arr::get($options, 'slug'),
-            Str::kebab(Str::plural(Arr::get($options, 'slug', $key)))
+            Str::kebab(Str::plural($slug))
         );
 
         $dataType = new DataType($options);
