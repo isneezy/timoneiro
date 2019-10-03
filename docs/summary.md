@@ -1,5 +1,4 @@
-# Introduction
+# Summary
 
-Welcome to Timoneiro documentation page.
-![Timoneiro Screenshot](screenshot.png)
- 
+## Getting Started
+* [Installation](getting-started/installation.md)

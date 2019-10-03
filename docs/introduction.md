@@ -1,5 +1,4 @@
 # Introduction
 
-Welcome to the Timoneiro documentation
-
+Welcome to Timoneiro documentation page.
 ![Timoneiro Screenshot](screenshot.png)
