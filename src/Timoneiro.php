@@ -14,10 +14,12 @@ use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\DataType\DataTypeField;
 use Isneezy\Timoneiro\FormFields\HandlerInterface;
+use Isneezy\Timoneiro\Models\Setting;
 use isneezy\timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
+    protected static $settings = [];
     protected static $isDataTypesLoaded = false;
     protected static $dataTypes = [];
     protected static $formFields = [];
@@ -104,6 +106,16 @@ class Timoneiro
             $handler = app($handler);
         }
         self::$formFields[$handler->getCodename()] = $handler;
+    }
+
+    public static function setting($key, $default = null) {
+        if (empty(self::$settings)) {
+            foreach (Setting::all() as $setting) {
+                self::$settings[$setting->key] = $setting->value;
+            }
+        }
+
+        return Arr::get(self::$settings, $key, $default);
     }
 
     public static function dimmers() {

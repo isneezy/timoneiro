@@ -5,7 +5,7 @@ namespace Isneezy\Timoneiro;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use isneezy\timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
+use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 
 class TimoneiroServiceProvider extends ServiceProvider
 {
