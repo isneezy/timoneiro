@@ -3,7 +3,7 @@
 Inspired by [django admin](https://github.com/django/django/tree/master/django/contrib/admin)
 and [Laravel Voyager](https://voyager.devdojo.com/), Timoneiro is a Laravel Admin Package created to make your life easier.
 
-Website and documentation: [Todo]()
+Website and documentation: [https://timoneiro.vilanculo.me](https://timoneiro.vilanculo.me)
 
 <hr>
 
