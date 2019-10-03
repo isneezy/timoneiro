@@ -2,4 +2,4 @@
 
 Welcome to the Timoneiro documentation
 
-![Timoneiro Logo](screenshot.png)
+![Timoneiro Screenshot](screenshot.png)
