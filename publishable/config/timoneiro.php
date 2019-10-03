@@ -12,10 +12,6 @@ return [
         'Roles' => [
             'model_name' => \Isneezy\Timoneiro\Models\Role::class,
             'icon_class' => 'mdi mdi-lock'
-        ],
-        'Settings' => [
-            'model_name' => \Isneezy\Timoneiro\Models\Role::class,
-            'icon_class' => 'mdi mdi-settings'
         ]
     ],
     'dashboard' => [
@@ -24,5 +20,7 @@ return [
             \isneezy\timoneiro\Widgets\UserDimmer::class,
             \isneezy\timoneiro\Widgets\UserDimmer::class,
         ]
+    ],
+    'settings' => [
     ]
 ];

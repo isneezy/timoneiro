@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use isneezy\timoneiro\Http\Controllers\ContentTypes\Text;
+use Isneezy\Timoneiro\Http\Controllers\ContentTypes\Text;
 
 class Controller extends BaseController
 {

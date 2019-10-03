@@ -65,3 +65,9 @@ if (!function_exists('timoneiro_assets')) {
         return route('timoneiro.assets') . '?path=' . urlencode($name);
     }
 }
+
+if (!function_exists('setting')) {
+    function setting($key, $default = null) {
+        return Timoneiro::setting($key, $default);
+    }
+}

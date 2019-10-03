@@ -22,6 +22,11 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
         }
     });
 
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('/', 'TimoneiroSettingsController@index')->name('index');
+        Route::put('/', 'TimoneiroSettingsController@update')->name('update');
+    });
+
     // Assets Route
     Route::get('timoneiro-assets', 'TimoneiroController@assets')->name('assets');
 });

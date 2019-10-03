@@ -1,6 +1,6 @@
 <?php
 
-namespace isneezy\timoneiro\Http\Controllers\ContentTypes;
+namespace Isneezy\Timoneiro\Http\Controllers\ContentTypes;
 
 
 class Text extends BaseType
