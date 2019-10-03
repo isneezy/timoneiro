@@ -15,7 +15,7 @@ composer require isneezy/timoneiro
 ```
 **2. Register the Service Provider**  
 
-In `conf/app.php` file of your laravel project, register the `TimoneiroServiceProvider`
+In `config/app.php` file of your laravel project, register the `TimoneiroServiceProvider`
 ```php
 <?php
 return [
@@ -46,7 +46,7 @@ mkdir packages
 cd packages && git clone git@github.com:user/timoneiro.git
 ```
 
-**4. Register composer development repo in your `package.json` file as follows:**
+**4. Register composer development repo in your `composer.json` file as follows:**
 
 ```json
 {
