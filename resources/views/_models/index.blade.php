@@ -60,11 +60,11 @@
                                     {{ $item->{$column} }}
                                 </td>
                             @endforeach
-                            <th class="relative cursor-pointer whitespace-no-wrap p-3 border-t text-right text-lg">
+                            <td class="relative cursor-pointer whitespace-no-wrap p-3 border-t text-right text-lg">
                                 @foreach($actions as $action)
                                     @include('timoneiro::_models.partials.actions')
                                 @endforeach
-                            </th>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

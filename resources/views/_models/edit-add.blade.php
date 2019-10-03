@@ -8,16 +8,29 @@
 @section('title', ($edit ? 'Edit' : 'Add').' '.$dataType->display_name_singular)
 @section('page_title', ($edit ? 'Edit' : 'Add').' '.$dataType->display_name_singular)
 
+@section('submit-buttons')
+    @component('timoneiro::components.button')
+        @slot('variant', 'success')
+        Save
+    @endcomponent
+    @component('timoneiro::components.button')
+        @slot('variant', 'white')
+        @slot('type', 'reset')
+        @slot('color', '')
+        Reset
+    @endcomponent
+@endsection
+
 @section('page_content')
     <form
         action="{{ route("timoneiro.$dataType->slug.". ($edit ? 'update' : 'store' ), $data->getKey()) }}"
         method="post"
         enctype="multipart/form-data"
     >
-        @if($edit)
-            {{ method_field('PUT') }}
-        @endif
-        <!-- CSRF TOKEN -->
+    @if($edit)
+        {{ method_field('PUT') }}
+    @endif
+    <!-- CSRF TOKEN -->
         {{ csrf_field() }}
 
         <div class="bg-white rounded p-5">
@@ -41,19 +54,7 @@
                 </div>
             @endforeach
 
-            <div class="w-full px-2">
-                @section('submit-buttons')
-                    @component('timoneiro::components.button')
-                        @slot('variant', 'success')
-                        Save
-                    @endcomponent
-                    @component('timoneiro::components.button')
-                        @slot('variant', 'white')
-                        @slot('type', 'reset')
-                        @slot('color', '')
-                        Reset
-                    @endcomponent
-                @endsection
+            <div class="w-full">
                 @yield('submit-buttons')
             </div>
         </div>

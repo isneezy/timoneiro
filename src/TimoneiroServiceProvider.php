@@ -44,7 +44,7 @@ class TimoneiroServiceProvider extends ServiceProvider
     }
 
     public function registerFormFields() {
-        $formFields = ['date', 'number', 'text'];
+        $formFields = ['date', 'number', 'select_dropdown', 'text'];
 
         foreach ($formFields as $formField) {
             $class = Str::studly("{$formField}_handler");

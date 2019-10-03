@@ -11,6 +11,7 @@ use Isneezy\Timoneiro\DataType\Traits\HasOptions;
  * @package Isneezy\Timoneiro\DataType
  * @property string name
  * @property string display_name
+ * @property string placeholder
  */
 class DataTypeField
 {
@@ -28,12 +29,15 @@ class DataTypeField
     }
 
     public function getDisplayNameOption($value) {
-        $name = value_fallback($value, $this->name);
-        return Str::title(str_replace('_', ' ', $name));
+        return Str::title(value_fallback($value, function () {
+            return $this->options['display_name'] = str_replace('_', ' ', $this->name);
+        }));
     }
 
     public function getPlaceHolderOption($value) {
-        return $this->getDisplayNameOption($value);
+        return value_fallback($value, function () {
+            return $this->options['placeholder'] = $this->display_name;
+        });
     }
 
     public function getTypeOption($type) {

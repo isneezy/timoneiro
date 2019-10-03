@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Isneezy\Timoneiro\Actions\AbstractAction;
 use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
+use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
 use Isneezy\Timoneiro\Timoneiro;
 
 class TimoneiroBaseController extends Controller
 {
+    use RelationShipParser;
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -28,11 +30,11 @@ class TimoneiroBaseController extends Controller
         // $this->authorize('browse', app($dataType->model_name));
         $search = $request->get('s');
 
-
-        $query = $model->newQuery();
+        $dataType->removeRelationshipFields();
+        $query = $model->query();
 
         if ($search) {
-            $searchable = array_keys(DatabaseSchemaManager::describeTable($model->getTable())->toArray());
+            $searchable = array_keys($dataType->field_set);
             $query->where(function (Builder $query) use ($search, $searchable) {
                 foreach ($searchable as $column) {
                     $query->orWhere($column, 'LIKE', "%$search%");
@@ -107,6 +109,7 @@ class TimoneiroBaseController extends Controller
             $model = $model->{$scope}();
         }
 
+        $dataType->removeRelationshipFields('edit');
         $data = $model->findOrFail($id);
 
         // foreach ($dataType->field_set) {}
@@ -145,6 +148,8 @@ class TimoneiroBaseController extends Controller
         $slug = $this->getSlug($request);
         $dataType = Timoneiro::dataType($slug);
 
+        $dataType->removeRelationshipFields('create');
+        /** @var Model $data */
         $data = app($dataType->model_name);
 
         // todo check permission
