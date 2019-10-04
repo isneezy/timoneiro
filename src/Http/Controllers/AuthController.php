@@ -3,7 +3,7 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use isneezy\timoneiro\Timoneiro;
+use Isneezy\Timoneiro\Facades\Timoneiro;
 
 class AuthController extends Controller
 {

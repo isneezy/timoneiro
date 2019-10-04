@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Isneezy\Timoneiro\DataType\DataType;
+use Isneezy\Timoneiro\Facades\Timoneiro;
+
 $namespacePrefix = '\\'.config('timoneiro.controllers.namespace').'\\';
 
 Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function () {
@@ -10,8 +14,8 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
         Route::get('/', 'TimoneiroController@index')->name('dashboard');
 
         try {
-            foreach (Isneezy\Timoneiro\Timoneiro::dataTypes() as $dataType) {
-                /** @var $dataType \Isneezy\Timoneiro\DataType */
+            foreach (Timoneiro::dataTypes() as $dataType) {
+                /** @var $dataType DataType */
                 $breadController = $dataType->controller;
                 $slug = $dataType->slug;
 

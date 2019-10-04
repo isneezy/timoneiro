@@ -34,7 +34,7 @@
                                     <label class="block">
                                         <div
                                             class="font-bold block mb-2 cursor-pointer">{{ $setting->display_name }}</div>
-                                        {!! \Isneezy\Timoneiro\Timoneiro::formField($setting, null, $data->get($setting->name)) !!}
+                                        {!! Timoneiro::formField($setting, null, $data->get($setting->name)) !!}
                                     </label>
                                 </div>
                             </div>

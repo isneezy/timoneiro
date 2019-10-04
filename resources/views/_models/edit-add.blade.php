@@ -47,7 +47,7 @@
                         <div class="mb-6">
                             <label class="block">
                                 <div class="font-bold block mb-2 cursor-pointer">{{ $field->display_name }}</div>
-                                {!! \Isneezy\Timoneiro\Timoneiro::formField($field, $dataType, $data) !!}
+                                {!! Timoneiro::formField($field, $dataType, $data) !!}
                             </label>
                         </div>
                     </div>
