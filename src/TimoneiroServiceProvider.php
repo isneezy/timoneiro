@@ -24,9 +24,15 @@ class TimoneiroServiceProvider extends ServiceProvider
         $this->app->singleton('timoneiro', function () {
             return new Timoneiro();
         });
+
         $this->loadHelpers();
         $this->registerFormFields();
+
         $this->registerConfigs();
+
+        if ($this->app->runningInConsole()) {
+            $this->registerPublishableResources();
+        }
     }
 
     /**
@@ -60,6 +66,20 @@ class TimoneiroServiceProvider extends ServiceProvider
         foreach ($formFields as $formField) {
             $class = Str::studly("{$formField}_handler");
             Timoneiro::addFormField("\\Isneezy\\Timoneiro\\FormFields\\{$class}");
+        }
+    }
+
+    public function registerPublishableResources()
+    {
+        $path = sprintf('%s/publishable', dirname(__DIR__));
+        $publishable = [
+            'timoneiro-config' => [
+                "{$path}/config/timoneiro.php" => config_path('timoneiro.php')
+            ]
+        ];
+
+        foreach ($publishable as $group => $paths) {
+            $this->publishes($paths, $group);
         }
     }
 }
