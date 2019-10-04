@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ivan
- * Date: 10/1/19
- * Time: 6:10 PM.
- */
-
 namespace Isneezy\Timoneiro\Http\Controllers\ContentTypes;
 
 use Illuminate\Http\Request;
