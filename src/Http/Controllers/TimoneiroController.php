@@ -17,7 +17,8 @@ class TimoneiroController extends Controller
     public function assets(Request $request)
     {
         $path = str_start(str_replace(['../', './'], '', urldecode($request->path)), '/');
-        $path = base_path("packages/laradzosa/publishable/assets$path");
+        $path = base_path("vendor/isneezy/timoneiro/publishable/assets{$path}");
+
         if (File::exists($path)) {
             if (Str::endsWith($path, '.js')) {
                 $mime = 'text/javascript';
