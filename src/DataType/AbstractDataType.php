@@ -39,11 +39,17 @@ class AbstractDataType
         return Str::start($this->options['controller'], '\\');
     }
 
+    public function getSlugOption($value) {
+        return value_fallback($value, function () {
+            return $this->options['slug'] = Str::kebab(Str::plural(class_basename($this->model_name)));
+        });
+    }
+
     public function getDisplayNameSingularOption($value)
     {
         return value_fallback($value, function () {
             return $this->options['display_name_singular'] = Str::title(
-                Str::singular(str_replace('_', ' ', $this->slug))
+                Str::singular(str_replace(['_','-'], ' ', $this->slug))
             );
         });
     }

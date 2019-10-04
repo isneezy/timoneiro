@@ -33,8 +33,8 @@ class Timoneiro
     public function loadDataTypes()
     {
         if (!$this->isDataTypesLoaded) {
-            foreach (config('timoneiro.models') as $key => $model) {
-                $dataType = DataType::make($key, $model);
+            foreach (config('timoneiro.models') as $model) {
+                $dataType = DataType::make($model);
                 $this->useDataType($dataType);
             }
         }
