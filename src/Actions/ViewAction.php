@@ -1,10 +1,9 @@
 <?php
-namespace Isneezy\Timoneiro\Actions;
 
+namespace Isneezy\Timoneiro\Actions;
 
 class ViewAction extends AbstractAction
 {
-
     public function getTitle(): ?string
     {
         return 'View';
@@ -13,7 +12,7 @@ class ViewAction extends AbstractAction
     public function getAttributes()
     {
         return [
-            'class' => 'inline-block px-1 text-gray-500 hover:text-gray-700'
+            'class' => 'inline-block px-1 text-gray-500 hover:text-gray-700',
         ];
     }
 

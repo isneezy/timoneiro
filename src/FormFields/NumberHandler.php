@@ -1,8 +1,7 @@
 <?php
-namespace Isneezy\Timoneiro\FormFields;
 
+namespace Isneezy\Timoneiro\FormFields;
 
 class NumberHandler extends AbstractHandler
 {
-
 }

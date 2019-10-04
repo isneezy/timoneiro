@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers;
 
-
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -14,7 +13,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function getSlug(Request $request) {
+    public function getSlug(Request $request)
+    {
         if (isset($this->slug)) {
             $slug = $this->slug;
         } else {
@@ -25,21 +25,23 @@ class Controller extends BaseController
         return $slug;
     }
 
-    public function insertOrUpdateData($request, $slug, $filedSet, $data) {
+    public function insertOrUpdateData($request, $slug, $filedSet, $data)
+    {
         foreach ($filedSet as $field) {
             $content = $this->getContentBasedOnType($request, $slug, $field);
             $data->{$field->name} = $content;
         }
 
         $data->save();
+
         return $data;
     }
 
-    public function getContentBasedOnType($request, $slug, $field) {
+    public function getContentBasedOnType($request, $slug, $field)
+    {
         switch ($field->type) {
             default:
                 return (new Text($request, $slug, $field))->handle();
         }
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\FormFields;
 
-
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Traits\Renderable;
 
@@ -17,12 +16,13 @@ class AbstractHandler implements HandlerInterface
     public function handle($field, $dataType, $data)
     {
         $content = $this->createContent($field, $dataType, $data);
+
         return $this->render($content);
     }
 
     public function supports($driver)
     {
-        if (empty($this->supports)){
+        if (empty($this->supports)) {
             return true;
         }
 
@@ -47,11 +47,12 @@ class AbstractHandler implements HandlerInterface
         if (empty($this->name)) {
             $this->name = ucwords(str_replace('_', ' ', $this->getCodename()));
         }
+
         return $this->name;
     }
 
-
-    public function createContent($field, $dataType, $data) {
+    public function createContent($field, $dataType, $data)
+    {
         return view('timoneiro::formfields.'.$this->getCodename(), compact(
             'field',
             'dataType',

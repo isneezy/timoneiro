@@ -2,10 +2,8 @@
 
 namespace Isneezy\Timoneiro\Actions;
 
-
 class EditAction extends AbstractAction
 {
-
     public function getTitle(): ?string
     {
         return 'Edit';
@@ -24,7 +22,7 @@ class EditAction extends AbstractAction
     public function getAttributes()
     {
         return [
-            'class' => 'inline-block px-1 text-gray-500 hover:text-warning'
+            'class' => 'inline-block px-1 text-gray-500 hover:text-warning',
         ];
     }
 

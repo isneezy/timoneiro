@@ -33,17 +33,20 @@ class TimoneiroServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(realpath(__DIR__.'/../migrations'));
     }
 
-    public function loadHelpers() {
+    public function loadHelpers()
+    {
         foreach (glob(__DIR__.'/Helpers/*.php') as $filename) {
             require_once $filename;
         }
     }
 
-    public function registerConfigs() {
+    public function registerConfigs()
+    {
         $this->mergeConfigFrom(dirname(__DIR__).'/publishable/config/timoneiro.php', 'timoneiro');
     }
 
-    public function registerFormFields() {
+    public function registerFormFields()
+    {
         $formFields = ['date', 'number', 'select_dropdown', 'text'];
 
         foreach ($formFields as $formField) {
