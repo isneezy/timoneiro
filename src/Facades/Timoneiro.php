@@ -1,4 +1,5 @@
 <?php
+
 namespace Isneezy\Timoneiro\Facades;
 
 use Arrilot\Widgets\WidgetGroup;

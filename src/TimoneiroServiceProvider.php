@@ -74,8 +74,8 @@ class TimoneiroServiceProvider extends ServiceProvider
         $path = sprintf('%s/publishable', dirname(__DIR__));
         $publishable = [
             'timoneiro-config' => [
-                "{$path}/config/timoneiro.php" => config_path('timoneiro.php')
-            ]
+                "{$path}/config/timoneiro.php" => config_path('timoneiro.php'),
+            ],
         ];
 
         foreach ($publishable as $group => $paths) {
