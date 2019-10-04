@@ -15,7 +15,7 @@ use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\DataType\DataTypeField;
 use Isneezy\Timoneiro\FormFields\HandlerInterface;
 use Isneezy\Timoneiro\Models\Setting;
-use isneezy\timoneiro\Widgets\BaseDimmer;
+use Isneezy\Timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
