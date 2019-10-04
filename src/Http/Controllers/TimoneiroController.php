@@ -9,7 +9,6 @@ use isneezy\timoneiro\Timoneiro;
 
 class TimoneiroController extends Controller
 {
-
     public function index()
     {
         return Timoneiro::view('timoneiro::index');
@@ -24,8 +23,7 @@ class TimoneiroController extends Controller
                 $mime = 'text/javascript';
             } elseif (Str::endsWith($path, '.css')) {
                 $mime = 'text/css';
-            }
-            else {
+            } else {
                 $mime = File::mimeType($path);
             }
 

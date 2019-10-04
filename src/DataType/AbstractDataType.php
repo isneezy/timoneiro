@@ -3,17 +3,15 @@
 namespace Isneezy\Timoneiro\DataType;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
 use Isneezy\Timoneiro\DataType\Traits\HasOptions;
 use Isneezy\Timoneiro\Http\Controllers\TimoneiroBaseController;
 use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
-use function Symfony\Component\Debug\Tests\testHeader;
 
 /**
- * Class AbstractDataType
- * @package Isneezy\Timoneiro
+ * Class AbstractDataType.
+ *
  * @property string slug
  * @property string controller
  * @property string model_name
@@ -37,6 +35,7 @@ class AbstractDataType
     public function getControllerOption($value)
     {
         $this->controller = value_fallback($value, TimoneiroBaseController::class);
+
         return Str::start($this->options['controller'], '\\');
     }
 
@@ -79,11 +78,15 @@ class AbstractDataType
         $value = value_fallback($value, function () {
             return $this->options['scopes'] = [];
         });
-        if (is_string($value)) $value = explode(',', $value);
+        if (is_string($value)) {
+            $value = explode(',', $value);
+        }
+
         return $value ?? [];
     }
 
-    public function getRelationsOption($value) {
+    public function getRelationsOption($value)
+    {
         return value_fallback($value, function () {
             return $this->getRelations($this);
         });
@@ -109,10 +112,12 @@ class AbstractDataType
         if (!$timestamps) {
             $table = $table->except([$model::CREATED_AT, $model::UPDATED_AT]);
         }
+
         return $table;
     }
 
-    public function removeRelationshipFields($action = 'index') {
+    public function removeRelationshipFields($action = 'index')
+    {
         $related_cols = array_keys($this->relations);
 
         $forgetKeys = [];
@@ -130,12 +135,12 @@ class AbstractDataType
                 $field = $this->field_set[$key];
                 $field->type = 'select_dropdown';
                 $field->display_name = $this->relations[$field->name]['name'];
-                $field->relationship =  $this->relations[$field->name];
+                $field->relationship = $this->relations[$field->name];
 
                 $field->options = $this->relations[$field->name]['related']->all()->map(function (Model $model) {
                     return [
                         'value' => $model->getKey(),
-                        'label' => strval($model)
+                        'label' => strval($model),
                     ];
                 })->all();
 

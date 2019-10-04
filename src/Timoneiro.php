@@ -27,10 +27,11 @@ class Timoneiro
         ViewAction::class,
         EditAction::class,
         DeleteAction::class,
-        RestoreAction::class
+        RestoreAction::class,
     ];
 
-    public static function loadDataTypes() {
+    public static function loadDataTypes()
+    {
         if (!self::$isDataTypesLoaded) {
             foreach (config('timoneiro.models') as $key => $model) {
                 $dataType = DataType::make($key, $model);
@@ -39,31 +40,38 @@ class Timoneiro
         }
     }
 
-    public static function dataTypes() {
+    public static function dataTypes()
+    {
         self::loadDataTypes();
+
         return self::$dataTypes;
     }
 
     /**
      * @param $slug
+     *
      * @return DataType
      */
-    public static function dataType($slug) {
+    public static function dataType($slug)
+    {
         self::loadDataTypes();
+
         return self::$dataTypes[$slug];
     }
 
     /**
      * @param string | AbstractDataType $dataType
      */
-    public static function useDataType($dataType) {
+    public static function useDataType($dataType)
+    {
         if (is_string($dataType)) {
             $dataType = app($dataType);
         }
         self::$dataTypes[$dataType->slug] = $dataType;
     }
 
-    public static function routes() {
+    public static function routes()
+    {
         require __DIR__.'/../routes/routes.php';
     }
 
@@ -72,11 +80,13 @@ class Timoneiro
         return view($name, $params);
     }
 
-    public static function actions() {
+    public static function actions()
+    {
         return self::$actions;
     }
 
-    public static function addAction($action) {
+    public static function addAction($action)
+    {
         array_push(self::$actions, $action);
     }
 
@@ -88,27 +98,33 @@ class Timoneiro
 
     /**
      * @param DataTypeField $field
-     * @param DataType $dataType
-     * @param Model $data
-     * @return string
+     * @param DataType      $dataType
+     * @param Model         $data
+     *
      * @throws ErrorException
+     *
+     * @return string
      */
-    public static function formField($field, $dataType, $data) {
+    public static function formField($field, $dataType, $data)
+    {
         $formField = Arr::get(self::$formFields, $field->type);
         if ($formField) {
             return $formField->handle($field, $dataType, $data);
         }
+
         throw new ErrorException("No Handler for `$field->type` found.");
     }
 
-    public static function addFormField($handler) {
+    public static function addFormField($handler)
+    {
         if (!$handler instanceof HandlerInterface) {
             $handler = app($handler);
         }
         self::$formFields[$handler->getCodename()] = $handler;
     }
 
-    public static function setting($key, $default = null) {
+    public static function setting($key, $default = null)
+    {
         if (empty(self::$settings)) {
             foreach (Setting::all() as $setting) {
                 self::$settings[$setting->key] = $setting->value;
@@ -118,7 +134,8 @@ class Timoneiro
         return Arr::get(self::$settings, $key, $default);
     }
 
-    public static function dimmers() {
+    public static function dimmers()
+    {
         $widgetClasses = config('timoneiro.dashboard.widgets');
         $dimmers = Widget::group('timoneiro::dimmers');
 

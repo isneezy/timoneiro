@@ -1,4 +1,5 @@
 <?php
+
 namespace Isneezy\Timoneiro\Http\Controllers\Traits;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,18 +11,22 @@ use Throwable;
 
 trait RelationShipParser
 {
-    private function getBlacklistedMethods() {
+    private function getBlacklistedMethods()
+    {
         return get_class_methods(Model::class);
     }
 
     /**
      * @noinspection PhpDocMissingThrowsInspection
+     *
      * @param DataType $dataType
-     * @param null $model
+     * @param null     $model
+     *
      * @return array
      */
-    public function getRelations(AbstractDataType $dataType, $model = null) {
-        if (!$model){
+    public function getRelations(AbstractDataType $dataType, $model = null)
+    {
+        if (!$model) {
             $model = app($dataType->model_name);
         }
         $relations = [];
@@ -35,7 +40,7 @@ trait RelationShipParser
                 && !$method->getNumberOfParameters()
                 && !in_array($method->name, $this->getBlacklistedMethods())
             ) {
-                try{
+                try {
                     $instance = app()->call([$model, $method->name]);
                     if ($instance instanceof BelongsTo) {
                         $type = class_basename($instance);
@@ -55,7 +60,7 @@ trait RelationShipParser
                     }
                 } catch (Throwable $e) {
                     if ($e instanceof \ReflectionException) {
-                        /** @noinspection PhpUnhandledExceptionInspection */
+                        /* @noinspection PhpUnhandledExceptionInspection */
                         throw $e;
                     }
                     // do nothing has we are only testing if we can gate instance of relation

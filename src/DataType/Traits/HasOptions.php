@@ -1,6 +1,6 @@
 <?php
-namespace Isneezy\Timoneiro\DataType\Traits;
 
+namespace Isneezy\Timoneiro\DataType\Traits;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -12,16 +12,17 @@ trait HasOptions
     public function getOption($name)
     {
         $value = Arr::get($this->options, $name);
-        $getter = Str::camel("get_$name" . '_option');
+        $getter = Str::camel("get_$name".'_option');
         if (method_exists($this, $getter)) {
             $value = $this->{$getter}($value);
         }
+
         return $value;
     }
 
     public function setOption($name, $value)
     {
-        $setter = Str::camel("set_$name" . '_option');
+        $setter = Str::camel("set_$name".'_option');
         if (method_exists($this, $setter)) {
             $this->{$setter}($value);
         } else {
@@ -29,10 +30,10 @@ trait HasOptions
         }
     }
 
-
     public function setOptions(array $options)
     {
         $this->options = $options;
+
         return $this;
     }
 

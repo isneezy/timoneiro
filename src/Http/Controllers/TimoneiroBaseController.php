@@ -2,21 +2,21 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Isneezy\Timoneiro\Actions\AbstractAction;
-use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
 use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
 use Isneezy\Timoneiro\Timoneiro;
 
 class TimoneiroBaseController extends Controller
 {
     use RelationShipParser;
+
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
@@ -99,7 +99,8 @@ class TimoneiroBaseController extends Controller
         return Timoneiro::view($view, $viewData);
     }
 
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $slug = $this->getSlug($request);
         $dataType = Timoneiro::dataType($slug);
 
@@ -124,7 +125,8 @@ class TimoneiroBaseController extends Controller
         return Timoneiro::view($view, compact('dataType', 'data'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $slug = $this->getSlug($request);
 
         $dataType = Timoneiro::dataType($slug);
@@ -141,10 +143,12 @@ class TimoneiroBaseController extends Controller
         // todo Check permission
         // todo validate fields
         $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
+
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $slug = $this->getSlug($request);
         $dataType = Timoneiro::dataType($slug);
 
@@ -154,14 +158,15 @@ class TimoneiroBaseController extends Controller
 
         // todo check permission
         $view = 'timoneiro::_models.edit-add';
-        if (view()->exists("timoneiro::{$slug}.edit-add")){
+        if (view()->exists("timoneiro::{$slug}.edit-add")) {
             $view = "timoneiro::{$slug}.edit-add";
         }
 
         return Timoneiro::view($view, compact('dataType', 'data'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $slug = $this->getSlug($request);
         $dataType = Timoneiro::dataType($slug);
 

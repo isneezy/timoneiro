@@ -6,14 +6,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
- * Class DataType
- * @package Isneezy\Timoneiro
+ * Class DataType.
  */
 class DataType extends AbstractDataType
 {
     /**
      * @param $slug
      * @param $options array | string
+     *
      * @return DataType
      */
     public static function make($slug, $options)
@@ -27,7 +27,8 @@ class DataType extends AbstractDataType
             Str::kebab(Str::plural($slug))
         );
 
-        $dataType = new DataType($options);
+        $dataType = new self($options);
+
         return $dataType;
     }
 }
