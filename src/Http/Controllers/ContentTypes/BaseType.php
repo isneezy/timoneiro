@@ -1,4 +1,5 @@
 <?php
+
 namespace Isneezy\Timoneiro\Http\Controllers\ContentTypes;
 
 use Illuminate\Http\Request;
