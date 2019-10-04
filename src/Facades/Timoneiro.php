@@ -1,13 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ivan
- * Date: 10/4/19
- * Time: 1:38 PM.
- */
-
 namespace Isneezy\Timoneiro\Facades;
 
-class Timoneiro
+use Illuminate\Support\Facades\Facade;
+
+/**
+ * @method static mixed routes()
+ */
+class Timoneiro extends Facade
 {
+    protected static function getFacadeAccessor()
+    {
+        return 'timoneiro';
+    }
 }

@@ -2,9 +2,11 @@
 
 namespace Isneezy\Timoneiro;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 
 class TimoneiroServiceProvider extends ServiceProvider
@@ -16,6 +18,12 @@ class TimoneiroServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Timoneiro', TimoneiroFacade::class);
+
+        $this->app->singleton('timoneiro', function () {
+            return new Timoneiro();
+        });
         $this->loadHelpers();
         $this->registerFormFields();
         $this->registerConfigs();
