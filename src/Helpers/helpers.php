@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Str;
-use Isneezy\Timoneiro\Timoneiro;
+use Isneezy\Timoneiro\DataType\DataType;
+use Isneezy\Timoneiro\Facades\Timoneiro;
 
 if (!function_exists('str_start')) {
     function str_start($string, $start)
@@ -16,7 +17,7 @@ if (!function_exists('timoneiro_menu')) {
         $dataTypes = Timoneiro::dataTypes();
         $menu = [];
         foreach ($dataTypes as $key => $dataType) {
-            /* @var $dataType \Isneezy\Timoneiro\DataType */
+            /* @var $dataType DataType */
             $menuItem['label'] = $dataType->display_name_plural;
             $menuItem['icon-class'] = $dataType->icon_class;
             $menuItem['slug'] = $dataType->slug;

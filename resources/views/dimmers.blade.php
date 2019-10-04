@@ -1,5 +1,4 @@
 @php
-    use isneezy\timoneiro\Timoneiro;
     $dimmers = Timoneiro::dimmers();
     $count = $dimmers->count();
     $grid = $count <= 4 ? $count : 4;

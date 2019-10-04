@@ -65,7 +65,7 @@ class TimoneiroServiceProvider extends ServiceProvider
 
         foreach ($formFields as $formField) {
             $class = Str::studly("{$formField}_handler");
-            Timoneiro::addFormField("\\Isneezy\\Timoneiro\\FormFields\\{$class}");
+            TimoneiroFacade::addFormField("\\Isneezy\\Timoneiro\\FormFields\\{$class}");
         }
     }
 

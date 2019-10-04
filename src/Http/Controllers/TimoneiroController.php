@@ -5,7 +5,7 @@ namespace Isneezy\Timoneiro\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use isneezy\timoneiro\Timoneiro;
+use Isneezy\Timoneiro\Facades\Timoneiro;
 
 class TimoneiroController extends Controller
 {

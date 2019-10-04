@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Isneezy\Timoneiro\Actions\AbstractAction;
 use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
-use Isneezy\Timoneiro\Timoneiro;
+use Isneezy\Timoneiro\Facades\Timoneiro;
 
 class TimoneiroBaseController extends Controller
 {

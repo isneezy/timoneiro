@@ -19,32 +19,32 @@ use isneezy\timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
-    protected static $settings = [];
-    protected static $isDataTypesLoaded = false;
-    protected static $dataTypes = [];
-    protected static $formFields = [];
-    protected static $actions = [
+    protected $settings = [];
+    protected $isDataTypesLoaded = false;
+    protected $dataTypes = [];
+    protected $formFields = [];
+    protected $actions = [
         ViewAction::class,
         EditAction::class,
         DeleteAction::class,
         RestoreAction::class,
     ];
 
-    public static function loadDataTypes()
+    public function loadDataTypes()
     {
-        if (!self::$isDataTypesLoaded) {
+        if (!$this->isDataTypesLoaded) {
             foreach (config('timoneiro.models') as $key => $model) {
                 $dataType = DataType::make($key, $model);
-                self::useDataType($dataType);
+                $this->useDataType($dataType);
             }
         }
     }
 
-    public static function dataTypes()
+    public function dataTypes()
     {
-        self::loadDataTypes();
+        $this->loadDataTypes();
 
-        return self::$dataTypes;
+        return $this->dataTypes;
     }
 
     /**
@@ -52,48 +52,48 @@ class Timoneiro
      *
      * @return DataType
      */
-    public static function dataType($slug)
+    public function dataType($slug)
     {
-        self::loadDataTypes();
+        $this->loadDataTypes();
 
-        return self::$dataTypes[$slug];
+        return $this->dataTypes[$slug];
     }
 
     /**
      * @param string | AbstractDataType $dataType
      */
-    public static function useDataType($dataType)
+    public function useDataType($dataType)
     {
         if (is_string($dataType)) {
             $dataType = app($dataType);
         }
-        self::$dataTypes[$dataType->slug] = $dataType;
+        $this->dataTypes[$dataType->slug] = $dataType;
     }
 
-    public static function routes()
+    public function routes()
     {
         require __DIR__.'/../routes/routes.php';
     }
 
-    public static function view($name, array $params = [])
+    public function view($name, array $params = [])
     {
         return view($name, $params);
     }
 
-    public static function actions()
+    public function actions()
     {
-        return self::$actions;
+        return $this->actions;
     }
 
-    public static function addAction($action)
+    public function addAction($action)
     {
-        array_push(self::$actions, $action);
+        array_push($this->actions, $action);
     }
 
-    public static function replaceAction($actionToReplace, $action)
+    public function replaceAction($actionToReplace, $action)
     {
-        $key = array_search($actionToReplace, self::$actions);
-        self::$actions[$key] = $action;
+        $key = array_search($actionToReplace, $this->actions);
+        $this->actions[$key] = $action;
     }
 
     /**
@@ -105,9 +105,9 @@ class Timoneiro
      *
      * @return string
      */
-    public static function formField($field, $dataType, $data)
+    public function formField($field, $dataType, $data)
     {
-        $formField = Arr::get(self::$formFields, $field->type);
+        $formField = Arr::get($this->formFields, $field->type);
         if ($formField) {
             return $formField->handle($field, $dataType, $data);
         }
@@ -115,26 +115,26 @@ class Timoneiro
         throw new ErrorException("No Handler for `$field->type` found.");
     }
 
-    public static function addFormField($handler)
+    public function addFormField($handler)
     {
         if (!$handler instanceof HandlerInterface) {
             $handler = app($handler);
         }
-        self::$formFields[$handler->getCodename()] = $handler;
+        $this->formFields[$handler->getCodename()] = $handler;
     }
 
-    public static function setting($key, $default = null)
+    public function setting($key, $default = null)
     {
-        if (empty(self::$settings)) {
+        if (empty($this->settings)) {
             foreach (Setting::all() as $setting) {
-                self::$settings[$setting->key] = $setting->value;
+                $this->settings[$setting->key] = $setting->value;
             }
         }
 
-        return Arr::get(self::$settings, $key, $default);
+        return Arr::get($this->settings, $key, $default);
     }
 
-    public static function dimmers()
+    public function dimmers()
     {
         $widgetClasses = config('timoneiro.dashboard.widgets');
         $dimmers = Widget::group('timoneiro::dimmers');
