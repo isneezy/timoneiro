@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -15,8 +15,6 @@ jobs:
       with:
        php-version: 7.1
        extension-csv: mbstring
-    - name: check php version
-      run: php -v
-    - name: check composer version
-      run: composer -v
+    - name: Install composer dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist --optimise-autoloader
 
