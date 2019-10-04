@@ -13,7 +13,7 @@ Website and documentation: [https://timoneiro.vilanculo.me](https://timoneiro.vi
 ```bash
 composer require isneezy/timoneiro
 ```
-**2. Register the Service Provider**  
+**2. Register the Service Provider**
 
 In `config/app.php` file of your laravel project, register the `TimoneiroServiceProvider`
 ```php
@@ -27,6 +27,13 @@ return [
     ]
 ];
 ```
+
+**3. Run the package installation command**
+```bash
+php artisan timoneiro:install
+```
+this will add Timoneiro routes on `routes/web.php` file
+and your admin/control panel will be available at `/admin` route
 
 ## Development
 **1. Fork this project**
