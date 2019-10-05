@@ -41,7 +41,7 @@ if (!function_exists('value_fallback')) {
      */
     function value_fallback($value, $default)
     {
-        if (!$value) {
+        if (is_null($value)) {
             if ($default instanceof Closure) {
                 $value = $default();
             } else {

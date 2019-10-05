@@ -3,6 +3,7 @@
 namespace Isneezy\Timoneiro\DataType;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
 use Isneezy\Timoneiro\DataType\Traits\HasOptions;
@@ -16,20 +17,27 @@ use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
  * @property string controller
  * @property string model_name
  * @property string display_name_singular
- * @property string $display_name_plural
+ * @property string display_name_plural
  * @property string icon_class
  * @property array list_display
  * @property array scopes
  * @property array field_set
  * @property array relations
+ * @property string default
  */
 class AbstractDataType
 {
     use HasOptions, RelationShipParser;
 
+    protected $table = [];
+
     public function __construct(array $options = [])
     {
         $this->options = array_merge_recursive($options, $this->options);
+
+        $this->options['field_set'] = $this->describeTable()->map(function ($def, $key) {
+            return array_merge($def, Arr::get($this->options, "field_set.{$key}", []));
+        })->all();
     }
 
     public function getControllerOption($value)
@@ -72,11 +80,12 @@ class AbstractDataType
 
     public function getFieldSetOption($value)
     {
-        return value_fallback($value, function () {
-            return  $this->options['field_set'] = $this->describeTable()->map(function ($def) {
-                return new DataTypeField($def);
-            })->values()->all();
-        });
+        return collect($value)->map(function ($def) {
+            if (!$def instanceof DataTypeField) {
+                $def = new DataTypeField($def);
+            }
+            return $def;
+        })->values()->all();
     }
 
     public function getScopesOption($value)
@@ -110,16 +119,19 @@ class AbstractDataType
 
     protected function describeTable($hidden = false, $timestamps = false)
     {
-        $model = app($this->model_name);
-        $table = DatabaseSchemaManager::describeTable($model->getTable());
-        if (!$hidden) {
-            $table = $table->except($model->getHidden())->except($model->getKeyName());
-        }
-        if (!$timestamps) {
-            $table = $table->except([$model::CREATED_AT, $model::UPDATED_AT]);
-        }
+        if (empty($this->table)) {
+            $model = app($this->model_name);
+            $table = DatabaseSchemaManager::describeTable($model->getTable());
+            if (!$hidden) {
+                $table = $table->except($model->getHidden())->except($model->getKeyName());
+            }
+            if (!$timestamps) {
+                $table = $table->except([$model::CREATED_AT, $model::UPDATED_AT]);
+            }
 
-        return $table;
+            $this->table = $table;
+        }
+        return $this->table;
     }
 
     public function removeRelationshipFields($action = 'index')
@@ -140,7 +152,7 @@ class AbstractDataType
                 array_push($forgetKeys, $key);
                 $field = $this->field_set[$key];
                 $field->type = 'select_dropdown';
-                $field->display_name = $this->relations[$field->name]['name'];
+                $field->display_name = $field->display_name ?? $this->relations[$field->name]['name'];
                 $field->relationship = $this->relations[$field->name];
 
                 $field->options = $this->relations[$field->name]['related']->all()->map(function (Model $model) {
