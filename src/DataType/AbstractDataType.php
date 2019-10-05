@@ -35,9 +35,13 @@ class AbstractDataType
     {
         $this->options = array_merge_recursive($options, $this->options);
 
-        $this->options['field_set'] = $this->describeTable()->map(function ($def, $key) {
-            return array_merge($def, Arr::get($this->options, "field_set.{$key}", []));
-        })->all();
+        $order = 0;
+        $this->describeTable()->each(function ($def, $key) use (&$order) {
+            $order += 100;
+            $opts = Arr::get($this->options, "field_set.{$key}", []);
+            $opts['order'] = Arr::get($opts, 'order', $order);
+            $this->options['field_set'][$key] = array_merge($opts, $def, $opts);
+        });
     }
 
     public function getControllerOption($value)
@@ -85,7 +89,9 @@ class AbstractDataType
                 $def = new DataTypeField($def);
             }
             return $def;
-        })->values()->all();
+        })->sortBy(function ($def) {
+            return $def->order;
+        })->all();
     }
 
     public function getScopesOption($value)
