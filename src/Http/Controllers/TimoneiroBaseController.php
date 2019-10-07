@@ -34,9 +34,9 @@ class TimoneiroBaseController extends Controller
         $query = $model->query();
 
         if ($search) {
-            $searchable = array_keys($dataType->field_set);
+            $searchable = $dataType->list_display;
             $query->where(function (Builder $query) use ($search, $searchable) {
-                foreach ($searchable as $column) {
+                foreach ($searchable as $key => $column) {
                     $query->orWhere($column, 'LIKE', "%$search%");
                 }
             });
