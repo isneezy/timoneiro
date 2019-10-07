@@ -24,6 +24,7 @@ use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
  * @property array field_set
  * @property array relations
  * @property string default
+ * @property array | null short_descriptions
  */
 class AbstractDataType
 {
@@ -120,6 +121,9 @@ class AbstractDataType
 
     public function getColumnLabel($column)
     {
+        if ($this->short_descriptions) {
+            $column = Arr::get($this->short_descriptions, $column, $column);
+        }
         return Str::ucfirst(str_replace('_', ' ', $column));
     }
 
