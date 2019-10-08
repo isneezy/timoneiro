@@ -45,14 +45,17 @@ class TimoneiroSettingsController extends Controller
         })->all();
     }
 
-    public function queryData($settings, $index = true) {
+    public function queryData($settings, $index = true)
+    {
         $data = Setting::query()->whereIn('key', array_keys($settings))->get()->keyBy('key');
+
         return collect($settings)->map(function ($def, $key) use ($index, $data) {
             $setting = $data->get($key) ?? new Setting();
             $setting->key = $key;
             if ($index) {
                 $setting->{$key} = $setting->value;
             }
+
             return $setting;
         });
     }
