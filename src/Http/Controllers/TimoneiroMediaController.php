@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers;
 
-
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -37,7 +36,7 @@ class TimoneiroMediaController extends Controller
             $folder = '';
         }
 
-        $dir = $this->directory . $folder;
+        $dir = $this->directory.$folder;
         $storage = Storage::disk($this->filesystem)->addPlugin(new ListWith());
         $files = collect($storage->listWith(['mimetype'], $dir))
             ->map(function ($item) use ($storage) {
@@ -53,6 +52,7 @@ class TimoneiroMediaController extends Controller
                     $file['thumbnails'] = [];
                 }
                 $file['last_modified'] = Carbon::createFromTimestamp($item['timestamp']);
+
                 return $file;
             })
             ->all();
