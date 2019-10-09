@@ -24,7 +24,7 @@ class TimoneiroSettingsController extends Controller
     {
         $active = $request->get('_group');
         $settings = $this->getSettings($active);
-        $data = $this->queryData($settings);
+        $data = $this->queryData($settings, false);
 
         foreach ($settings as $setting) {
             $value = $this->getContentBasedOnType($request, 'settings', $setting);
@@ -45,13 +45,16 @@ class TimoneiroSettingsController extends Controller
         })->all();
     }
 
-    public function queryData($settings)
+    public function queryData($settings, $index = true)
     {
         $data = Setting::query()->whereIn('key', array_keys($settings))->get()->keyBy('key');
 
-        return collect($settings)->map(function ($def, $key) use ($data) {
+        return collect($settings)->map(function ($def, $key) use ($index, $data) {
             $setting = $data->get($key) ?? new Setting();
             $setting->key = $key;
+            if ($index) {
+                $setting->{$key} = $setting->value;
+            }
 
             return $setting;
         });
