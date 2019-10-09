@@ -21,6 +21,8 @@ class TimoneiroDataTypeMiddleware
 
     public function handle($request, $next, $slug) {
         $request = Request::createFrom($request);
+        $this->app->call([$request, 'setContainer']);
+        $this->app->call([$request, 'setRedirector']);
         $request->attachDataType(Timoneiro::dataType($slug));
 
         $this->app->instance(Request::class, $request);

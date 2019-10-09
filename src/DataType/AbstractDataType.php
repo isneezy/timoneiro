@@ -25,6 +25,9 @@ use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
  * @property array relations
  * @property string default
  * @property array | null short_descriptions
+ * @property FormRequest | array | null rules
+ * @property FormRequest | array | null update_rules
+ * @property FormRequest | array | null create_rules
  */
 class AbstractDataType
 {

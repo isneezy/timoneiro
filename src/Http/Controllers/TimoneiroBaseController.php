@@ -9,11 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Isneezy\Timoneiro\Http\Request;
 use Isneezy\Timoneiro\Actions\AbstractAction;
 use Isneezy\Timoneiro\Facades\Timoneiro;
-use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
 
 class TimoneiroBaseController extends Controller
 {
-    use RelationShipParser;
 
     /**
      * @param Request $request
@@ -26,8 +24,7 @@ class TimoneiroBaseController extends Controller
 
         /** @var Model $model */
         $model = app($dataType->model_name);
-        // Todo check for permission
-        // $this->authorize('browse', app($dataType->model_name));
+        $request->check('index');
         $search = $request->get('s');
 
         $dataType->removeRelationshipFields();
@@ -112,8 +109,7 @@ class TimoneiroBaseController extends Controller
         $dataType->removeRelationshipFields('edit');
         $data = $model->findOrFail($id);
 
-        // foreach ($dataType->field_set) {}
-        // todo check permissions
+        $request->check('edit', $data);
 
         $view = 'timoneiro::_models.edit-add';
 
@@ -128,7 +124,6 @@ class TimoneiroBaseController extends Controller
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -143,8 +138,7 @@ class TimoneiroBaseController extends Controller
         /** @var Model $data */
         $data = $model->findOrFail($id);
 
-        // todo Check permission
-        // todo validate fields
+        $request->check('edit', $data);
         $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
@@ -158,7 +152,7 @@ class TimoneiroBaseController extends Controller
         /** @var Model $data */
         $data = app($dataType->model_name);
 
-        // todo check permission
+        $request->check('create', $data);
         $view = 'timoneiro::_models.edit-add';
         if (view()->exists("timoneiro::{$dataType->slug}.edit-add")) {
             $view = "timoneiro::{$dataType->slug}.edit-add";
@@ -170,15 +164,12 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
         $dataType = $request->getDataType();
 
-        // todo Check permission
-
-        $this->validateFormRequest($request, $dataType);
+        $request->check('create');
         $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, app($dataType->model_name));
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
