@@ -6,6 +6,7 @@ use Arrilot\Widgets\Facade as Widget;
 use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Isneezy\Timoneiro\Actions\DeleteAction;
 use Isneezy\Timoneiro\Actions\EditAction;
 use Isneezy\Timoneiro\Actions\RestoreAction;
@@ -108,11 +109,15 @@ class Timoneiro
     public function formField($field, $dataType, $data)
     {
         $formField = Arr::get($this->formFields, $field->type);
-        if ($formField) {
-            return $formField->handle($field, $dataType, $data);
+        if (!$formField) {
+            Log::warning(
+                "No Handler for `$field->type` found. Falling back to `text`",
+                compact('field', 'dataType', 'data')
+            );
+            $formField = $this->formFields['text'];
         }
 
-        throw new ErrorException("No Handler for `$field->type` found.");
+        return $formField->handle($field, $dataType, $data);
     }
 
     public function addFormField($handler)
