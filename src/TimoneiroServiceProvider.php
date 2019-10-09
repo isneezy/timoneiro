@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Commands\InstallCommand;
 use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
+use Isneezy\Timoneiro\Http\Middleware\TimoneiroDataTypeMiddleware;
 
 class TimoneiroServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,7 @@ class TimoneiroServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(realpath(__DIR__.'/../resources/views'), 'timoneiro');
         $router->aliasMiddleware('admin.user', TimoneiroAdminMiddleware::class);
+        $router->aliasMiddleware('timoneiro', TimoneiroDataTypeMiddleware::class);
         $this->loadMigrationsFrom(realpath(__DIR__.'/../migrations'));
     }
 

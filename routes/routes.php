@@ -19,7 +19,7 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
                 $breadController = $dataType->controller;
                 $slug = $dataType->slug;
 
-                Route::resource($slug, $breadController);
+                Route::resource($slug, $breadController)->middleware("timoneiro:{$slug}");
             }
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException("Custom routes hasn't been configured because: ".$e->getMessage(), 1);
