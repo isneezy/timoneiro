@@ -1,4 +1,5 @@
 <?php
+
 namespace Isneezy\Timoneiro\Http;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,18 +18,22 @@ class Request extends FormRequest
 
     /**
      * @param AbstractDataType $dataType
+     *
      * @return $this
      */
-    public function attachDataType(AbstractDataType $dataType) {
+    public function attachDataType(AbstractDataType $dataType)
+    {
         $this->dataType = $dataType;
+
         return $this;
     }
 
     /**
      * @param string $action
-     * @param null $model
+     * @param null   $model
      */
-    public function check($action, $model = null) {
+    public function check($action, $model = null)
+    {
         $this->action = $action;
         $this->model = $model ?? app($this->dataType->model_name);
         $this->validateResolved();
@@ -37,17 +42,20 @@ class Request extends FormRequest
     /**
      * @return AbstractDataType
      */
-    public function getDataType() {
+    public function getDataType()
+    {
         return $this->dataType;
     }
 
-    public function authorize() {
+    public function authorize()
+    {
         // todo check for permission
         // return auth()->user()->can($this->action, $this->model);
         return true;
     }
 
-    public function rules() {
+    public function rules()
+    {
         $paramName = Str::snake(Str::camel(Str::singular($this->dataType->slug)));
         $id = $this->route($paramName);
         $table = app($this->dataType->model_name)->getTable();
@@ -60,12 +68,15 @@ class Request extends FormRequest
         $rules = $this->parseRules($this->dataType, $isUpdate, $table, $id);
         if (is_string($rules) && class_exists($rules)) {
             app($rules);
+
             return [];
         }
+
         return $rules;
     }
 
-    protected function parseRules($dataType, $isUpdate, $table, $id) {
+    protected function parseRules($dataType, $isUpdate, $table, $id)
+    {
         $rules = $dataType->rules ?? [];
         if ($isUpdate) {
             $rules = $dataType->update_rules ?? $rules;
@@ -75,6 +86,7 @@ class Request extends FormRequest
         if (is_string($rules) && class_exists($rules)) {
             return $rules;
         }
+
         return collect($rules)->map(function ($rules) use ($id, $table, $isUpdate) {
             $rules = is_array($rules) ? $rules : explode('|', $rules);
             foreach ($rules as &$fieldRule) {
@@ -83,6 +95,7 @@ class Request extends FormRequest
                     $fieldRule = Rule::unique($table)->ignore($id);
                 }
             }
+
             return $rules;
         })->all();
     }

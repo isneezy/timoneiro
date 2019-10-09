@@ -2,26 +2,25 @@
 
 namespace Isneezy\Timoneiro\Commands;
 
-
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Isneezy\Timoneiro\TimoneiroServiceProvider;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
-    protected $name = "timoneiro:install";
+    protected $name = 'timoneiro:install';
 
     protected function getOptions()
     {
         return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run in production', null]
+            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run in production', null],
         ];
     }
 
     /**
      * @param Filesystem $filesystem
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function handle(Filesystem $filesystem)
@@ -37,6 +36,7 @@ class InstallCommand extends Command
 
     /**
      * @param Filesystem $filesystem
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     private function registerRoutes(Filesystem $filesystem)
@@ -51,7 +51,8 @@ class InstallCommand extends Command
         }
     }
 
-    private function dumpAutoload() {
+    private function dumpAutoload()
+    {
         $this->info('Dumping the autoloaded files and reloading all new files');
         $composer = $this->findComposer();
         $process = new Process(["{$composer} dump-autoload"]);
@@ -59,10 +60,12 @@ class InstallCommand extends Command
         $process->setWorkingDirectory(base_path())->run();
     }
 
-    private function findComposer() {
+    private function findComposer()
+    {
         if (file_exists(getcwd().'/composer.phar')) {
             return '"'.PHP_BINARY.'" '.getcwd().'./composer.phar';
         }
+
         return 'composer';
     }
 }

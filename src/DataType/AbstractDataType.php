@@ -61,7 +61,8 @@ class AbstractDataType
         return Str::start($this->options['controller'], '\\');
     }
 
-    public function getSlugOption($value) {
+    public function getSlugOption($value)
+    {
         return value_fallback($value, function () {
             return $this->options['slug'] = Str::kebab(Str::plural(class_basename($this->model_name)));
         });
@@ -71,7 +72,7 @@ class AbstractDataType
     {
         return value_fallback($value, function () {
             return $this->options['display_name_singular'] = Str::title(
-                Str::singular(str_replace(['_','-'], ' ', $this->slug))
+                Str::singular(str_replace(['_', '-'], ' ', $this->slug))
             );
         });
     }
@@ -98,6 +99,7 @@ class AbstractDataType
             if (!$def instanceof DataTypeField) {
                 $def = new DataTypeField($def);
             }
+
             return $def;
         })->sortBy(function ($def) {
             return $def->order;
@@ -133,6 +135,7 @@ class AbstractDataType
         if ($this->short_descriptions) {
             $column = Arr::get($this->short_descriptions, $column, $column);
         }
+
         return Str::ucfirst(str_replace('_', ' ', $column));
     }
 
@@ -150,6 +153,7 @@ class AbstractDataType
 
             $this->table = $table;
         }
+
         return $this->table;
     }
 

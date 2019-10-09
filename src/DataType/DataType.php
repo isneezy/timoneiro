@@ -2,9 +2,6 @@
 
 namespace Isneezy\Timoneiro\DataType;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-
 /**
  * Class DataType.
  */

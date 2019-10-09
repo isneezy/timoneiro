@@ -87,7 +87,8 @@ class TimoneiroServiceProvider extends ServiceProvider
         }
     }
 
-    private function registerConsoleCommands() {
+    private function registerConsoleCommands()
+    {
         $this->commands(InstallCommand::class);
     }
 }

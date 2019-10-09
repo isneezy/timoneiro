@@ -6,13 +6,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Isneezy\Timoneiro\Http\Request;
 use Isneezy\Timoneiro\Actions\AbstractAction;
 use Isneezy\Timoneiro\Facades\Timoneiro;
+use Isneezy\Timoneiro\Http\Request;
 
 class TimoneiroBaseController extends Controller
 {
-
     /**
      * @param Request $request
      *
@@ -123,6 +122,7 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      * @param $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
@@ -163,6 +163,7 @@ class TimoneiroBaseController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
