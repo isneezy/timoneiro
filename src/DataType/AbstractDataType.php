@@ -3,7 +3,9 @@
 namespace Isneezy\Timoneiro\DataType;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
 use Isneezy\Timoneiro\DataType\Traits\HasOptions;
@@ -39,13 +41,17 @@ class AbstractDataType
     {
         $this->options = array_merge_recursive($options, $this->options);
 
-        $order = 0;
-        $this->describeTable()->each(function ($def, $key) use (&$order) {
-            $order += 100;
-            $opts = Arr::get($this->options, "field_set.{$key}", []);
-            $opts['order'] = Arr::get($opts, 'order', $order);
-            $this->options['field_set'][$key] = array_merge($opts, $def, $opts);
-        });
+        try {
+            $order = 0;
+            $this->describeTable()->each(function ($def, $key) use (&$order) {
+                $order += 100;
+                $opts = Arr::get($this->options, "field_set.{$key}", []);
+                $opts['order'] = Arr::get($opts, 'order', $order);
+                $this->options['field_set'][$key] = array_merge($opts, $def, $opts);
+            });
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage(), [$e->getTraceAsString()]);
+        }
     }
 
     public function getControllerOption($value)

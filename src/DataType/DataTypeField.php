@@ -53,4 +53,19 @@ class DataTypeField
 
         return Arr::get($result, $type, $type);
     }
+
+    public function getOptionsOption($options) {
+        if (empty($options)) {
+            return [];
+        }
+        if (is_string($options)) {
+            $options = explode(',',$options);
+        }
+        foreach ($options as $key => $value) {
+            if (!is_array($value)) {
+                $options[$key] = ['value' => $value, 'label' => $value];
+            }
+        }
+        return $options;
+    }
 }
