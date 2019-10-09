@@ -1,5 +1,5 @@
-let mix = require('laravel-mix');
-require('laravel-mix-tailwind');
+let mix = require('laravel-mix')
+require('laravel-mix-tailwind')
 
 /*
  |--------------------------------------------------------------------------
@@ -12,12 +12,15 @@ require('laravel-mix-tailwind');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'publishable/assets/js')
-    .postCss('resources/assets/css/style.css', 'publishable/assets/css', [
-        require('tailwindcss'),
-        require('autoprefixer'),
-    ])
-    .copy('resources/assets/images', 'publishable/assets/images')
+mix.setPublicPath('./')
+  .js('resources/assets/js/app.js', 'publishable/assets/js')
+  .postCss('resources/assets/css/style.css', 'publishable/assets/css', [
+    require('tailwindcss'),
+    require('autoprefixer'),
+  ])
+  .copy('resources/assets/images', 'publishable/assets/images')
+
+mix.version()
 
 // Full API
 // mix.js(src, output);
