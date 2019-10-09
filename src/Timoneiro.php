@@ -6,6 +6,7 @@ use Arrilot\Widgets\Facade as Widget;
 use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Isneezy\Timoneiro\Actions\DeleteAction;
 use Isneezy\Timoneiro\Actions\EditAction;
 use Isneezy\Timoneiro\Actions\RestoreAction;
@@ -14,99 +15,132 @@ use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\DataType\DataTypeField;
 use Isneezy\Timoneiro\FormFields\HandlerInterface;
-use isneezy\timoneiro\Widgets\BaseDimmer;
+use Isneezy\Timoneiro\Models\Setting;
+use Isneezy\Timoneiro\Widgets\BaseDimmer;
 
 class Timoneiro
 {
-    protected static $isDataTypesLoaded = false;
-    protected static $dataTypes = [];
-    protected static $formFields = [];
-    protected static $actions = [
+    protected $settings = [];
+    protected $isDataTypesLoaded = false;
+    protected $dataTypes = [];
+    protected $formFields = [];
+    protected $actions = [
         ViewAction::class,
         EditAction::class,
         DeleteAction::class,
-        RestoreAction::class
+        RestoreAction::class,
     ];
 
-    public static function loadDataTypes() {
-        if (!self::$isDataTypesLoaded) {
-            foreach (config('timoneiro.models') as $key => $model) {
-                $dataType = DataType::make($key, $model);
-                self::useDataType($dataType);
+    public function loadDataTypes()
+    {
+        if (!$this->isDataTypesLoaded) {
+            foreach (config('timoneiro.models') as $model) {
+                $dataType = DataType::make($model);
+                $this->useDataType($dataType);
             }
         }
     }
 
-    public static function dataTypes() {
-        self::loadDataTypes();
-        return self::$dataTypes;
+    public function dataTypes()
+    {
+        $this->loadDataTypes();
+
+        return $this->dataTypes;
     }
 
     /**
      * @param $slug
+     *
      * @return DataType
      */
-    public static function dataType($slug) {
-        self::loadDataTypes();
-        return self::$dataTypes[$slug];
+    public function dataType($slug)
+    {
+        $this->loadDataTypes();
+
+        return $this->dataTypes[$slug];
     }
 
     /**
      * @param string | AbstractDataType $dataType
      */
-    public static function useDataType($dataType) {
+    public function useDataType($dataType)
+    {
         if (is_string($dataType)) {
             $dataType = app($dataType);
         }
-        self::$dataTypes[$dataType->slug] = $dataType;
+        $this->dataTypes[$dataType->slug] = $dataType;
     }
 
-    public static function routes() {
+    public function routes()
+    {
         require __DIR__.'/../routes/routes.php';
     }
 
-    public static function view($name, array $params = [])
+    public function view($name, array $params = [])
     {
         return view($name, $params);
     }
 
-    public static function actions() {
-        return self::$actions;
-    }
-
-    public static function addAction($action) {
-        array_push(self::$actions, $action);
-    }
-
-    public static function replaceAction($actionToReplace, $action)
+    public function actions()
     {
-        $key = array_search($actionToReplace, self::$actions);
-        self::$actions[$key] = $action;
+        return $this->actions;
+    }
+
+    public function addAction($action)
+    {
+        array_push($this->actions, $action);
+    }
+
+    public function replaceAction($actionToReplace, $action)
+    {
+        $key = array_search($actionToReplace, $this->actions);
+        $this->actions[$key] = $action;
     }
 
     /**
      * @param DataTypeField $field
-     * @param DataType $dataType
-     * @param Model $data
-     * @return string
+     * @param DataType      $dataType
+     * @param Model         $data
+     *
      * @throws ErrorException
+     *
+     * @return string
      */
-    public static function formField($field, $dataType, $data) {
-        $formField = Arr::get(self::$formFields, $field->type);
-        if ($formField) {
-            return $formField->handle($field, $dataType, $data);
+    public function formField($field, $dataType, $data)
+    {
+        $formField = Arr::get($this->formFields, $field->type);
+        if (!$formField) {
+            Log::warning(
+                "No Handler for `$field->type` found. Falling back to `text`",
+                compact('field', 'dataType', 'data')
+            );
+            $formField = $this->formFields['text'];
         }
-        throw new ErrorException("No Handler for `$field->type` found.");
+
+        return $formField->handle($field, $dataType, $data);
     }
 
-    public static function addFormField($handler) {
+    public function addFormField($handler)
+    {
         if (!$handler instanceof HandlerInterface) {
             $handler = app($handler);
         }
-        self::$formFields[$handler->getCodename()] = $handler;
+        $this->formFields[$handler->getCodename()] = $handler;
     }
 
-    public static function dimmers() {
+    public function setting($key, $default = null)
+    {
+        if (empty($this->settings)) {
+            foreach (Setting::all() as $setting) {
+                $this->settings[$setting->key] = $setting->value;
+            }
+        }
+
+        return Arr::get($this->settings, $key, $default);
+    }
+
+    public function dimmers()
+    {
         $widgetClasses = config('timoneiro.dashboard.widgets');
         $dimmers = Widget::group('timoneiro::dimmers');
 

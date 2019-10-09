@@ -3,7 +3,7 @@
 Inspired by [django admin](https://github.com/django/django/tree/master/django/contrib/admin)
 and [Laravel Voyager](https://voyager.devdojo.com/), Timoneiro is a Laravel Admin Package created to make your life easier.
 
-Website and documentation: [Todo]()
+Website and documentation: [https://timoneiro.vilanculo.me](https://timoneiro.vilanculo.me)
 
 <hr>
 
@@ -13,9 +13,9 @@ Website and documentation: [Todo]()
 ```bash
 composer require isneezy/timoneiro
 ```
-**2. Register the Service Provider**  
+**2. Register the Service Provider**
 
-In `conf/app.php` file of your laravel project, register the `TimoneiroServiceProvider`
+In `config/app.php` file of your laravel project, register the `TimoneiroServiceProvider`
 ```php
 <?php
 return [
@@ -27,6 +27,13 @@ return [
     ]
 ];
 ```
+
+**3. Run the package installation command**
+```bash
+php artisan timoneiro:install
+```
+this will add Timoneiro routes on `routes/web.php` file
+and your admin/control panel will be available at `/admin` route
 
 ## Development
 **1. Fork this project**
@@ -46,7 +53,7 @@ mkdir packages
 cd packages && git clone git@github.com:user/timoneiro.git
 ```
 
-**4. Register composer development repo in your `package.json` file as follows:**
+**4. Register composer development repo in your `composer.json` file as follows:**
 
 ```json
 {

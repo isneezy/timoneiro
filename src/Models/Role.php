@@ -1,12 +1,11 @@
 <?php
-namespace Isneezy\Timoneiro\Models;
 
+namespace Isneezy\Timoneiro\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Model for user_groups table
- * @package Isneezy\Timoneiro
+ * Model for user_groups table.
  */
 class Role extends Model
 {

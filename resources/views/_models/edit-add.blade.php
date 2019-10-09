@@ -23,9 +23,9 @@
 
 @section('page_content')
     <form
-        action="{{ route("timoneiro.$dataType->slug.". ($edit ? 'update' : 'store' ), $data->getKey()) }}"
-        method="post"
-        enctype="multipart/form-data"
+            action="{{ route("timoneiro.$dataType->slug.". ($edit ? 'update' : 'store' ), $data->getKey()) }}"
+            method="post"
+            enctype="multipart/form-data"
     >
     @if($edit)
         {{ method_field('PUT') }}
@@ -41,18 +41,21 @@
                 $fieldSet = $dataType->field_set;
             @endphp
 
-            @foreach($fieldSet as $field)
-                <div class="-mx-2">
-                    <div class="w-full px-2">
+            <div class="flex flex-wrap -mx-2">
+                @foreach($fieldSet as $field)
+                    <div class="px-2 {{ $field->class ?? "w-full" }}">
                         <div class="mb-6">
                             <label class="block">
                                 <div class="font-bold block mb-2 cursor-pointer">{{ $field->display_name }}</div>
-                                {!! \Isneezy\Timoneiro\Timoneiro::formField($field, $dataType, $data) !!}
+                                {!! Timoneiro::formField($field, $dataType, $data) !!}
+                                @if($errors->has($field->name))
+                                    <p class="text-danger mt-1">{{ $errors->first($field->name) }}</p>
+                                @endif
                             </label>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
 
             <div class="w-full">
                 @yield('submit-buttons')

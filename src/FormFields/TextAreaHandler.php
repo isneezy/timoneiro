@@ -2,6 +2,6 @@
 
 namespace Isneezy\Timoneiro\FormFields;
 
-class TextHandler extends AbstractHandler
+class TextAreaHandler extends AbstractHandler
 {
 }

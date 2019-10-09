@@ -2,32 +2,28 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers;
 
-
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Isneezy\Timoneiro\Actions\AbstractAction;
-use Isneezy\Timoneiro\Database\DatabaseSchemaManager;
-use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
-use Isneezy\Timoneiro\Timoneiro;
+use Isneezy\Timoneiro\Facades\Timoneiro;
+use Isneezy\Timoneiro\Http\Request;
 
 class TimoneiroBaseController extends Controller
 {
-    use RelationShipParser;
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * @return Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-        $slug = $this->getSlug($request);
-        $dataType = Timoneiro::dataType($slug);
+        $dataType = $request->getDataType();
 
         /** @var Model $model */
         $model = app($dataType->model_name);
-        // Todo check for permission
-        // $this->authorize('browse', app($dataType->model_name));
+        $request->check('index');
         $search = $request->get('s');
 
         $dataType->removeRelationshipFields();
@@ -81,8 +77,8 @@ class TimoneiroBaseController extends Controller
         }
 
         $view = 'timoneiro::_models.index';
-        if (view()->exists("timoneiro::$slug.index")) {
-            $view = "timoneiro::$slug.index";
+        if (view()->exists("timoneiro::{$dataType->slug}.index")) {
+            $view = "timoneiro::{$dataType->slug}.index";
         }
 
         $viewData = compact(
@@ -99,9 +95,9 @@ class TimoneiroBaseController extends Controller
         return Timoneiro::view($view, $viewData);
     }
 
-    public function edit(Request $request, $id) {
-        $slug = $this->getSlug($request);
-        $dataType = Timoneiro::dataType($slug);
+    public function edit(Request $request, $id)
+    {
+        $dataType = $request->getDataType();
 
         /** @var Model $model */
         $model = app($dataType->model_name);
@@ -112,22 +108,26 @@ class TimoneiroBaseController extends Controller
         $dataType->removeRelationshipFields('edit');
         $data = $model->findOrFail($id);
 
-        // foreach ($dataType->field_set) {}
-        // todo check permissions
+        $request->check('edit', $data);
 
         $view = 'timoneiro::_models.edit-add';
 
-        if (view()->exists("timoneiro::$slug.edit-add")) {
-            $view = "timoneiro::$slug.edit-add";
+        if (view()->exists("timoneiro::{$dataType->slug}.edit-add")) {
+            $view = "timoneiro::{$dataType->slug}.edit-add";
         }
 
         return Timoneiro::view($view, compact('dataType', 'data'));
     }
 
-    public function update(Request $request, $id) {
-        $slug = $this->getSlug($request);
-
-        $dataType = Timoneiro::dataType($slug);
+    /**
+     * @param Request $request
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $dataType = $request->getDataType();
         /** @var Model $model */
         $model = app($dataType->model_name);
 
@@ -138,38 +138,41 @@ class TimoneiroBaseController extends Controller
         /** @var Model $data */
         $data = $model->findOrFail($id);
 
-        // todo Check permission
-        // todo validate fields
+        $request->check('edit', $data);
         $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
+
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
-    public function create(Request $request) {
-        $slug = $this->getSlug($request);
-        $dataType = Timoneiro::dataType($slug);
+    public function create(Request $request)
+    {
+        $dataType = $request->getDataType();
 
         $dataType->removeRelationshipFields('create');
         /** @var Model $data */
         $data = app($dataType->model_name);
 
-        // todo check permission
+        $request->check('create', $data);
         $view = 'timoneiro::_models.edit-add';
-        if (view()->exists("timoneiro::{$slug}.edit-add")){
-            $view = "timoneiro::{$slug}.edit-add";
+        if (view()->exists("timoneiro::{$dataType->slug}.edit-add")) {
+            $view = "timoneiro::{$dataType->slug}.edit-add";
         }
 
         return Timoneiro::view($view, compact('dataType', 'data'));
     }
 
-    public function store(Request $request) {
-        $slug = $this->getSlug($request);
-        $dataType = Timoneiro::dataType($slug);
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $dataType = $request->getDataType();
 
-        // todo Check permission
+        $request->check('create');
+        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, app($dataType->model_name));
 
-        // todo Validate
-        $this->insertOrUpdateData($request, $slug, $dataType->field_set, app($dataType->model_name));
-
-        return redirect()->route("timoneiro.{$slug}.index");
+        return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 }

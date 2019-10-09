@@ -19,6 +19,15 @@
                 </a>
             </li>
         @endforeach
+        <li>
+            <a
+                href="{{ route('timoneiro.settings.index') }}"
+                class="px-6 py-2 flex hover:text-info {{ request()->routeIs('timoneiro.settings.index') ? 'text-info': '' }} items-center"
+            >
+                <i class="mdi mdi-settings mr-2"></i>
+                <span class="flex-1">Settings</span>
+            </a>
+        </li>
     </ul>
 </div>
 <!--======== End Left Sidebar =======-->
