@@ -10,6 +10,15 @@
                 <span class="flex-1">Dashboard</span>
             </a>
         </li>
+        <li>
+            <a
+                    href="{{ route('timoneiro.media.index') }}"
+                    class="px-6 py-2 flex hover:text-info {{ request()->routeIs('timoneiro.media.*') ? 'text-info': '' }} items-center"
+            >
+                <i class="mdi mdi-folder-multiple-image mr-2"></i>
+                <span class="flex-1">Media</span>
+            </a>
+        </li>
         {{--<li class="px-5 py-2 uppercase text-xs font-semibold">Auth</li>--}}
         @foreach(timoneiro_menu() as $menuItem)
             <li>

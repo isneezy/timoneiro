@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import DataTable from './DataTable'
+import MediaManager from './MediaManager/MediaManager'
 
-Vue.component('data-table', DataTable)
+Vue.component('media-manager', MediaManager)

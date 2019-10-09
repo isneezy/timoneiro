@@ -31,6 +31,11 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
         Route::put('/', 'TimoneiroSettingsController@update')->name('update');
     });
 
+    Route::group(['prefix' => 'media', 'as' => 'media.'], function () {
+        Route::get('/', 'TimoneiroMediaController@index')->name('index');
+        Route::get('files', 'TimoneiroMediaController@files')->name('files');
+    });
+
     // Assets Route
     Route::get('timoneiro-assets', 'TimoneiroController@assets')->name('assets');
 });
