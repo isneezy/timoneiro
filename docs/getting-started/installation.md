@@ -26,6 +26,9 @@ DB_USERNAME=homestead
 DB_PASSWORD=secret
 ```
 
+Run the installation command `php artisan timoneiro:install`  
+This command will register the admin routes, run migrations and publish the package configuration.
+
 And we are good to go!
 
 
