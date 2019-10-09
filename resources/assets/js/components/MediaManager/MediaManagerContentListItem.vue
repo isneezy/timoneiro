@@ -7,9 +7,9 @@
     @mouseout="isHover = false"
   >
     <div class="w-1/3 mr-2 flex items-center justify-center h-12">
-      <i class="mdi mdi-folder text-4xl"></i>
+      <i class="mdi text-4xl" :class="icon"></i>
     </div>
-    <div>
+    <div class="w-2/3">
       <p class="font-bold truncate">{{ item.name }}</p>
       <p v-if="!isFolder" class="text-xs">{{ fileSize }}kb</p>
     </div>
@@ -34,7 +34,7 @@
         const className = {}
         className['bg-gray-200'] = !this.isHover && !this.hasFocus
         className['bg-gray-300'] = this.isHover && !this.hasFocus
-        className['bg-primary'] = this.hasFocus
+        className['bg-info'] = this.hasFocus
 
         className['text-white'] = this.hasFocus
         return className
@@ -44,7 +44,19 @@
       },
       fileSize() {
         return  (this.item.size / 1000).toFixed(1)
+      },
+      icon() {
+        const icon = icons[this.item.type] || 'mdi-file-alert'
+        return icon
       }
     }
   }
+  const icons = {
+    'folder': 'mdi-folder',
+    'text/plain': 'mdi-file-document',
+    'application/pdf': 'mdi-file-pdf',
+    'application/msword': 'mdi-file-word',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'mdi-file-word',
+    'application/vnd.ms-excel': 'mdi-file-excel'
+  };
 </script>

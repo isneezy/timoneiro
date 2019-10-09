@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-gray-400 p-3 flex">
+  <div class="bg-gray-300 p-3 flex">
     <div class="mr-8">
       <button class="appearance-none bg-primary py-2 px-3 text-white rounded-l">
         <i class="mdi mdi-upload"></i>
         <span>Upload</span>
       </button>
-      <button class="appearance-none bg-primary py-2 px-3 text-white rounded-r -ml-1 border-l">
+      <button class="appearance-none bg-primary py-2 px-3 text-white rounded-r -ml-1 border-l" @click="onCreateFolder">
         <i class="mdi mdi-folder-plus"></i>
         <span>Add Folder</span>
       </button>
@@ -32,7 +32,15 @@
 
 <script>
   export default {
-    name: 'MediaManagerToolbar'
+    name: 'MediaManagerToolbar',
+    methods: {
+      onCreateFolder() {
+        const name = window.prompt('Name of the folder')
+        if (name) {
+          this.$emit('createFolder', name)
+        }
+      }
+    }
   }
 </script>
 

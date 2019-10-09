@@ -27,6 +27,8 @@
       onDblclick(item) {
         if (item.type === 'folder') {
           this.$emit('changeDir', item.relative_path)
+        } else {
+          window.open(item.path)
         }
       },
       isSelected(item) {
