@@ -24,7 +24,7 @@
           <i class="mdi mdi-textbox"></i>
           <span>Rename</span>
         </button>
-        <button class="appearance-none bg-white py-2 px-3 -ml-1 rounded-r border-l">
+        <button class="appearance-none bg-white py-2 px-3 -ml-1 rounded-r border-l" @click="onDeleteFile">
           <i class="mdi mdi-delete"></i>
           <span>Delete</span>
         </button>
@@ -44,7 +44,8 @@
     name: 'MediaManagerToolbar',
     props: {
       current: { type: String, required: true, default: '' },
-      basePath: { type: String, required: true }
+      basePath: { type: String, required: true },
+      selected: { type: Object, default: null }
     },
     data: () => ({
       progress: 0
@@ -76,6 +77,16 @@
       },
       onUploadProgress(e) {
         this.progress = Math.round((e.load * 100) / e.total)
+      },
+      async onDeleteFile() {
+        const confirm = window.confirm('Are you sure want to delete the selected file(s)?\nNote: this can\'t be undone.')
+        if (confirm) {
+          await axios.post(`${this.basePath}/delete`, {
+            path: this.current,
+            files: [this.selected]
+          })
+          this.$emit('refresh')
+        }
       }
     }
   }

@@ -83,6 +83,25 @@ class TimoneiroMediaController extends Controller
 
         return response()->json(compact('success', 'error'));
     }
+
+    public function delete(Request $request) {
+        // todo check permission
+        // $this->authorize('browse_media');
+        $path = str_replace('//', '/', Str::finish($request->path, '/'));
+        $success = true;
+        $message = '';
+
+        foreach ($request->get('files') as $file) {
+            $file_path = $path.$file['name'];
+            if ($file['type'] === 'folder' && !Storage::disk($this->filesystem)->deleteDirectory($file_path)) {
+                $success = false;
+                $message = 'Error deleting folder';
+            } elseif (!Storage::disk($this->filesystem)->delete($file_path)) {
+                $success = false;
+                $message = 'Error deleting file';
+            }
+        }
+        return response()->json(compact('success', 'message'));
     }
 
     /**

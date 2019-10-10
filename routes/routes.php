@@ -24,20 +24,20 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException("Custom routes hasn't been configured because: ".$e->getMessage(), 1);
         }
-    });
 
-    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
-        Route::get('/', 'TimoneiroSettingsController@index')->name('index');
-        Route::put('/', 'TimoneiroSettingsController@update')->name('update');
-    });
+        Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+            Route::get('/', 'TimoneiroSettingsController@index')->name('index');
+            Route::put('/', 'TimoneiroSettingsController@update')->name('update');
+        });
 
-    Route::group(['prefix' => 'media', 'as' => 'media.'], function () {
-        Route::get('/', 'TimoneiroMediaController@index')->name('index');
-        Route::get('files', 'TimoneiroMediaController@files')->name('files');
-        Route::post('new-folder', 'TimoneiroMediaController@newFolder')->name('new-folder');
-        Route::post('upload', 'TimoneiroMediaController@upload')->name('upload');
+        Route::group(['prefix' => 'media', 'as' => 'media.'], function () {
+            Route::get('/', 'TimoneiroMediaController@index')->name('index');
+            Route::get('files', 'TimoneiroMediaController@files')->name('files');
+            Route::post('new-folder', 'TimoneiroMediaController@newFolder')->name('new-folder');
+            Route::post('delete', 'TimoneiroMediaController@delete')->name('delete');
+            Route::post('upload', 'TimoneiroMediaController@upload')->name('upload');
+        });
     });
-
     // Assets Route
     Route::get('timoneiro-assets', 'TimoneiroController@assets')->name('assets');
 });

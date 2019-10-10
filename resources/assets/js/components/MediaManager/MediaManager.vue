@@ -3,6 +3,7 @@
     <MediaManagerToolbar
       :base-path="basePath"
       :current="currentFolder"
+      :selected="selectedFile"
       @createFolder="onCreateFolder"
       @refresh="changeDir(currentFolder)"
     />

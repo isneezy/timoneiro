@@ -13,6 +13,7 @@
     "production": "cross-env NODE_ENV=production webpack --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "datatables.net": "^1.10.19",
     "jquery": "^3.4.1",
     "vue": "^2.6.10"
