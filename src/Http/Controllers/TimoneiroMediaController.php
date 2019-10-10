@@ -3,7 +3,6 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -39,7 +38,7 @@ class TimoneiroMediaController extends Controller
             $folder = '';
         }
 
-        $dir = $this->directory.$folder;
+        $dir = $this->directory . $folder;
         $storage = Storage::disk($this->filesystem)->addPlugin(new ListWith());
         $files = collect($storage->listWith(['mimetype'], $dir))
             ->map(function ($item) use ($storage) {
@@ -84,7 +83,8 @@ class TimoneiroMediaController extends Controller
         return response()->json(compact('success', 'error'));
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         // todo check permission
         // $this->authorize('browse_media');
         $path = str_replace('//', '/', Str::finish($request->path, '/'));
@@ -92,7 +92,7 @@ class TimoneiroMediaController extends Controller
         $message = '';
 
         foreach ($request->get('files') as $file) {
-            $file_path = $path.$file['name'];
+            $file_path = $path . $file['name'];
             if ($file['type'] === 'folder' && !Storage::disk($this->filesystem)->deleteDirectory($file_path)) {
                 $success = false;
                 $message = 'Error deleting folder';
@@ -108,7 +108,8 @@ class TimoneiroMediaController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
         $path = str_replace('//', '/', Str::finish($request->path, '/'));
 
         try {
@@ -129,6 +130,28 @@ class TimoneiroMediaController extends Controller
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
+        }
+
+        return response()->json(compact('success', 'message'));
+    }
+
+    public function rename(Request $request)
+    {
+        $path = str_replace('//', '/', Str::finish($request->path, '/'));
+        $oldName = $request->get('file')['name'];
+        $newName = $request->get('name');
+
+        $success = true;
+        $message = '';
+
+        if (!Storage::disk($this->filesystem)->exists($path . $newName)) {
+            if (!Storage::disk($this->filesystem)->move($path . $oldName, $path . $newName)) {
+                $success = false;
+                $message = 'Error moving file';
+            }
+        } else {
+            $success = false;
+            $message = 'File or folder may exists.';
         }
 
         return response()->json(compact('success', 'message'));

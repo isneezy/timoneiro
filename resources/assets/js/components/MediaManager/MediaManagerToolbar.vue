@@ -20,7 +20,7 @@
           <i class="mdi mdi-folder-move"></i>
           <span>Move</span>
         </button>
-        <button class="appearance-none bg-white py-2 px-3 -ml-1 border-l">
+        <button class="appearance-none bg-white py-2 px-3 -ml-1 border-l" @click="onRename">
           <i class="mdi mdi-textbox"></i>
           <span>Rename</span>
         </button>
@@ -77,6 +77,20 @@
       },
       onUploadProgress(e) {
         this.progress = Math.round((e.load * 100) / e.total)
+      },
+      async onRename() {
+        const name = window.prompt(
+          `Rename ${this.selected.name}`,
+          this.selected.name
+        )
+        if (name) {
+          await axios.post(`${this.basePath}/rename`, {
+            path: this.current,
+            file: this.selected,
+            name
+          })
+          this.$emit('refresh')
+        }
       },
       async onDeleteFile() {
         const confirm = window.confirm('Are you sure want to delete the selected file(s)?\nNote: this can\'t be undone.')
