@@ -10,7 +10,7 @@
         <span>Add Folder</span>
       </button>
     </div>
-    <button class="appearance-none bg-white py-2 px-3 rounded">
+    <button class="appearance-none bg-white py-2 px-3 rounded" @click="$emit('refresh')">
       <i class="mdi mdi-reload"></i>
     </button>
     <div class="ml-8">

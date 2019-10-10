@@ -1,6 +1,10 @@
 <template>
   <div class="bg-white rounded overflow-hidden">
-    <MediaManagerToolbar :current="currentFolder" @createFolder="onCreateFolder"/>
+    <MediaManagerToolbar
+      :current="currentFolder"
+      @createFolder="onCreateFolder"
+      @refresh="changeDir(currentFolder)"
+    />
     <MediaManagerBreadCrumb :current="currentFolder" @changeDir="changeDir"  />
     <div class="flex">
       <div class="flex-1 p-5">
