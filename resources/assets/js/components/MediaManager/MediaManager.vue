@@ -1,12 +1,13 @@
 <template>
   <div class="bg-white rounded overflow-hidden">
     <MediaManagerToolbar
+      :base-path="basePath"
       :current="currentFolder"
       @createFolder="onCreateFolder"
       @refresh="changeDir(currentFolder)"
     />
     <MediaManagerBreadCrumb :current="currentFolder" @changeDir="changeDir"  />
-    <div class="flex">
+    <div class="flex" style="min-height: 264px">
       <div class="flex-1 p-5">
         <MediaManagerContentList
           v-if="!loading"

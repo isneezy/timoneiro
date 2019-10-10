@@ -3,8 +3,11 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Facades\Timoneiro;
 use League\Flysystem\Plugin\ListWith;
 
@@ -79,5 +82,36 @@ class TimoneiroMediaController extends Controller
         }
 
         return response()->json(compact('success', 'error'));
+    }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upload(Request $request) {
+        $path = str_replace('//', '/', Str::finish($request->path, '/'));
+
+        try {
+            collect($request->allFiles())->each(function (UploadedFile $file) use ($path) {
+                $extension = $file->getClientOriginalExtension();
+                $name = Str::replaceLast('.' . $extension, '', $file->getClientOriginalName());
+                $file_name = $name . '.' . $extension;
+                $conflicts = 0;
+                while (Storage::disk($this->filesystem)->exists($path . $file_name)) {
+                    $conflicts++;
+                    $file_name = $name . '_' . str_pad($conflicts, 2, '0', STR_PAD_LEFT) . '.' . $extension;
+                }
+
+                $file->storeAs($path, $file_name, $this->filesystem);
+            });
+            $success = true;
+            $message = '';
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return response()->json(compact('success', 'message'));
     }
 }

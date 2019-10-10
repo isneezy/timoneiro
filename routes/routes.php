@@ -35,6 +35,7 @@ Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function (
         Route::get('/', 'TimoneiroMediaController@index')->name('index');
         Route::get('files', 'TimoneiroMediaController@files')->name('files');
         Route::post('new-folder', 'TimoneiroMediaController@newFolder')->name('new-folder');
+        Route::post('upload', 'TimoneiroMediaController@upload')->name('upload');
     });
 
     // Assets Route
