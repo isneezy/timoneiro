@@ -33,11 +33,15 @@
 <script>
   export default {
     name: 'MediaManagerToolbar',
+    props: {
+      current: { type: String, required: true, default: '' }
+    },
     methods: {
       onCreateFolder() {
         const name = window.prompt('Name of the folder')
         if (name) {
-          this.$emit('createFolder', name)
+          const path = this.current || ''
+          this.$emit('createFolder', path + '/' + name)
         }
       }
     }

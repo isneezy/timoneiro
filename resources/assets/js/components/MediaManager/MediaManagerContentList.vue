@@ -4,7 +4,7 @@
       <MediaManagerContentListItem
         :item="item"
         :active="isSelected(item)"
-        @click.native="onClick(item)"
+        @click.stop.native="onClick(item)"
         @dblclick.native="onDblclick(item)"
       />
     </div>

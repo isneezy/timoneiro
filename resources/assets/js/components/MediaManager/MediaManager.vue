@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white rounded overflow-hidden">
-    <MediaManagerToolbar @createFolder="onCreateFolder"/>
+    <MediaManagerToolbar :current="currentFolder" @createFolder="onCreateFolder"/>
     <MediaManagerBreadCrumb :current="currentFolder" @changeDir="changeDir"  />
     <div class="flex">
       <div class="flex-1 p-5">
@@ -17,12 +17,7 @@
         </div>
       </div>
       <div class="w-1/4 p-5 border-l">
-        <div v-if="selectedFile">
-          <p class="font-semibold text-base">{{ selectedFile.name }}</p>
-          <p v-if="selectedFile.size">{{ selectedFile.size / 1000 }}kb</p>
-          <p>{{ selectedFile.type }}</p>
-          <p>{{ selectedFile.last_modified }}</p>
-        </div>
+        <MediaFileInfo :selectedFile="selectedFile" />
       </div>
     </div>
   </div>
@@ -32,25 +27,27 @@
   import MediaManagerToolbar from './MediaManagerToolbar'
   import MediaManagerContentList from './MediaManagerContentList'
   import MediaManagerBreadCrumb from './MediaManagerBreadCrumb'
+  import MediaFileInfo from './MediaFileInfo'
 
   export default {
     name: 'MediaManager',
+    components: {
+      MediaFileInfo,
+      MediaManagerBreadCrumb,
+      MediaManagerContentList,
+      MediaManagerToolbar
+    },
     props: {
       basePath: { required: true, type: String }
     },
     data: () => ({
       files: [],
       selectedFile: null,
-      currentFolder: null,
+      currentFolder: '',
       loading: false
     }),
     mounted() {
       this.changeDir()
-    },
-    components: {
-      MediaManagerBreadCrumb,
-      MediaManagerContentList,
-      MediaManagerToolbar
     },
     methods: {
       async changeDir(folder = '/') {
@@ -67,8 +64,7 @@
       onSelect(file) {
         this.selectedFile = file
       },
-      async onCreateFolder(name) {
-        name = this.currentFolder + '/' + name
+      async onCreateFolder(new_folder) {
         try {
           this.loading = true
           await fetch(`${this.basePath}/new-folder`, {
@@ -78,7 +74,7 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              new_folder: name
+              new_folder
             })
           })
           await this.changeDir(this.currentFolder)

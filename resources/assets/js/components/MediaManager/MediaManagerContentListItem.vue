@@ -7,7 +7,8 @@
     @mouseout="isHover = false"
   >
     <div class="w-1/3 mr-2 flex items-center justify-center h-12">
-      <i class="mdi text-4xl" :class="icon"></i>
+      <img class="max-h-full max-w-full" v-if="isImage" :src="item.path" :alt="item.name">
+      <i v-else class="mdi text-4xl" :class="icon"></i>
     </div>
     <div class="w-2/3">
       <p class="font-bold truncate">{{ item.name }}</p>
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+  import { isImage } from '../../utils'
+
   export default {
     name: 'MediaManagerContentListItem',
     props: {
@@ -48,6 +51,9 @@
       icon() {
         const icon = icons[this.item.type] || 'mdi-file-alert'
         return icon
+      },
+      isImage() {
+        return isImage(this.item)
       }
     }
   }
