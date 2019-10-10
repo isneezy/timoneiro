@@ -16,7 +16,7 @@
         <i class="mdi mdi-reload"></i>
       </button>
       <div class="ml-8">
-        <button class="appearance-none bg-white py-2 px-3 rounded-l">
+        <button class="appearance-none bg-white py-2 px-3 rounded-l" @click="onMove">
           <i class="mdi mdi-folder-move"></i>
           <span>Move</span>
         </button>
@@ -88,6 +88,17 @@
             path: this.current,
             file: this.selected,
             name
+          })
+          this.$emit('refresh')
+        }
+      },
+      async onMove() {
+        const destination = window.prompt('Type the new location of the file/folder', `${this.current}`)
+        if (destination) {
+          await axios.post(`${this.basePath}/move`, {
+            path: this.current,
+            files: [this.selected],
+            destination
           })
           this.$emit('refresh')
         }

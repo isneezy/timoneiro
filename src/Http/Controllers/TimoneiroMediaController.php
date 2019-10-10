@@ -156,4 +156,28 @@ class TimoneiroMediaController extends Controller
 
         return response()->json(compact('success', 'message'));
     }
+
+    public function move(Request $request) {
+        $path = str_replace('//', '/', Str::finish($request->path, '/'));
+        $destination = str_replace('//', '/', Str::finish($request->destination, '/'));
+
+        $success = true;
+        $message = '';
+
+        foreach ($request->get('files') as $file) {
+            $oldPath = $path.$file['name'];
+            $newPath = $destination.$file['name'];
+
+            try{
+                Storage::disk($this->filesystem)->move($oldPath, $newPath);
+            } catch (\Exception $e) {
+                $success = false;
+                $message = $e->getMessage();
+
+                return response()->json(compact('success', 'message'));
+            }
+        }
+
+        return response()->json(compact('success', 'message'));
+    }
 }
