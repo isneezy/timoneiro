@@ -38,7 +38,7 @@ class TimoneiroMediaController extends Controller
             $folder = '';
         }
 
-        $dir = $this->directory . $folder;
+        $dir = $this->directory.$folder;
         $storage = Storage::disk($this->filesystem)->addPlugin(new ListWith());
         $files = collect($storage->listWith(['mimetype'], $dir))
             ->map(function ($item) use ($storage) {
@@ -92,7 +92,7 @@ class TimoneiroMediaController extends Controller
         $message = '';
 
         foreach ($request->get('files') as $file) {
-            $file_path = $path . $file['name'];
+            $file_path = $path.$file['name'];
             if ($file['type'] === 'folder' && !Storage::disk($this->filesystem)->deleteDirectory($file_path)) {
                 $success = false;
                 $message = 'Error deleting folder';
@@ -101,11 +101,13 @@ class TimoneiroMediaController extends Controller
                 $message = 'Error deleting file';
             }
         }
+
         return response()->json(compact('success', 'message'));
     }
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function upload(Request $request)
@@ -115,12 +117,12 @@ class TimoneiroMediaController extends Controller
         try {
             collect($request->allFiles())->each(function (UploadedFile $file) use ($path) {
                 $extension = $file->getClientOriginalExtension();
-                $name = Str::replaceLast('.' . $extension, '', $file->getClientOriginalName());
-                $file_name = $name . '.' . $extension;
+                $name = Str::replaceLast('.'.$extension, '', $file->getClientOriginalName());
+                $file_name = $name.'.'.$extension;
                 $conflicts = 0;
-                while (Storage::disk($this->filesystem)->exists($path . $file_name)) {
+                while (Storage::disk($this->filesystem)->exists($path.$file_name)) {
                     $conflicts++;
-                    $file_name = $name . '_' . str_pad($conflicts, 2, '0', STR_PAD_LEFT) . '.' . $extension;
+                    $file_name = $name.'_'.str_pad($conflicts, 2, '0', STR_PAD_LEFT).'.'.$extension;
                 }
 
                 $file->storeAs($path, $file_name, $this->filesystem);
@@ -144,8 +146,8 @@ class TimoneiroMediaController extends Controller
         $success = true;
         $message = '';
 
-        if (!Storage::disk($this->filesystem)->exists($path . $newName)) {
-            if (!Storage::disk($this->filesystem)->move($path . $oldName, $path . $newName)) {
+        if (!Storage::disk($this->filesystem)->exists($path.$newName)) {
+            if (!Storage::disk($this->filesystem)->move($path.$oldName, $path.$newName)) {
                 $success = false;
                 $message = 'Error moving file';
             }
@@ -157,7 +159,8 @@ class TimoneiroMediaController extends Controller
         return response()->json(compact('success', 'message'));
     }
 
-    public function move(Request $request) {
+    public function move(Request $request)
+    {
         $path = str_replace('//', '/', Str::finish($request->path, '/'));
         $destination = str_replace('//', '/', Str::finish($request->destination, '/'));
 
@@ -168,7 +171,7 @@ class TimoneiroMediaController extends Controller
             $oldPath = $path.$file['name'];
             $newPath = $destination.$file['name'];
 
-            try{
+            try {
                 Storage::disk($this->filesystem)->move($oldPath, $newPath);
             } catch (\Exception $e) {
                 $success = false;
