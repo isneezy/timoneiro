@@ -3,10 +3,10 @@
 namespace Isneezy\Timoneiro\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Hash;
+use Isneezy\Timoneiro\Facades\Timoneiro;
+use Isneezy\Timoneiro\Models\Role;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Process;
 
 class AdminCommand extends Command
 {
@@ -28,6 +28,7 @@ class AdminCommand extends Command
     }
 
     public function handle() {
+        Timoneiro::permissions();
         $user = $this->getUser($this->option('create'));
 
         // no user returned
@@ -35,7 +36,27 @@ class AdminCommand extends Command
             exit;
         }
 
+        $role = $this->getAdminRole();
+        // get all permissions
+        $permissions = Timoneiro::permissions();
+
+        // assign all permissions to admin role
+        $role->permissions = $permissions;
+        $role->save();
+
+        $user->role_id = $role->id;
         $user->save();
+    }
+
+    protected function getAdminRole() {
+        $role = Role::where(['name' => 'admin'])->firstOrNew([]);
+        if (!$role->exists) {
+            $role->forceFill([
+                'name' => 'admin',
+                'display_name' => 'Administrator'
+            ])->save();
+        }
+        return $role;
     }
 
     protected function getUser($create) {

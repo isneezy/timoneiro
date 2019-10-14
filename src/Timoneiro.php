@@ -76,6 +76,18 @@ class Timoneiro
         require __DIR__.'/../routes/routes.php';
     }
 
+    public function permissions() {
+        return collect($this->dataTypes())->map(function (AbstractDataType $dataType) {
+            return [
+                "browse $dataType->slug",
+                "read $dataType->slug",
+                "edit $dataType->slug",
+                "add $dataType->slug",
+                "delete $dataType->slug"
+            ];
+        })->flatten();
+    }
+
     public function view($name, array $params = [])
     {
         return view($name, $params);
