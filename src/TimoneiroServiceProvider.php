@@ -2,18 +2,20 @@
 
 namespace Isneezy\Timoneiro;
 
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Commands\AdminCommand;
 use Isneezy\Timoneiro\Commands\InstallCommand;
 use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroDataTypeMiddleware;
+use Isneezy\Timoneiro\Policies\BasePolicy;
 
 class TimoneiroServiceProvider extends ServiceProvider
 {
+    protected $policies = [];
     /**
      * Register services.
      *
@@ -50,6 +52,8 @@ class TimoneiroServiceProvider extends ServiceProvider
         $router->aliasMiddleware('admin.user', TimoneiroAdminMiddleware::class);
         $router->aliasMiddleware('timoneiro', TimoneiroDataTypeMiddleware::class);
         $this->loadMigrationsFrom(realpath(__DIR__.'/../migrations'));
+
+        $this->loadAuth();
     }
 
     public function loadHelpers()
@@ -62,6 +66,18 @@ class TimoneiroServiceProvider extends ServiceProvider
     public function registerConfigs()
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/publishable/config/timoneiro.php', 'timoneiro');
+    }
+
+    public function loadAuth() {
+        // DataType Policies
+        foreach (TimoneiroFacade::dataTypes() as $dataType) {
+            $policyClass = BasePolicy::class;
+            if ($dataType->policy_name && $dataType->policy_name != '' && class_exists($dataType->policy_name)) {
+                $policyClass = $dataType->policy_name;
+            }
+            $this->policies[$dataType->model_name] = $policyClass;
+        }
+        $this->registerPolicies();
     }
 
     public function registerFormFields()
