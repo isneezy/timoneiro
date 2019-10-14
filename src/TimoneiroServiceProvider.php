@@ -6,6 +6,7 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Isneezy\Timoneiro\Commands\AdminCommand;
 use Isneezy\Timoneiro\Commands\InstallCommand;
 use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
@@ -90,5 +91,6 @@ class TimoneiroServiceProvider extends ServiceProvider
     private function registerConsoleCommands()
     {
         $this->commands(InstallCommand::class);
+        $this->commands(AdminCommand::class);
     }
 }
