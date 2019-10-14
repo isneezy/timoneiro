@@ -131,7 +131,7 @@ class TimoneiroBaseController extends Controller
 
         $dataType->removeRelationshipFields('create');
         /** @var Model $data */
-        $data = app($dataType->model_name);
+        $data = $this->getService($dataType)->getModel();
 
         $request->check('create', $data);
         $view = 'timoneiro::_models.edit-add';
@@ -152,16 +152,8 @@ class TimoneiroBaseController extends Controller
         $dataType = $request->getDataType();
 
         $request->check('create');
-        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, app($dataType->model_name));
+        $this->getService($dataType)->create($request->all());
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
-    }
-
-    /**
-     * @param $dataType
-     * @return Service
-     */
-    public function getService($dataType) {
-        return app($dataType->service ?? Service::class);
     }
 }

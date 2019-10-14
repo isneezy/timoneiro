@@ -43,12 +43,22 @@ class Service
         return $this->newQuery()->findOrFail($id);
     }
 
-    public function update($id, array $data) {
+    /**
+     * @param Model | integer | string $model
+     * @param array $data
+     * @return Model
+     */
+    public function update($model, array $data) {
         $dataType = $this->getDataType();
-        if (!$id instanceof Model) {
-            $id = $this->find($id);
+        if (!$model instanceof Model) {
+            $model = $this->find($model);
         }
-        return $this->insertOrUpdateData($data, $dataType->slug, $dataType->field_set, $id);
+        return $this->insertOrUpdate($data, $dataType->slug, $dataType->field_set, $model);
+    }
+
+    public function create(array $data) {
+        $dataType = $this->getDataType();
+        return $this->insertOrUpdate($data, $dataType->slug, $dataType->field_set, $this->getModel());
     }
 
     /**
@@ -92,7 +102,7 @@ class Service
      * @param Model $model
      * @return Model
      */
-    public function insertOrUpdateData(array $data, $slug, $filedSet, $model)
+    public function insertOrUpdate(array $data, $slug, $filedSet, $model)
     {
         foreach ($filedSet as $field) {
             $content = $this->getContentBasedOnType($data, $slug, $field);
