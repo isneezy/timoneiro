@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\DataType;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -32,55 +31,66 @@ class Service implements ServiceInterface
         }
 
         $perPage = Arr::get($data, 'limit', 10);
+
         return $query->paginate($perPage);
     }
 
     /**
      * @param $id
+     *
      * @return Collection|Model
      */
-    public function find($id) {
+    public function find($id)
+    {
         return $this->newQuery()->findOrFail($id);
     }
 
     /**
      * @param Model | integer | string $model
-     * @param array $data
+     * @param array                    $data
+     *
      * @return Model
      */
-    public function update($model, array $data) {
+    public function update($model, array $data)
+    {
         $dataType = $this->getDataType();
         if (!$model instanceof Model) {
             $model = $this->find($model);
         }
+
         return $this->insertOrUpdate($data, $dataType->slug, $dataType->field_set, $model);
     }
 
-    public function create(array $data) {
+    public function create(array $data)
+    {
         $dataType = $this->getDataType();
+
         return $this->insertOrUpdate($data, $dataType->slug, $dataType->field_set, $this->getModel());
     }
 
     /**
      * @return AbstractDataType
      */
-    public function getDataType() {
+    public function getDataType()
+    {
         return app(AbstractDataType::class);
     }
 
     /**
      * @return Model
      */
-    public function getModel() {
+    public function getModel()
+    {
         return app($this->getDataType()->model_name);
     }
 
     /**
      * @param array $data
+     *
      * @return Builder
      */
-    public function newQuery($data = []) {
-
+    public function newQuery($data = [])
+    {
         $model = $this->getModel();
         $query = $model->newQuery();
 
@@ -92,6 +102,7 @@ class Service implements ServiceInterface
                 $query = $query->withTrashed();
             }
         }
+
         return $query;
     }
 
@@ -100,6 +111,7 @@ class Service implements ServiceInterface
      * @param $slug
      * @param $filedSet
      * @param Model $model
+     *
      * @return Model
      */
     public function insertOrUpdate(array $data, $slug, $filedSet, $model)

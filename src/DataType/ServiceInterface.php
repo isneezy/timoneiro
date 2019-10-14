@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\DataType;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,13 +10,15 @@ interface ServiceInterface
 {
     /**
      * @param string $keyword
-     * @param array $data
+     * @param array  $data
+     *
      * @return LengthAwarePaginator
      */
     public function findAll($keyword = '', array $data = []);
 
     /**
      * @param $id
+     *
      * @return Model | null
      */
     public function find($id);
@@ -25,12 +26,14 @@ interface ServiceInterface
     /**
      * @param $model
      * @param array $data
+     *
      * @return Model
      */
     public function update($model, array $data);
 
     /**
      * @param array $data
+     *
      * @return Model
      */
     public function create(array $data);
@@ -47,6 +50,7 @@ interface ServiceInterface
 
     /**
      * @param array $data
+     *
      * @return Builder
      */
     public function newQuery($data = []);

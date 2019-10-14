@@ -3,11 +3,9 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Isneezy\Timoneiro\Actions\AbstractAction;
-use Isneezy\Timoneiro\DataType\Service;
 use Isneezy\Timoneiro\Facades\Timoneiro;
 use Isneezy\Timoneiro\Http\Request;
 

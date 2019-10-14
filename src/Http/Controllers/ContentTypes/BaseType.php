@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers\ContentTypes;
 
-use Illuminate\Http\Request;
 use Isneezy\Timoneiro\DataType\DataTypeField;
 
 abstract class BaseType
