@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import PortalVue from 'portal-vue'
 import axios from 'axios'
 import './components'
 
@@ -6,6 +7,8 @@ window.$ = window.jQuery = require('jquery')
 require('datatables.net')
 
 axios.defaults.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+
+Vue.use(PortalVue)
 
 $(document).ready(function () {
     const searchForm = $('#search-form')

@@ -39,6 +39,7 @@
             </div>
         </div>
     </div>
+    <portal-target name="modals" multiple></portal-target>
 </div>
 <script src="{{ timoneiro_assets('/js/app.js') }}" type="text/javascript"></script>
 </body>

@@ -26,6 +26,14 @@
         <MediaFileInfo :selectedFile="selectedFile" />
       </div>
     </div>
+    <div v-if="chooser" class="flex items-center justify-end border-t px-2 py-3">
+      <button class="appearance-none py-2 px-3 rounded mr-1" @click="$emit('close')">
+        <span>Cancel</span>
+      </button>
+      <button class="appearance-none bg-primary py-2 px-3 text-white rounded" :class="selectFileClass" @click="$emit('change', selectedFile)">
+        <span>Select</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -44,7 +52,8 @@
       MediaManagerToolbar
     },
     props: {
-      basePath: { required: true, type: String }
+      basePath: { required: true, type: String },
+      chooser: { type: Boolean, default: false },
     },
     data: () => ({
       files: [],
@@ -54,6 +63,18 @@
     }),
     mounted() {
       this.changeDir()
+    },
+    computed: {
+      selectFileClass() {
+        const className = {}
+        className['opacity-75'] = !this.isFileSelected
+        className['pointer-events-none'] = !this.isFileSelected
+        className['cursor-not-allowed'] = !this.isFileSelected
+        return className
+      },
+      isFileSelected() {
+        return this.selectedFile && this.selectedFile.type !== 'folder'
+      }
     },
     methods: {
       async changeDir(folder = '/') {
