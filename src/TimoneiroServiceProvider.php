@@ -21,7 +21,8 @@ class TimoneiroServiceProvider extends ServiceProvider
 
     protected $gates = [
         'browse_admin',
-        'browse_media'
+        'browse_media',
+        'browse_settings'
     ];
 
     /**

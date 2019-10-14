@@ -92,6 +92,7 @@ class Timoneiro
         })->flatten()->merge([
             'browse_admin',
             'browse_media',
+            'browse_settings'
         ]);
     }
 
