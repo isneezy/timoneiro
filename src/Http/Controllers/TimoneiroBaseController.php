@@ -89,7 +89,7 @@ class TimoneiroBaseController extends Controller
         }
 
         $dataType->removeRelationshipFields('edit');
-        $data = $model->findOrFail($id);
+        $data = $this->getService($dataType)->find($id);
 
         $request->check('edit', $data);
 
