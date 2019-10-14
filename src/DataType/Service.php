@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Isneezy\Timoneiro\Http\Controllers\ContentTypes\Text;
 
-class Service
+class Service implements ServiceInterface
 {
     public function findAll($keyword = '', array $data = [])
     {
@@ -25,7 +25,7 @@ class Service
         }
 
         $orderBy = Arr::get($data, 'sort.column');
-        $sortOrder = request('sort.direction');
+        $sortOrder = Arr::get($data, 'sort.direction');
 
         if ($orderBy && $sortOrder) {
             $query->orderBy($orderBy, $sortOrder);

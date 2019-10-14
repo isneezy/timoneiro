@@ -17,7 +17,7 @@ class Controller extends BaseController
      * @param $dataType
      * @return ServiceInterface
      */
-    public function getService($dataType) {
+    public function getService($dataType): ServiceInterface {
         return app($dataType->service ?? Service::class);
     }
 }
