@@ -14,6 +14,8 @@ use Isneezy\Timoneiro\Actions\ViewAction;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\DataType\DataTypeField;
+use Isneezy\Timoneiro\DataType\RoleDataType;
+use Isneezy\Timoneiro\DataType\UserDataType;
 use Isneezy\Timoneiro\FormFields\HandlerInterface;
 use Isneezy\Timoneiro\Models\Setting;
 use Isneezy\Timoneiro\Widgets\BaseDimmer;
@@ -38,6 +40,8 @@ class Timoneiro
                 $dataType = DataType::make($model);
                 $this->useDataType($dataType);
             }
+            $this->useDataType(new UserDataType());
+            $this->useDataType(new RoleDataType());
         }
     }
 
