@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
+use Isneezy\Timoneiro\Models\User;
 
 class Request extends FormRequest
 {
@@ -49,9 +50,7 @@ class Request extends FormRequest
 
     public function authorize()
     {
-        // todo check for permission
-        // return auth()->user()->can($this->action, $this->model);
-        return true;
+        return $this->user()->can($this->action, $this->model);
     }
 
     public function rules()

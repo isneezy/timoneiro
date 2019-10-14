@@ -20,4 +20,9 @@ class Role extends Model
         $class = Timoneiro::dataType('users')->model_name;
         return $this->hasMany($class);
     }
+
+    public function __toString()
+    {
+        return $this->display_name;
+    }
 }

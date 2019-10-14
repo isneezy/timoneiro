@@ -22,7 +22,7 @@ class TimoneiroBaseController extends Controller
 
         /** @var Model $model */
         $model = app($dataType->model_name);
-        $request->check('index');
+        $request->check('browse');
         $search = $request->get('s');
 
         $dataType->removeRelationshipFields();
@@ -131,7 +131,7 @@ class TimoneiroBaseController extends Controller
         /** @var Model $data */
         $data = $this->getService($dataType)->getModel();
 
-        $request->check('create', $data);
+        $request->check('add', $data);
         $view = 'timoneiro::_models.edit-add';
         if (view()->exists("timoneiro::{$dataType->slug}.edit-add")) {
             $view = "timoneiro::{$dataType->slug}.edit-add";
@@ -149,7 +149,7 @@ class TimoneiroBaseController extends Controller
     {
         $dataType = $request->getDataType();
 
-        $request->check('create');
+        $request->check('add');
         $this->getService($dataType)->create($request->all());
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
