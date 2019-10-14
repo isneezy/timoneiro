@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
+use Isneezy\Timoneiro\Http\Controllers\ContentTypes\Text;
 
 class Service
 {
@@ -42,6 +43,14 @@ class Service
         return $this->newQuery()->findOrFail($id);
     }
 
+    public function update($id, array $data) {
+        $dataType = $this->getDataType();
+        if (!$id instanceof Model) {
+            $id = $this->find($id);
+        }
+        return $this->insertOrUpdateData($data, $dataType->slug, $dataType->field_set, $id);
+    }
+
     /**
      * @return AbstractDataType
      */
@@ -74,5 +83,32 @@ class Service
             }
         }
         return $query;
+    }
+
+    /**
+     * @param array $data
+     * @param $slug
+     * @param $filedSet
+     * @param Model $model
+     * @return Model
+     */
+    public function insertOrUpdateData(array $data, $slug, $filedSet, $model)
+    {
+        foreach ($filedSet as $field) {
+            $content = $this->getContentBasedOnType($data, $slug, $field);
+            $model->{$field->name} = $content;
+        }
+
+        $model->save();
+
+        return $model;
+    }
+
+    public function getContentBasedOnType(array $data, $slug, $field)
+    {
+        switch ($field->type) {
+            default:
+                return (new Text($data, $slug, $field))->handle();
+        }
     }
 }

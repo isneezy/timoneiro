@@ -2,10 +2,12 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers\ContentTypes;
 
+use Illuminate\Support\Arr;
+
 class Text extends BaseType
 {
     public function handle()
     {
-        return $this->request->input($this->field->name);
+        return Arr::get($this->data, $this->field->name);
     }
 }

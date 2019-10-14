@@ -118,11 +118,9 @@ class TimoneiroBaseController extends Controller
             $model = $model->{$scope}();
         }
 
-        /** @var Model $data */
-        $data = $model->findOrFail($id);
-
+        $data = $this->getService($dataType)->find($id);
         $request->check('edit', $data);
-        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
+        $this->getService($dataType)->update($data, $request->all());
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
