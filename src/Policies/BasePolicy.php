@@ -44,6 +44,6 @@ class BasePolicy
             return $value;
         });
 
-        return $user->hasPermission("{$action} {$dataType->slug}");
+        return $user->hasPermission("{$action}_{$dataType->slug}");
     }
 }

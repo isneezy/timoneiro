@@ -5,17 +5,25 @@ namespace Isneezy\Timoneiro;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Commands\AdminCommand;
 use Isneezy\Timoneiro\Commands\InstallCommand;
 use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroDataTypeMiddleware;
+use Isneezy\Timoneiro\Models\User;
 use Isneezy\Timoneiro\Policies\BasePolicy;
 
 class TimoneiroServiceProvider extends ServiceProvider
 {
     protected $policies = [];
+
+    protected $gates = [
+        'browse_admin',
+        'browse_media'
+    ];
+
     /**
      * Register services.
      *
@@ -78,6 +86,13 @@ class TimoneiroServiceProvider extends ServiceProvider
             $this->policies[$dataType->model_name] = $policyClass;
         }
         $this->registerPolicies();
+
+        // Gates
+        foreach ($this->gates as $gate) {
+            Gate::define($gate, function (User $user) use ($gate) {
+               return $user->hasPermission($gate);
+            });
+        }
     }
 
     public function registerFormFields()

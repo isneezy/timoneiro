@@ -83,13 +83,16 @@ class Timoneiro
     public function permissions() {
         return collect($this->dataTypes())->map(function (AbstractDataType $dataType) {
             return [
-                "browse $dataType->slug",
-                "read $dataType->slug",
-                "edit $dataType->slug",
-                "add $dataType->slug",
-                "delete $dataType->slug"
+                "browse_$dataType->slug",
+                "read_$dataType->slug",
+                "edit_$dataType->slug",
+                "add_$dataType->slug",
+                "delete_$dataType->slug"
             ];
-        })->flatten();
+        })->flatten()->merge([
+            'browse_admin',
+            'browse_media',
+        ]);
     }
 
     public function view($name, array $params = [])
