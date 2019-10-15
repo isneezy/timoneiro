@@ -48,6 +48,10 @@ class Request extends FormRequest
         return $this->dataType;
     }
 
+    public function getAction() {
+        return $this->action;
+    }
+
     public function authorize()
     {
         return $this->user()->can($this->action, $this->model);

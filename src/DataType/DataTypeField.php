@@ -14,6 +14,7 @@ use Isneezy\Timoneiro\Traits\Renderable;
  * @property string name
  * @property string display_name
  * @property string placeholder
+ * @property bool persist
  */
 class DataTypeField
 {
@@ -71,6 +72,10 @@ class DataTypeField
         }
 
         return $options;
+    }
+
+    public function getPersistOption($value) {
+        return is_bool($value) ? $value : true;
     }
 
     /**

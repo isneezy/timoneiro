@@ -25,7 +25,7 @@
 >
     @foreach($field->options ?? [] as $option)
         @php
-            $selected = $option['value'] === $selectedValue;
+            $selected = $option['value'] == $selectedValue;
         @endphp
         <option @if($selected) selected @endif value="{{ $option['value'] }}">{{ $option['label'] }}</option>
     @endforeach
