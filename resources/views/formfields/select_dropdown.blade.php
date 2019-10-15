@@ -24,6 +24,9 @@
     placeholder="{{ $field->placeholder }}"
 >
     @foreach($field->options ?? [] as $option)
-        <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+        @php
+            $selected = $option['value'] === $selectedValue;
+        @endphp
+        <option @if($selected) selected @endif value="{{ $option['value'] }}">{{ $option['label'] }}</option>
     @endforeach
 </form-select>

@@ -10,7 +10,12 @@ class UserDataType extends AbstractDataType
 {
     public $policy_name = UserPolicy::class;
     public $icon_class = 'mdi mdi-account-multiple';
-    public $list_display = ['name', 'email'];
+    public $rules = [
+        'role_id' => 'required|exists:roles,id',
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'verified_at' => 'sometimes|datetime'
+    ];
 
     public function __construct(array $options = [])
     {

@@ -21,7 +21,10 @@
         noResultsText: 'No results found',
         noChoicesText: 'No choices to choose from',
         itemSelectText: 'Press to select',
-        addItemText: 'Press Enter to add "${value}"'
+        addItemText: 'Press Enter to add "${value}"',
+        classNames: {
+          containerOuter: 'choices mb-0'
+        }
       })
     }
   }
