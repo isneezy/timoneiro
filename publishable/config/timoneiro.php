@@ -12,6 +12,5 @@ return [
             \Isneezy\Timoneiro\Widgets\UserDimmer::class,
         ],
     ],
-    'settings' => [
-    ],
+    'settings' => [],
 ];

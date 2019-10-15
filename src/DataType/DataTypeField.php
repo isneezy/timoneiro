@@ -5,6 +5,8 @@ namespace Isneezy\Timoneiro\DataType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\DataType\Traits\HasOptions;
+use Isneezy\Timoneiro\Facades\Timoneiro;
+use Isneezy\Timoneiro\Traits\Renderable;
 
 /**
  * Class DataTypeField.
@@ -69,5 +71,15 @@ class DataTypeField
         }
 
         return $options;
+    }
+
+    /**
+     * Renders the form field
+     * @param AbstractDataType $dataType
+     * @param $data
+     * @return string
+     */
+    public function render($data, AbstractDataType $dataType = null) {
+        return Timoneiro::formField($this, $dataType, $data);
     }
 }

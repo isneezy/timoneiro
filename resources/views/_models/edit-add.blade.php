@@ -48,7 +48,7 @@
                             <label class="block">
                                 <span class="block font-bold block mb-2 cursor-pointer">{{ $field->display_name }}</span>
                                 <div>
-                                    {!! Timoneiro::formField($field, $dataType, $data) !!}
+                                    {!! $field->render($data, $dataType) !!}
                                     @if($errors->has($field->name))
                                         <p class="text-danger mt-1">{{ $errors->first($field->name) }}</p>
                                     @endif
