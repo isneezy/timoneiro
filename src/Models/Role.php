@@ -21,6 +21,10 @@ class Role extends Model
         return $this->hasMany($class);
     }
 
+    public function getPermissionsListDisplayAttribute() {
+        return implode(', ', $this->permissions);
+    }
+
     public function __toString()
     {
         return $this->display_name;

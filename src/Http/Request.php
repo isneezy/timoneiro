@@ -58,9 +58,9 @@ class Request extends FormRequest
         $paramName = Str::snake(Str::camel(Str::singular($this->dataType->slug)));
         $id = $this->route($paramName);
         $table = app($this->dataType->model_name)->getTable();
-        $isUpdate = $this->action === 'update' && $id;
+        $isUpdate = $this->action === 'edit' && $id;
 
-        if (!in_array($this->action, ['create', 'update']) || $this->isMethod('get')) {
+        if ($this->isMethod('get')) {
             return [];
         }
 
