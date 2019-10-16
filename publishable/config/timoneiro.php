@@ -14,7 +14,7 @@ return [
     ],
     'settings' => [
         'General' => [
-            'logo' => ['type' => 'file']
-        ]
+            'logo' => ['type' => 'file'],
+        ],
     ],
 ];
