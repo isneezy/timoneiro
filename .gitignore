@@ -4,3 +4,7 @@ node_modules/
 .idea/
 
 vendor/
+
+publishable/
+
+*.json
