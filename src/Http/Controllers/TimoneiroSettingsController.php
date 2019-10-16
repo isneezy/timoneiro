@@ -5,6 +5,7 @@ namespace Isneezy\Timoneiro\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Isneezy\Timoneiro\DataType\DataTypeField;
+use Isneezy\Timoneiro\DataType\Service;
 use Isneezy\Timoneiro\Models\Setting;
 
 class TimoneiroSettingsController extends Controller
@@ -27,9 +28,11 @@ class TimoneiroSettingsController extends Controller
         $active = $request->get('_group');
         $settings = $this->getSettings($active);
         $data = $this->queryData($settings, false);
+        $service = app(Service::class);
 
         foreach ($settings as $setting) {
-            $value = $this->getContentBasedOnType($request, 'settings', $setting);
+            /** @var Service $service */
+            $value = $service->getContentBasedOnType($request->all(), 'settings', $setting, $data);
             $data = $data->get($setting->name);
             $data->value = $value;
             $data->save();

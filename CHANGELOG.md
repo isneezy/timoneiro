@@ -13,3 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ability to browse, create and update models
 - Media manager
 - file input handler
+
+### Changed
+- Login screen design

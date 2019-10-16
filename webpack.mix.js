@@ -31,7 +31,6 @@ mix.setPublicPath('./')
     require('tailwindcss'),
     require('autoprefixer'),
   ])
-  .copy('resources/assets/images', 'publishable/assets/images')
 
 mix.version()
 
