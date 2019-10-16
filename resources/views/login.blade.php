@@ -10,22 +10,31 @@
     <link rel="stylesheet" type="text/css" href="{{ timoneiro_assets('css/style.css') }}">
     @include('timoneiro::theme')
 </head>
-<body class="bg-light">
-<div class="flex h-screen justify-center items-center">
-    <div class="w-full max-w-xs mx-2">
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="{{ route('timoneiro.login') }}"
+<body class="bg-white flex">
+<div class="w-4/6 min-h-screen bg-no-repeat bg-cover" style='background-image: url("{{ timoneiro_assets('images/bg.jpg') }}")'></div>
+<div class="flex-1 mx-2 flex items-center">
+    <div class="w-full">
+        <form class="px-8 pt-6 pb-8 mb-4" action="{{ route('timoneiro.login') }}"
               method="post">
             {{ csrf_field() }}
+
+            <h1 class="flex justify-center mb-8">
+                <a href="{{ route('timoneiro.dashboard') }}">
+                    <img class="text-center" src="{{ timoneiro_assets('images/logo.svg') }}" alt="{{ config('app.name')  }}">
+                </a>
+            </h1>
+            <p class="text-center text-gray-500 text-sm mb-8">Enter your email address and password to access admin panel.</p>
+
             <div class="mb-4">
                 <label class="block text-secondary text-sm font-bold mb-2" for="username">
-                    Email
+                    Enter your email
                 </label>
                 <input
-                    class="shadow appearance-none border border-light  @if($errors->has('email')) border-danger @endif rounded w-full py-2 px-3 text-dark leading-tight focus:outline-none focus:shadow-outline"
-                    id="username" name="email"
-                    type="text"
-                    placeholder="example@email.com"
-                    value="{{ old('email') }}"
+                        class="@if($errors->has('email')) border-danger @endif block w-full py-2 px-3 text-sm text-dark bg-white rounded border focus:border-gray-500"
+                        id="username" name="email"
+                        type="text"
+                        placeholder="example@email.com"
+                        value="{{ old('email') }}"
                 />
                 @if($errors->has('email'))
                     <p class="text-red-500 text-xs italic mt-3">{{ $errors->first('email') }}</p>
@@ -36,28 +45,25 @@
                     Password
                 </label>
                 <input
-                    class="shadow appearance-none border border-light  @if($errors->has('password')) border-danger @endif rounded w-full py-2 px-3 text-dark leading-tight focus:outline-none focus:shadow-outline"
-                    id="password" name="password"
-                    type="password"
-                    placeholder="******************"
+                        class="@if($errors->has('password')) border-danger @endif  block w-full py-2 px-3 text-sm text-dark bg-white rounded border focus:border-gray-500"
+                        id="password" name="password"
+                        type="password"
+                        placeholder="******************"
                 />
                 @if($errors->has('password'))
                     <p class="text-red-500 text-xs italic mt-3">{{ $errors->first('password') }}</p>
                 @endif
             </div>
-            <div class="flex items-center justify-between">
-                <button
-                    class="bg-info text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            <button
+                    class="w-full bg-primary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit">
-                    Sign In
-                </button>
-                <a class="inline-block align-baseline font-bold text-sm text-primary hover:text-info" href="#">
-                    Forgot Password?
-                </a>
-            </div>
+                Sign In
+            </button>
         </form>
-        <p class="text-center text-gray-500 text-xs">
-            &copy;2019 Acme Corp. All rights reserved.
+        <p class="text-center text-gray-500 text-xs mb-10">
+            <a class="inline-block align-baseline text-sm hover:text-primary" href="#">
+                Forgot Password?
+            </a>
         </p>
     </div>
 </div>
