@@ -12,8 +12,8 @@ class RoleDataType extends AbstractDataType
     public $icon_class = 'mdi mdi-lock';
     public $list_display = ['name', 'display_name'];
     public $rules = [
-        'name' => 'required|unique:roles|alpha_dash|max:254',
-        'display_name' => 'required|max:254'
+        'name'         => 'required|unique:roles|alpha_dash|max:254',
+        'display_name' => 'required|max:254',
     ];
 
     public function __construct(array $options = [])
@@ -28,14 +28,14 @@ class RoleDataType extends AbstractDataType
             return array_map(function ($permission) {
                 return [
                     'value' => $permission,
-                    'label' => Str::ucfirst(str_replace('_', ' ', $permission))
+                    'label' => Str::ucfirst(str_replace('_', ' ', $permission)),
                 ];
             }, $permissions);
         });
 
         $this->options['field_set']['permissions'] = array_merge($filed, [
-            'type' => 'select_multiple',
-            'options' => $permissions
+            'type'    => 'select_multiple',
+            'options' => $permissions,
         ]);
 
         return parent::getFieldSetOption($this->options['field_set']);

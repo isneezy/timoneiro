@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
-use Isneezy\Timoneiro\Models\User;
 
 class Request extends FormRequest
 {
@@ -48,7 +47,8 @@ class Request extends FormRequest
         return $this->dataType;
     }
 
-    public function getAction() {
+    public function getAction()
+    {
         return $this->action;
     }
 

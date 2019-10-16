@@ -118,7 +118,9 @@ class Service implements ServiceInterface
     public function insertOrUpdate(array $data, $slug, $filedSet, $model)
     {
         foreach ($filedSet as $key => $field) {
-             if (!$field->persist) continue;
+            if (!$field->persist) {
+                continue;
+            }
             $content = $this->getContentBasedOnType($data, $slug, $field, $model);
             $model->{$field->name} = $content;
         }

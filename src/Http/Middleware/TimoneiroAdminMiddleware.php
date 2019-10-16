@@ -27,7 +27,8 @@ class TimoneiroAdminMiddleware
         return redirect()->route('timoneiro.login');
     }
 
-    public function isInstalledOnRoot() {
+    public function isInstalledOnRoot()
+    {
         return route('timoneiro.dashboard') === url('/');
     }
 }

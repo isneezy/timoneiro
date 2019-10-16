@@ -21,7 +21,7 @@ abstract class AbstractAction implements ActionInterface
      * AbstractAction constructor.
      *
      * @param AbstractDataType $dataType
-     * @param Model $data
+     * @param Model            $data
      */
     public function __construct(AbstractDataType $dataType, $data)
     {

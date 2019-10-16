@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\Contracts;
 
-
 interface User
 {
     public function role();

@@ -14,20 +14,22 @@ class AdminCommand extends Command
 
     protected $description = 'Make sure there is  a user  with the admin role that has all of the necessary permissions.';
 
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
-            ['create', null, InputOption::VALUE_NONE, 'Create an admin user', null]
+            ['create', null, InputOption::VALUE_NONE, 'Create an admin user', null],
         ];
     }
 
     protected function getArguments()
     {
         return [
-            ['email', InputOption::VALUE_REQUIRED, 'The email of the user.', null]
+            ['email', InputOption::VALUE_REQUIRED, 'The email of the user.', null],
         ];
     }
 
-    public function handle() {
+    public function handle()
+    {
         Timoneiro::permissions();
         $user = $this->getUser($this->option('create'));
 
@@ -48,18 +50,21 @@ class AdminCommand extends Command
         $user->save();
     }
 
-    protected function getAdminRole() {
+    protected function getAdminRole()
+    {
         $role = Role::where(['name' => 'admin'])->firstOrNew([]);
         if (!$role->exists) {
             $role->forceFill([
-                'name' => 'admin',
-                'display_name' => 'Administrator'
+                'name'         => 'admin',
+                'display_name' => 'Administrator',
             ])->save();
         }
+
         return $role;
     }
 
-    protected function getUser($create) {
+    protected function getUser($create)
+    {
         $email = $this->argument('email');
         $model = config('auth.providers.users.model');
 
@@ -74,11 +79,13 @@ class AdminCommand extends Command
 
             if ($password != $confirmPassword) {
                 $this->info('Passwords do not match');
-                return null;
+
+                return;
             }
 
             $this->info('Creating admin account');
             $password = Hash::make($password);
+
             return $model::create(compact('name', 'email', 'password'));
         }
 

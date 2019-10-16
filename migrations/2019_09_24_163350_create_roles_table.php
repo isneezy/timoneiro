@@ -40,6 +40,5 @@ class CreateRolesTable extends Migration
         });
 
         Schema::drop('roles');
-
     }
 }

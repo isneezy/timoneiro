@@ -37,8 +37,8 @@ class Timoneiro
         'System' => [
             'browse_admin',
             'browse_media',
-            'browse_settings'
-        ]
+            'browse_settings',
+        ],
     ];
 
     public function loadDataTypes()
@@ -90,19 +90,22 @@ class Timoneiro
 
     /**
      * @param string $group
-     * @param array $permissions
+     * @param array  $permissions
      */
-    public function mergePermissions($group, array $permissions) {
+    public function mergePermissions($group, array $permissions)
+    {
         $_permissions = Arr::get($this->permissions, $group, []);
         $permissions = collect(array_merge($_permissions, $permissions))->flatten()->all();
         $this->permissions[$group] = $permissions;
     }
 
-    public function permissions($grouped = false) {
+    public function permissions($grouped = false)
+    {
         $permissions = collect($this->permissions);
         if (!$grouped) {
             return collect($this->permissions)->flatten();
         }
+
         return $permissions;
     }
 

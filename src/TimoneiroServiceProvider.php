@@ -2,8 +2,8 @@
 
 namespace Isneezy\Timoneiro;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ class TimoneiroServiceProvider extends ServiceProvider
     protected $gates = [
         'browse_admin',
         'browse_media',
-        'browse_settings'
+        'browse_settings',
     ];
 
     /**
@@ -78,7 +78,8 @@ class TimoneiroServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(dirname(__DIR__).'/publishable/config/timoneiro.php', 'timoneiro');
     }
 
-    public function loadAuth() {
+    public function loadAuth()
+    {
         // DataType Policies
         foreach (TimoneiroFacade::dataTypes() as $dataType) {
             $policyClass = BasePolicy::class;
@@ -92,21 +93,21 @@ class TimoneiroServiceProvider extends ServiceProvider
         // Gates
         foreach ($this->gates as $gate) {
             Gate::define($gate, function (User $user) use ($gate) {
-               return $user->hasPermission($gate);
+                return $user->hasPermission($gate);
             });
         }
 
         // permissions
         foreach (TimoneiroFacade::dataTypes() as $dataType) {
-            /** @var AbstractDataType $dataType */
+            /* @var AbstractDataType $dataType */
             TimoneiroFacade::mergePermissions($dataType->display_name_plural, [
                 [
                     "browse_$dataType->slug",
                     "read_$dataType->slug",
                     "edit_$dataType->slug",
                     "add_$dataType->slug",
-                    "delete_$dataType->slug"
-                ]
+                    "delete_$dataType->slug",
+                ],
             ]);
         }
     }

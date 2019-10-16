@@ -2,12 +2,10 @@
 
 namespace Isneezy\Timoneiro\Policies;
 
-
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
 use Isneezy\Timoneiro\Contracts\User;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
-use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\Facades\Timoneiro;
 
 class BasePolicy
@@ -31,16 +29,20 @@ class BasePolicy
 
     /**
      * Check if user has an associated permission.
-     * @param User $user
-     * @param Model $model
+     *
+     * @param User   $user
+     * @param Model  $model
      * @param string $action
+     *
      * @return mixed
      */
-    protected function checkPermission($user, $model, $action) {
+    protected function checkPermission($user, $model, $action)
+    {
         $dataType = collect(Timoneiro::dataTypes())->reduce(function ($value, AbstractDataType $dataType) use ($model) {
             if ($dataType->model_name === get_class($model)) {
                 return $dataType;
-            };
+            }
+
             return $value;
         });
 

@@ -59,9 +59,11 @@ class InstallCommand extends Command
         }
     }
 
-    protected function extendUserModel() {
+    protected function extendUserModel()
+    {
         $userModel = config('auth.providers.users.model');
         $this->info("Attempting to set Timoneiro User Model as parent to $userModel");
+
         try {
             $path = (new \ReflectionClass($userModel))->getFileName();
             $str = file_get_contents($path);

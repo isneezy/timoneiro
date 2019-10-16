@@ -13,6 +13,7 @@ class Password extends BaseType
         if ($password) {
             return Hash::make($password);
         }
+
         return $this->model->password;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Isneezy\Timoneiro\Traits;
 
-
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Validation\UnauthorizedException;
 use Isneezy\Timoneiro\Facades\Timoneiro;
@@ -13,7 +12,6 @@ use Isneezy\Timoneiro\Models\Role;
  */
 trait TimoneiroUser
 {
-
     /**
      * @return BelongsTo
      */
@@ -27,6 +25,7 @@ trait TimoneiroUser
         if ($role = $this->role) {
             return $role->name === $name;
         }
+
         return false;
     }
 
@@ -38,6 +37,7 @@ trait TimoneiroUser
             $this->role()->associate($role);
             $this->save();
         }
+
         return $this;
     }
 
@@ -47,6 +47,7 @@ trait TimoneiroUser
         if ($role) {
             return in_array($name, $role->permissions ?? []);
         }
+
         return false;
     }
 
@@ -55,6 +56,7 @@ trait TimoneiroUser
         if (!$this->hasPermission($name)) {
             throw new UnauthorizedException(null);
         }
+
         return true;
     }
 

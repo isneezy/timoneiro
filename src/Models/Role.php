@@ -16,12 +16,15 @@ class Role extends Model
 
     protected $hidden = ['id'];
 
-    public function users() {
+    public function users()
+    {
         $class = Timoneiro::dataType('users')->model_name;
+
         return $this->hasMany($class);
     }
 
-    public function getPermissionsListDisplayAttribute() {
+    public function getPermissionsListDisplayAttribute()
+    {
         return implode(', ', $this->permissions);
     }
 
