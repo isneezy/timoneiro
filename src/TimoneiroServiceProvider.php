@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\Commands\AdminCommand;
 use Isneezy\Timoneiro\Commands\InstallCommand;
+use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroDataTypeMiddleware;
@@ -93,6 +94,20 @@ class TimoneiroServiceProvider extends ServiceProvider
             Gate::define($gate, function (User $user) use ($gate) {
                return $user->hasPermission($gate);
             });
+        }
+
+        // permissions
+        foreach (TimoneiroFacade::dataTypes() as $dataType) {
+            /** @var AbstractDataType $dataType */
+            TimoneiroFacade::mergePermissions($dataType->display_name_plural, [
+                [
+                    "browse_$dataType->slug",
+                    "read_$dataType->slug",
+                    "edit_$dataType->slug",
+                    "add_$dataType->slug",
+                    "delete_$dataType->slug"
+                ]
+            ]);
         }
     }
 

@@ -24,11 +24,13 @@ class RoleDataType extends AbstractDataType
     public function getFieldSetOption($value)
     {
         $filed = $this->options['field_set']['permissions'];
-        $permissions = Timoneiro::permissions()->map(function ($permission) {
-            return [
-                'value' => $permission,
-                'label' => Str::ucfirst(str_replace('_', ' ', $permission))
-            ];
+        $permissions = Timoneiro::permissions(true)->map(function ($permissions) {
+            return array_map(function ($permission) {
+                return [
+                    'value' => $permission,
+                    'label' => Str::ucfirst(str_replace('_', ' ', $permission))
+                ];
+            }, $permissions);
         });
 
         $this->options['field_set']['permissions'] = array_merge($filed, [

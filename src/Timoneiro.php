@@ -33,6 +33,14 @@ class Timoneiro
         RestoreAction::class,
     ];
 
+    protected $permissions = [
+        'System' => [
+            'browse_admin',
+            'browse_media',
+            'browse_settings'
+        ]
+    ];
+
     public function loadDataTypes()
     {
         if (!$this->isDataTypesLoaded) {
@@ -80,20 +88,22 @@ class Timoneiro
         require __DIR__.'/../routes/routes.php';
     }
 
-    public function permissions() {
-        return collect($this->dataTypes())->map(function (AbstractDataType $dataType) {
-            return [
-                "browse_$dataType->slug",
-                "read_$dataType->slug",
-                "edit_$dataType->slug",
-                "add_$dataType->slug",
-                "delete_$dataType->slug"
-            ];
-        })->flatten()->merge([
-            'browse_admin',
-            'browse_media',
-            'browse_settings'
-        ]);
+    /**
+     * @param string $group
+     * @param array $permissions
+     */
+    public function mergePermissions($group, array $permissions) {
+        $_permissions = Arr::get($this->permissions, $group, []);
+        $permissions = collect(array_merge($_permissions, $permissions))->flatten()->all();
+        $this->permissions[$group] = $permissions;
+    }
+
+    public function permissions($grouped = false) {
+        $permissions = collect($this->permissions);
+        if (!$grouped) {
+            return collect($this->permissions)->flatten();
+        }
+        return $permissions;
     }
 
     public function view($name, array $params = [])
