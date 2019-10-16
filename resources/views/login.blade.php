@@ -20,7 +20,10 @@
 
             <h1 class="flex justify-center mb-8">
                 <a href="{{ route('timoneiro.dashboard') }}">
-                    <img class="text-center" src="{{ timoneiro_assets('images/logo.svg') }}" alt="{{ config('app.name')  }}">
+                    @php
+                        $logoUrl = Timoneiro::setting('logo', timoneiro_assets('images/logo.svg'))
+                    @endphp
+                    <img class="text-center" src="{{ $logoUrl }}" alt="{{ config('app.name')  }}">
                 </a>
             </h1>
             <p class="text-center text-gray-500 text-sm mb-8">Enter your email address and password to access admin panel.</p>
