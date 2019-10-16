@@ -4,6 +4,7 @@ namespace Isneezy\Timoneiro\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Isneezy\Timoneiro\TimoneiroServiceProvider;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 
@@ -25,8 +26,15 @@ class InstallCommand extends Command
      */
     public function handle(Filesystem $filesystem)
     {
+        $this->info('Publishing the Timoneiro assets, database, and config files');
+        // publish only relevant resources on install
+        $tags = ['config'];
+        $this->call('vendor:publish', ['--provider' => TimoneiroServiceProvider::class, '--tag' => $tags]);
+
         $this->info('Migrating database tables into your application');
         $this->call('migrate', ['--force' => $this->option('force')]);
+
+        $this->extendUserModel();
 
         $this->dumpAutoload();
         $this->registerRoutes($filesystem);
@@ -48,6 +56,23 @@ class InstallCommand extends Command
                 base_path('routes/web.php'),
                 "\n\nRoute::group(['prefix' => 'admin'], function() {\n    Timoneiro::routes();\n});\n"
             );
+        }
+    }
+
+    protected function extendUserModel()
+    {
+        $userModel = config('auth.providers.users.model');
+        $this->info("Attempting to set Timoneiro User Model as parent to $userModel");
+
+        try {
+            $path = (new \ReflectionClass($userModel))->getFileName();
+            $str = file_get_contents($path);
+            $str = str_replace('extends Authenticatable', "extends \Isneezy\Timoneiro\Models\User", $str);
+
+            file_put_contents($path, $str);
+        } catch (\Exception $e) {
+            $this->warn("Unable to set Timoneiro User Model as parent to $userModel");
+            $this->warn('You will need to update this manually.  Change "extends Authenticatable" to "extends \Isneezy\Timoneiro\Models\User" in your User model');
         }
     }
 

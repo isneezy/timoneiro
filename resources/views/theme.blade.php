@@ -1,5 +1,5 @@
 <!-- default theming -->
-<style type="text/css">
+<style>
     :root {
         --color-primary: #6658dd;
         --color-secondary: #6c757d;

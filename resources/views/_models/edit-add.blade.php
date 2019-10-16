@@ -46,11 +46,13 @@
                     <div class="px-2 {{ $field->class ?? "w-full" }}">
                         <div class="mb-6">
                             <label class="block">
-                                <div class="font-bold block mb-2 cursor-pointer">{{ $field->display_name }}</div>
-                                {!! Timoneiro::formField($field, $dataType, $data) !!}
-                                @if($errors->has($field->name))
-                                    <p class="text-danger mt-1">{{ $errors->first($field->name) }}</p>
-                                @endif
+                                <span class="block font-bold block mb-2 cursor-pointer">{{ $field->display_name }}</span>
+                                <div>
+                                    {!! $field->render($data, $dataType) !!}
+                                    @if($errors->has($field->name))
+                                        <p class="text-danger mt-1">{{ $errors->first($field->name) }}</p>
+                                    @endif
+                                </div>
                             </label>
                         </div>
                     </div>

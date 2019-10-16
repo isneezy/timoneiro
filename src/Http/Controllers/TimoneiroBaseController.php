@@ -3,7 +3,6 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Isneezy\Timoneiro\Actions\AbstractAction;
@@ -23,31 +22,15 @@ class TimoneiroBaseController extends Controller
 
         /** @var Model $model */
         $model = app($dataType->model_name);
-        $request->check('index');
+        $request->check('browse');
         $search = $request->get('s');
 
         $dataType->removeRelationshipFields();
-        $query = $model->query();
 
-        if ($search) {
-            $searchable = array_keys($dataType->field_set);
-            $query->where(function (Builder $query) use ($search, $searchable) {
-                foreach ($searchable as $column) {
-                    $query->orWhere($column, 'LIKE', "%$search%");
-                }
-            });
-        }
-
-        foreach ($dataType->scopes as $scope) {
-            $query->{$scope}();
-        }
+        $data = $this->getService($dataType)->findAll($search, $request->all());
 
         $orderBy = request('sort.column', null);
         $sortOrder = request('sort.direction', null);
-
-        if ($orderBy && $sortOrder) {
-            $query->orderBy($orderBy, $sortOrder);
-        }
 
         $useSoftDeletes = false;
         $showSoftDeleted = false;
@@ -56,12 +39,10 @@ class TimoneiroBaseController extends Controller
             $useSoftDeletes = true;
             if ($request->get('showSoftDeleted')) {
                 $showSoftDeleted = true;
-                $query = $query->withTrashed();
             }
         }
 
-        $perPage = $request->get('limit', 10);
-        $data = $query->paginate($perPage);
+        $perPage = $data->perPage();
         $data->defaultView('timoneiro::pagination');
 
         // Actions
@@ -106,7 +87,7 @@ class TimoneiroBaseController extends Controller
         }
 
         $dataType->removeRelationshipFields('edit');
-        $data = $model->findOrFail($id);
+        $data = $this->getService($dataType)->find($id);
 
         $request->check('edit', $data);
 
@@ -135,11 +116,9 @@ class TimoneiroBaseController extends Controller
             $model = $model->{$scope}();
         }
 
-        /** @var Model $data */
-        $data = $model->findOrFail($id);
-
+        $data = $this->getService($dataType)->find($id);
         $request->check('edit', $data);
-        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
+        $this->getService($dataType)->update($data, $request->all());
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
@@ -150,9 +129,9 @@ class TimoneiroBaseController extends Controller
 
         $dataType->removeRelationshipFields('create');
         /** @var Model $data */
-        $data = app($dataType->model_name);
+        $data = $this->getService($dataType)->getModel();
 
-        $request->check('create', $data);
+        $request->check('add', $data);
         $view = 'timoneiro::_models.edit-add';
         if (view()->exists("timoneiro::{$dataType->slug}.edit-add")) {
             $view = "timoneiro::{$dataType->slug}.edit-add";
@@ -170,8 +149,8 @@ class TimoneiroBaseController extends Controller
     {
         $dataType = $request->getDataType();
 
-        $request->check('create');
-        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, app($dataType->model_name));
+        $request->check('add');
+        $this->getService($dataType)->create($request->all());
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }

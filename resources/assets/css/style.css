@@ -23,3 +23,4 @@
 li:not(:last-child) .page-link {
     @apply mr-3;
 }
+

@@ -1,6 +1,18 @@
 let mix = require('laravel-mix')
 require('laravel-mix-tailwind')
 
+mix.webpackConfig(webpack => {
+  return {
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+      })
+    ]
+  };
+});
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -14,6 +26,7 @@ require('laravel-mix-tailwind')
 
 mix.setPublicPath('./')
   .js('resources/assets/js/app.js', 'publishable/assets/js')
+  .sass('resources/assets/css/choices.scss', 'publishable/assets/css')
   .postCss('resources/assets/css/style.css', 'publishable/assets/css', [
     require('tailwindcss'),
     require('autoprefixer'),

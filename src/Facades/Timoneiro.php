@@ -3,6 +3,7 @@
 namespace Isneezy\Timoneiro\Facades;
 
 use Arrilot\Widgets\WidgetGroup;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\View\View;
 use Isneezy\Timoneiro\DataType\DataType;
@@ -13,6 +14,8 @@ use Isneezy\Timoneiro\DataType\DataType;
  * @method static DataType dataType($slug)
  * @method static void useDataType(DataType $dataType)
  * @method static void routes()
+ * @method static \Isneezy\Timoneiro\Timoneiro mergePermissions($group, array $permissions)
+ * @method static Collection permissions(bool $grouped)
  * @method static View view($name, array $params = [])
  * @method static array actions()
  * @method static void addActions($action)

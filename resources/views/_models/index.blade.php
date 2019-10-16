@@ -56,6 +56,12 @@
                     @foreach($data->items() as $item)
                         <tr class="bg-black hover:bg-gray-200  hover:text-gray-700">
                             @foreach($dataType->list_display as $column)
+                                @php
+                                    $item->casts = [];
+                                    if ($item->{$column.'_list_display'}) {
+                                        $item->{$column} = $item->{$column.'_list_display'};
+                                    }
+                                @endphp
                                 <td class="relative whitespace-no-wrap p-3 border-t">
                                     {{ $item->{$column} }}
                                 </td>

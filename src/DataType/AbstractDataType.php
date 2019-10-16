@@ -30,6 +30,7 @@ use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
  * @property FormRequest | array | null rules
  * @property FormRequest | array | null update_rules
  * @property FormRequest | array | null create_rules
+ * @property string $policy_name
  */
 class AbstractDataType
 {

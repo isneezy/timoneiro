@@ -3,6 +3,7 @@
 namespace Isneezy\Timoneiro\Http\Middleware;
 
 use Illuminate\Foundation\Application;
+use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\Facades\Timoneiro;
 use Isneezy\Timoneiro\Http\Request;
 
@@ -26,6 +27,7 @@ class TimoneiroDataTypeMiddleware
         $request->attachDataType(Timoneiro::dataType($slug));
 
         $this->app->instance(Request::class, $request);
+        $this->app->instance(AbstractDataType::class, Timoneiro::dataType($slug));
 
         return $next($request);
     }
