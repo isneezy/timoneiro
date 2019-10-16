@@ -188,14 +188,14 @@ class TimoneiroMediaController extends Controller
 
     protected function filterMimeTypes($files, $mimeTypes)
     {
-        if(in_array('*', $mimeTypes)) {
+        if (in_array('*', $mimeTypes)) {
             return $files;
         }
+
         return collect($files)->filter(function ($file) use ($mimeTypes) {
             if ($file['type'] === 'folder' || in_array($file['type'], $mimeTypes)) {
                 return true;
             }
-
         })->all();
     }
 }

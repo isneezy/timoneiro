@@ -18,6 +18,6 @@ return [
         ],
     ],
     'media' => [
-        'mime_types' => ['*']
-    ]
+        'mime_types' => ['*'],
+    ],
 ];
