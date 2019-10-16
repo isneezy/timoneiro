@@ -24,12 +24,15 @@ mix.webpackConfig(webpack => {
  |
  */
 
-mix.js('resources/assets/js/app.js', 'publishable/assets/js')
+mix.setPublicPath('./')
+  .js('resources/assets/js/app.js', 'publishable/assets/js')
   .sass('resources/assets/css/choices.scss', 'publishable/assets/css')
   .postCss('resources/assets/css/style.css', 'publishable/assets/css', [
     require('tailwindcss'),
     require('autoprefixer'),
   ])
+
+mix.version()
 
 // Full API
 // mix.js(src, output);

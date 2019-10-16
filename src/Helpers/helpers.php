@@ -69,7 +69,17 @@ if (!function_exists('starts_with')) {
 if (!function_exists('timoneiro_assets')) {
     function timoneiro_assets($name, $secure = null)
     {
-        return route('timoneiro.assets').'?path='.urlencode($name);
+        $name = str_start($name, '/');
+        $basePath = '/publishable/assets';
+        $manifest = json_decode(file_get_contents(__DIR__.'/../../mix-manifest.json'), true);
+        $compiled = \Illuminate\Support\Arr::get($manifest, "{$basePath}{$name}", '');
+        $version = substr($compiled, strpos($compiled, 'id=') + 3);
+        $route = route('timoneiro.assets').'?path='.urlencode($name);
+        if ($version) {
+            $route = $route."&version=$version";
+        }
+
+        return $route;
     }
 }
 

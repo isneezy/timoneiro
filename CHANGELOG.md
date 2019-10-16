@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - command to create admin user `php artisan timoneiro:admin --create your@email.com`
 - release helper yarn command (`yarn release -V` for more info)
 - ability to browse, create and update models
+- Media manager
+- file input handler
 
 ### Changed
 - Login screen design
