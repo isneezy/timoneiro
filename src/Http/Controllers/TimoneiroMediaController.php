@@ -59,6 +59,8 @@ class TimoneiroMediaController extends Controller
             })
             ->all();
 
+        $files = $this->filterMimeTypes($files, explode(',', $request->get('mime_types')));
+
         return response()->json($files);
     }
 
@@ -182,5 +184,18 @@ class TimoneiroMediaController extends Controller
         }
 
         return response()->json(compact('success', 'message'));
+    }
+
+    protected function filterMimeTypes($files, $mimeTypes)
+    {
+        if(in_array('*', $mimeTypes)) {
+            return $files;
+        }
+        return collect($files)->filter(function ($file) use ($mimeTypes) {
+            if ($file['type'] === 'folder' || in_array($file['type'], $mimeTypes)) {
+                return true;
+            }
+
+        })->all();
     }
 }

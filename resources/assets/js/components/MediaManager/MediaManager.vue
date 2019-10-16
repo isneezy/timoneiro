@@ -1,6 +1,7 @@
 <template>
   <div class="bg-white rounded overflow-hidden">
     <MediaManagerToolbar
+      :mime-types="mimeTypes"
       :base-path="basePath"
       :current="currentFolder"
       :selected="selectedFile"
@@ -54,6 +55,7 @@
     props: {
       basePath: { required: true, type: String },
       chooser: { type: Boolean, default: false },
+      mimeTypes: { type: Array, required: true }
     },
     data: () => ({
       files: [],
@@ -81,7 +83,8 @@
         this.currentFolder = folder
         try {
           this.loading = true
-          const response = await fetch(`${this.basePath}/files?folder=${folder}`)
+          const mimeTypes = encodeURIComponent(this.mimeTypes.join(','))
+          const response = await fetch(`${this.basePath}/files?folder=${folder}&mime_types=${mimeTypes}`)
           this.files = await response.json()
           this.selectedFile = null
         } finally {

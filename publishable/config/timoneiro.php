@@ -14,7 +14,10 @@ return [
     ],
     'settings' => [
         'General' => [
-            'logo' => ['type' => 'file'],
+            'logo' => ['type' => 'file', 'mime_types' => ['image/jpeg', 'image/svg+xml', 'image/png', 'image/gif']],
         ],
     ],
+    'media' => [
+        'mime_types' => ['*']
+    ]
 ];

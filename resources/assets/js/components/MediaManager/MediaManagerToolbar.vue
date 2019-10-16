@@ -5,7 +5,7 @@
         <button class="appearance-none bg-primary py-2 px-3 text-white rounded-l" @click="selectFiles">
           <i class="mdi mdi-upload"></i>
           <span>Upload</span>
-          <input ref="input" multiple type="file" class="hidden" @change="uploadFiles">
+          <input ref="input" multiple type="file" class="hidden" @change="uploadFiles" :accept="mimeTypes.join(',')">
         </button>
         <button class="appearance-none bg-primary py-2 px-3 text-white rounded-r -ml-1 border-l" @click="onCreateFolder">
           <i class="mdi mdi-folder-plus"></i>
@@ -45,7 +45,8 @@
     props: {
       current: { type: String, required: true, default: '' },
       basePath: { type: String, required: true },
-      selected: { type: Object, default: null }
+      selected: { type: Object, default: null },
+      mimeTypes: { type: Array, required: true }
     },
     data: () => ({
       progress: 0

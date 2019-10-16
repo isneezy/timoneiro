@@ -5,7 +5,13 @@
     <div class="flex flex-wrap -mx-2">
       <FileInputItem :key="index" v-for="(file, index) in files" :item="file" @remove="remove(file)"/>
     </div>
-    <FileChooser :base-path="basePath" :visible="chooserVisible" @change="onChange" @close="chooserVisible = false"/>
+    <FileChooser
+      :base-path="basePath"
+      :visible="chooserVisible"
+      :mime-types="mimeTypes"
+      @change="onChange"
+      @close="chooserVisible = false"
+    />
   </div>
 </template>
 
@@ -21,7 +27,8 @@
       name: {required: true},
       wrapperClass: {type: String, default: ''},
       basePath: {type: String},
-      multiple: {default: false, type: Boolean}
+      multiple: {default: false, type: Boolean},
+      mimeTypes: { default: ['*'], type: Array }
     },
     data: () => ({
       chooserVisible: false,
