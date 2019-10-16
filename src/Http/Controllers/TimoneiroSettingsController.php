@@ -11,6 +11,7 @@ class TimoneiroSettingsController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('browse_settings');
         $groups = array_keys(config('timoneiro.settings', []));
         $active = $request->get('group', Arr::first($groups));
         $settings = $this->getSettings($active);
@@ -22,6 +23,7 @@ class TimoneiroSettingsController extends Controller
 
     public function update(Request $request)
     {
+        $this->authorize('browse_settings');
         $active = $request->get('_group');
         $settings = $this->getSettings($active);
         $data = $this->queryData($settings, false);

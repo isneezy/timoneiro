@@ -2,7 +2,6 @@ import Vue from 'vue'
 import './components'
 
 window.$ = window.jQuery = require('jquery')
-require('datatables.net')
 
 $(document).ready(function () {
     const searchForm = $('#search-form')

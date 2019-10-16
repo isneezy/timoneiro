@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
+use Isneezy\Timoneiro\Models\User;
 
 class Request extends FormRequest
 {
@@ -47,11 +48,13 @@ class Request extends FormRequest
         return $this->dataType;
     }
 
+    public function getAction() {
+        return $this->action;
+    }
+
     public function authorize()
     {
-        // todo check for permission
-        // return auth()->user()->can($this->action, $this->model);
-        return true;
+        return $this->user()->can($this->action, $this->model);
     }
 
     public function rules()
@@ -59,9 +62,9 @@ class Request extends FormRequest
         $paramName = Str::snake(Str::camel(Str::singular($this->dataType->slug)));
         $id = $this->route($paramName);
         $table = app($this->dataType->model_name)->getTable();
-        $isUpdate = $this->action === 'update' && $id;
+        $isUpdate = $this->action === 'edit' && $id;
 
-        if (!in_array($this->action, ['create', 'update']) || $this->isMethod('get')) {
+        if ($this->isMethod('get')) {
             return [];
         }
 

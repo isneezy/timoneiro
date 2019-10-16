@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import DataTable from './DataTable'
+import FormSelect from './FormSelect'
 
-Vue.component('data-table', DataTable)
+Vue.component('form-select', FormSelect)

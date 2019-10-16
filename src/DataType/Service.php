@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
+use Isneezy\Timoneiro\Http\Controllers\ContentTypes\Password;
 use Isneezy\Timoneiro\Http\Controllers\ContentTypes\Text;
 
 class Service implements ServiceInterface
@@ -116,8 +117,9 @@ class Service implements ServiceInterface
      */
     public function insertOrUpdate(array $data, $slug, $filedSet, $model)
     {
-        foreach ($filedSet as $field) {
-            $content = $this->getContentBasedOnType($data, $slug, $field);
+        foreach ($filedSet as $key => $field) {
+             if (!$field->persist) continue;
+            $content = $this->getContentBasedOnType($data, $slug, $field, $model);
             $model->{$field->name} = $content;
         }
 
@@ -126,11 +128,13 @@ class Service implements ServiceInterface
         return $model;
     }
 
-    public function getContentBasedOnType(array $data, $slug, $field)
+    public function getContentBasedOnType(array $data, $slug, $field, $model)
     {
         switch ($field->type) {
+            case 'password':
+                return (new Password($data, $slug, $field, $model))->handle();
             default:
-                return (new Text($data, $slug, $field))->handle();
+                return (new Text($data, $slug, $field, $model))->handle();
         }
     }
 }

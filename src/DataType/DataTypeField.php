@@ -5,6 +5,8 @@ namespace Isneezy\Timoneiro\DataType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Isneezy\Timoneiro\DataType\Traits\HasOptions;
+use Isneezy\Timoneiro\Facades\Timoneiro;
+use Isneezy\Timoneiro\Traits\Renderable;
 
 /**
  * Class DataTypeField.
@@ -12,6 +14,7 @@ use Isneezy\Timoneiro\DataType\Traits\HasOptions;
  * @property string name
  * @property string display_name
  * @property string placeholder
+ * @property bool persist
  */
 class DataTypeField
 {
@@ -69,5 +72,19 @@ class DataTypeField
         }
 
         return $options;
+    }
+
+    public function getPersistOption($value) {
+        return is_bool($value) ? $value : true;
+    }
+
+    /**
+     * Renders the form field
+     * @param AbstractDataType $dataType
+     * @param $data
+     * @return string
+     */
+    public function render($data, AbstractDataType $dataType = null) {
+        return Timoneiro::formField($this, $dataType, $data);
     }
 }

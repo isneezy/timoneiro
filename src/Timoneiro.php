@@ -14,6 +14,8 @@ use Isneezy\Timoneiro\Actions\ViewAction;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\DataType\DataTypeField;
+use Isneezy\Timoneiro\DataType\RoleDataType;
+use Isneezy\Timoneiro\DataType\UserDataType;
 use Isneezy\Timoneiro\FormFields\HandlerInterface;
 use Isneezy\Timoneiro\Models\Setting;
 use Isneezy\Timoneiro\Widgets\BaseDimmer;
@@ -31,6 +33,14 @@ class Timoneiro
         RestoreAction::class,
     ];
 
+    protected $permissions = [
+        'System' => [
+            'browse_admin',
+            'browse_media',
+            'browse_settings'
+        ]
+    ];
+
     public function loadDataTypes()
     {
         if (!$this->isDataTypesLoaded) {
@@ -38,6 +48,8 @@ class Timoneiro
                 $dataType = DataType::make($model);
                 $this->useDataType($dataType);
             }
+            $this->useDataType(new UserDataType());
+            $this->useDataType(new RoleDataType());
         }
     }
 
@@ -74,6 +86,24 @@ class Timoneiro
     public function routes()
     {
         require __DIR__.'/../routes/routes.php';
+    }
+
+    /**
+     * @param string $group
+     * @param array $permissions
+     */
+    public function mergePermissions($group, array $permissions) {
+        $_permissions = Arr::get($this->permissions, $group, []);
+        $permissions = collect(array_merge($_permissions, $permissions))->flatten()->all();
+        $this->permissions[$group] = $permissions;
+    }
+
+    public function permissions($grouped = false) {
+        $permissions = collect($this->permissions);
+        if (!$grouped) {
+            return collect($this->permissions)->flatten();
+        }
+        return $permissions;
     }
 
     public function view($name, array $params = [])
