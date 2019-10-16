@@ -26,6 +26,11 @@ class InstallCommand extends Command
      */
     public function handle(Filesystem $filesystem)
     {
+        $this->info('Publishing the Timoneiro assets, database, and config files');
+        // publish only relevant resources on install
+        $tags = ['config'];
+        $this->call('vendor:publish', ['--provider' => TimoneiroServiceProvider::class, '--tag' => $tags]);
+
         $this->info('Migrating database tables into your application');
         $this->call('migrate', ['--force' => $this->option('force')]);
 
