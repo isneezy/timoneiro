@@ -8,6 +8,7 @@
     <a
       v-if="hover"
       href="javascript:void(0)"
+      @click="$emit('remove')"
       class="
         flex z-10 h-6 w-6 rounded-full bg-danger absolute top-0 right-0
         justify-center items-center -my-2 -mx-1 shadow text-white
