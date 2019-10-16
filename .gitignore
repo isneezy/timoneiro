@@ -4,3 +4,7 @@ node_modules/
 .idea/
 
 vendor/
+
+mix-manifest.json
+
+publishable/assets/
