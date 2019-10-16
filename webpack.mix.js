@@ -30,7 +30,6 @@ mix.js('resources/assets/js/app.js', 'publishable/assets/js')
     require('tailwindcss'),
     require('autoprefixer'),
   ])
-  .copy('resources/assets/images', 'publishable/assets/images')
 
 // Full API
 // mix.js(src, output);

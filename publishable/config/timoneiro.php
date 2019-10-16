@@ -12,5 +12,9 @@ return [
             \Isneezy\Timoneiro\Widgets\UserDimmer::class,
         ],
     ],
-    'settings' => [],
+    'settings' => [
+        'General' => [
+            'logo' => ['type' => 'file']
+        ]
+    ],
 ];
