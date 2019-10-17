@@ -31,11 +31,10 @@ class TimoneiroSettingsController extends Controller
         $service = app(Service::class);
 
         foreach ($settings as $setting) {
-            /** @var Service $service */
             $value = $service->getContentBasedOnType($request->all(), 'settings', $setting, $data);
-            $data = $data->get($setting->name);
-            $data->value = $value;
-            $data->save();
+            $setting = $data->get($setting->name);
+            $setting->value = $value;
+            $setting->save();
         }
 
         $redirect = $request->fullUrlWithQuery(['group' => $active]);
