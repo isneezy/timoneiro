@@ -56,7 +56,7 @@ abstract class AbstractAction implements ActionInterface
     {
         $result = '';
         foreach ($this->getAttributes() as $key => $attribute) {
-            $result .= $key.'="'.$attribute.'"';
+            $result .= $key.'="'.$attribute.'" ';
         }
 
         return $result;

@@ -39,6 +39,12 @@ interface ServiceInterface
     public function create(array $data);
 
     /**
+     * @param array | integer | $ids
+     * @return mixed
+     */
+    public function destroy($ids);
+
+    /**
      * @return AbstractDataType
      */
     public function getDataType();

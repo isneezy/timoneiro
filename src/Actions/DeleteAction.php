@@ -19,8 +19,9 @@ class DeleteAction extends AbstractAction
     public function getAttributes()
     {
         return [
-            'class'   => 'inline-block px-1 text-gray-500 hover:text-danger',
+            'class'   => 'inline-block px-1 text-gray-500 hover:text-danger delete-single',
             'data-id' => $this->data->getKey(),
+            'data-action' => route("timoneiro.{$this->dataType->slug}.destroy", $this->data->getKey()),
             'id'      => 'delete-'.$this->data->getKey(),
         ];
     }
