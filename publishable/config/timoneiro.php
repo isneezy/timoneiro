@@ -19,6 +19,6 @@ return [
     ],
     'media' => [
         'show_hidden_files' => false,
-        'mime_types' => ['*'],
+        'mime_types'        => ['*'],
     ],
 ];

@@ -203,8 +203,9 @@ class TimoneiroMediaController extends Controller
     protected function filterHiddenFiles($files)
     {
         $showHiddenFiles = config('timoneiro.media.show_hidden_files', false);
+
         return collect($files)->filter(function ($file) use ($showHiddenFiles) {
-            return !Str::startsWith($file['relative_path'], '.') || $showHiddenFiles ;
+            return !Str::startsWith($file['relative_path'], '.') || $showHiddenFiles;
         })->all();
     }
 }
