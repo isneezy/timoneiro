@@ -67,7 +67,7 @@ function updateReadme () {
 }
 
 function commit(version) {
-  execSync(`git commit -m "release v ${version}"`)
+  execSync(`git commit -m "release v${version}"`)
   execSync(`git tag -a v${version} -m v${version}`)
 }
 
