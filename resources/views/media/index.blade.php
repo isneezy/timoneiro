@@ -14,5 +14,6 @@
         :allow-move="true"
         :allow-rename="true"
         :allow-delete="true"
+        :mime-types="{{ json_encode(config('timoneiro.media.mime_types')) }}"
     ></media-manager>
 @endsection

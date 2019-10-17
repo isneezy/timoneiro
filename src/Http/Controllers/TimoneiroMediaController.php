@@ -60,6 +60,7 @@ class TimoneiroMediaController extends Controller
             ->all();
 
         $files = $this->filterMimeTypes($files, explode(',', $request->get('mime_types')));
+        $files = $this->filterHiddenFiles($files);
 
         return response()->json($files);
     }
@@ -196,6 +197,14 @@ class TimoneiroMediaController extends Controller
             if ($file['type'] === 'folder' || in_array($file['type'], $mimeTypes)) {
                 return true;
             }
+        })->all();
+    }
+
+    protected function filterHiddenFiles($files)
+    {
+        $showHiddenFiles = config('timoneiro.media.show_hidden_files', false);
+        return collect($files)->filter(function ($file) use ($showHiddenFiles) {
+            return !Str::startsWith($file['relative_path'], '.') || $showHiddenFiles ;
         })->all();
     }
 }
