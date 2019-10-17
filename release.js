@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const pkg = require('./package')
 const { spawn, execSync } = require('child_process')
+const { readFileSync, writeFileSync } = require('fs')
 
 function buildAssets () {
   const prod = spawn('yarn', ['prod'])
@@ -20,8 +21,8 @@ function buildAssets () {
   })
 }
 
-function release (program) {
-  const arguments = ['version']
+function updatePackageVersion (program) {
+  const arguments = ['version', '--no-git-tag-version']
   if (program.type) {
     arguments.push(`--${program.type}`)
   }
@@ -46,11 +47,28 @@ function release (program) {
       if (code !== 0) {
         return reject(code)
       } else {
-
+        execSync('git add package.json')
         return resolve(code)
       }
     })
   })
+}
+
+function updateReadme () {
+  const version = require('./package').version
+  const content = readFileSync('CHANGELOG.md', 'utf8')
+  const today = new Date()
+  const pad = (value) => `${value}`.padStart(2, '0')
+  const unreleased = '## [Unreleased]'
+  const dateString = `${today.getUTCFullYear()}-${pad(today.getUTCMonth())}-${pad(today.getUTCDate())}`
+  writeFileSync('CHANGELOG.md', content.replace(unreleased, `${unreleased}\n\n## [${version}] - ${dateString}`))
+  execSync('git add CHANGELOG.md')
+  return version
+}
+
+function commit(version) {
+  execSync(`git commit -m "release v ${version}"`)
+  execSync(`git tag -a v${version} -m v${version}`)
 }
 
 const program = require('commander')
@@ -61,4 +79,8 @@ program.option('-a, --alpha', 'flag it as a alpha release')
 program.option('-b --beta', 'flag it as a beta release')
 
 program.parse(process.argv)
-buildAssets().then(() => release(program))
+
+buildAssets()
+  .then(() => updatePackageVersion(program))
+  .then(updateReadme)
+  .then(commit)
