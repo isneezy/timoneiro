@@ -33,7 +33,8 @@ module.exports = {
                 'top-bar-h': theme('spacing.top-bar-h')
             }),
             minWidth: theme => ({
-                8: theme('spacing.8')
+                8: theme('spacing.8'),
+                40: theme('spacing.40')
             })
         },
     },
