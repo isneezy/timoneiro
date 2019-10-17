@@ -9,6 +9,7 @@ $namespacePrefix = '\\'.config('timoneiro.controllers.namespace').'\\';
 Route::group(['as' => 'timoneiro.', 'namespace' => $namespacePrefix], function () {
     Route::get('login', 'AuthController@showLoginForm')->name('login');
     Route::post('login', 'AuthController@login')->name('loginPost');
+    Route::post('logout', 'AuthController@logout')->name('logout');
 
     Route::group(['middleware' => 'admin.user'], function () {
         Route::get('/', 'TimoneiroController@index')->name('dashboard');
