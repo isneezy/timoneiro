@@ -16,10 +16,12 @@ class Service implements ServiceInterface
     {
         $query = $this->newQuery();
         if ($keyword) {
-            $searchable = array_keys($this->getDataType()->field_set);
+            $searchable = $this->getDataType()->field_set;
             $query->where(function (Builder $query) use ($keyword, $searchable) {
                 foreach ($searchable as $column) {
-                    $query->orWhere($column, 'LIKE', "%$keyword%");
+                    if ($column->persist) {
+                        $query->orWhere($column->name, 'LIKE', "%$keyword%");
+                    }
                 }
             });
         }
