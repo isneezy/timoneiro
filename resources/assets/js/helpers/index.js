@@ -45,11 +45,7 @@ export function initNotifications() {
   let timeout = 0
   messages.forEach(message => {
     setTimeout(() => {
-      pushNotification({
-        id: uuidv4(),
-        timeOut: 5000,
-        ...message
-      })
+      pushNotification(message)
     }, timeout)
     timeout += 350
   })

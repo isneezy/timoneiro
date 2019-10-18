@@ -43,6 +43,7 @@
   import MediaManagerContentList from './MediaManagerContentList'
   import MediaManagerBreadCrumb from './MediaManagerBreadCrumb'
   import MediaFileInfo from './MediaFileInfo'
+  import { notification } from '../../helpers/notifications'
 
   export default {
     name: 'MediaManager',
@@ -107,6 +108,7 @@
               new_folder
             })
           })
+          notification().success().message('Successfully created folder.').toast()
           await this.changeDir(this.currentFolder)
         }finally {
           this.loading = false

@@ -15,6 +15,7 @@
   import { ref, computed } from '@vue/composition-api'
   import Toast from './Toast'
   import { onNotify } from '../../helpers'
+  import { uuidv4 } from '../../utils'
 
   export default {
     name: 'ToastNotifications',
@@ -23,7 +24,11 @@
       const items = ref([])
 
       onNotify(pushNotification => {
-        items.value.push(pushNotification)
+        items.value.push({
+          id: uuidv4(),
+          timeOut: 5000,
+          ...pushNotification
+        })
       })
 
       const notifications = computed(() => {
