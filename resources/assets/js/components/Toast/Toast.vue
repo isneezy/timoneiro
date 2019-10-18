@@ -1,5 +1,5 @@
 <template>
-  <div :id="`toast-${notification.id}`" class="w-56 relative card bg-white shadow rounded mb-2 overflow-hidden">
+  <div :id="`toast-${notification.id}`" class="w-64 relative card bg-white shadow rounded mb-2 overflow-hidden">
     <div class="flex items-center border-l-4 px-4 py-2 pl-0" :class="className">
       <div class="w-10 text-center text-xl">
         <i class="mdi mdi-check"></i>

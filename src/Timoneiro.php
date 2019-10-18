@@ -7,6 +7,7 @@ use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Isneezy\Timoneiro\Actions\DeleteAction;
 use Isneezy\Timoneiro\Actions\EditAction;
 use Isneezy\Timoneiro\Actions\RestoreAction;
@@ -191,6 +192,7 @@ class Timoneiro
 
     public function pushNotification($message, $title = null, $type = 'success')
     {
+        $notifications = Session::get('messages', []);
         switch ($type) {
             case 'warning':
                 $variant = 'warning';
@@ -205,12 +207,17 @@ class Timoneiro
                 $title = $title ?? 'Good job!';
         }
 
-        array_push($this->notifications, compact('message', 'type', 'title', 'variant'));
+        array_push($notifications, compact('message', 'type', 'title', 'variant'));
+        Session::put('messages', $notifications);
         return $this;
     }
 
-    public function notifications()
+    public function notifications($keep = false)
     {
-        return $this->notifications;
+        $notifications = Session::get('messages', []);
+        if (!$keep) {
+            Session::forget('messages');
+        }
+        return $notifications;
     }
 }

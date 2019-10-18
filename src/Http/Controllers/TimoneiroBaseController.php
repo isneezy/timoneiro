@@ -15,6 +15,7 @@ class TimoneiroBaseController extends Controller
      * @param Request $request
      *
      * @return Factory|\Illuminate\View\View
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Request $request)
     {
@@ -76,6 +77,12 @@ class TimoneiroBaseController extends Controller
         return Timoneiro::view($view, $viewData);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\View\View
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function edit(Request $request, $id)
     {
         $dataType = $request->getDataType();
@@ -105,6 +112,7 @@ class TimoneiroBaseController extends Controller
      * @param $id
      *
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -120,9 +128,15 @@ class TimoneiroBaseController extends Controller
         $request->check('edit', $data);
         $this->getService($dataType)->update($data, $request->all());
 
+        Timoneiro::pushNotification("Successfully Updated $dataType->display_name_singular");
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\View\View
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function create(Request $request)
     {
         $dataType = $request->getDataType();
@@ -144,6 +158,7 @@ class TimoneiroBaseController extends Controller
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -152,9 +167,16 @@ class TimoneiroBaseController extends Controller
         $request->check('add');
         $this->getService($dataType)->create($request->all());
 
+        Timoneiro::pushNotification("Successfully Created $dataType->display_name_singular");
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function destroy(Request $request, $id)
     {
         $dataType = $request->getDataType();
@@ -162,13 +184,20 @@ class TimoneiroBaseController extends Controller
         $request->check('delete', $service->getModel());
         $ids = [];
 
+        $displayName = count($ids) > 1 ? $dataType->display_name_plural : $dataType->display_name_singular;
+
         if (empty($id)) {
             $ids = explode(',', $request->ids);
         } else {
             $ids[] = $id;
         }
 
-        $service->destroy($ids);
+        try {
+            $service->destroy($ids);
+            Timoneiro::pushNotification("Successfully deleted {$displayName}");
+        } catch (\Exception $e) {
+            Timoneiro::pushNotification("Sorry it appears there was a problem deleting this {$displayName}", null, 'error');
+        }
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
