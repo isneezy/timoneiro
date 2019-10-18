@@ -5,7 +5,9 @@ namespace Isneezy\Timoneiro\Http;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
+use Isneezy\Timoneiro\Facades\Timoneiro;
 
 class Request extends FormRequest
 {
@@ -29,14 +31,24 @@ class Request extends FormRequest
     }
 
     /**
-     * @param string $action
-     * @param null   $model
+     * @param $action
+     * @param null $model
+     *
+     * @throws ValidationException
      */
     public function check($action, $model = null)
     {
         $this->action = $action;
         $this->model = $model ?? app($this->dataType->model_name);
-        $this->validateResolved();
+
+        try {
+            $this->validateResolved();
+        } catch (ValidationException $e) {
+            $count = count($e->errors());
+            Timoneiro::pushNotification('There are errors in your form. Please review carefully and resubmit.', null, 'warning');
+
+            throw $e;
+        }
     }
 
     /**

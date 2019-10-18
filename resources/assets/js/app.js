@@ -4,7 +4,7 @@ import { onMounted } from '@vue/composition-api'
 import PortalVue from 'portal-vue'
 import axios from 'axios'
 import './components'
-import { initDeleteActions } from './helpers'
+import { initDeleteActions, initNotifications } from './helpers'
 
 window.$ = window.jQuery = require('jquery')
 
@@ -25,10 +25,12 @@ const app = new Vue({
   setup () {
     onMounted(() => {
       initDeleteActions()
+      initNotifications()
     })
   }
 })
 
 window.$app = app
 
+export const events = new Vue()
 

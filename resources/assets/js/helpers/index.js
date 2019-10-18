@@ -1,4 +1,5 @@
 import { alert } from './alert'
+import { uuidv4 } from '../utils'
 
 export function initDeleteActions () {
   const root = document.querySelector('#app')
@@ -26,5 +27,26 @@ export function initDeleteActions () {
         form.submit()
       }
     })
+  })
+}
+
+/*---- Notifications Helpers ------*/
+
+let onNotifyFn = () => {}
+
+export function onNotify (callback) {
+  onNotifyFn = callback
+}
+
+export const pushNotification = (notification) => onNotifyFn(notification)
+
+export function initNotifications() {
+  const { messages } = window.timoneiro
+  let timeout = 0
+  messages.forEach(message => {
+    setTimeout(() => {
+      pushNotification(message)
+    }, timeout)
+    timeout += 350
   })
 }
