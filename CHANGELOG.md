@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Delete functionality
 - package auto discovery
 
+### Fixed
+- Issue where settings where not being saved when there where multiple fields #16
+
 ## [0.0.1-alpha.1] - 2019-09-17
 ### Added
 - authorization system
