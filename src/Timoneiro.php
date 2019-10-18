@@ -32,6 +32,7 @@ class Timoneiro
         DeleteAction::class,
         RestoreAction::class,
     ];
+    protected $notifications = [];
 
     protected $permissions = [
         'System' => [
@@ -186,5 +187,25 @@ class Timoneiro
         }
 
         return $dimmers;
+    }
+
+    public function pushNotification($message, $title = null, $type = 'success') {
+        if (empty($title)) {
+            switch ($type) {
+                default:
+                    $title = 'Good job!';
+            }
+        }
+
+        array_push($this->notifications, [
+            'text' => $message,
+            'title' => $title,
+            'type' => $type
+        ]);
+        return $this;
+    }
+
+    public function notifications () {
+        return $this->notifications;
     }
 }

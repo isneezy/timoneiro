@@ -28,3 +28,21 @@ export function initDeleteActions () {
     })
   })
 }
+
+let onNotifyFn = () => {}
+export function onNotify (callback) {
+  onNotifyFn = callback
+}
+
+export const pushNotification = (notification) => onNotifyFn(notification)
+
+export function initNotifications() {
+  const { message } = window.timoneiro
+  if (message) {
+    pushNotification({
+      id: new Date().toUTCString(),
+      timeOut: 5000,
+      ...message
+    })
+  }
+}
