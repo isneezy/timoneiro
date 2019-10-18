@@ -5,7 +5,6 @@ namespace Isneezy\Timoneiro\Http\Controllers;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Response;
 use Isneezy\Timoneiro\Actions\AbstractAction;
 use Isneezy\Timoneiro\Facades\Timoneiro;
 use Isneezy\Timoneiro\Http\Request;
@@ -156,7 +155,8 @@ class TimoneiroBaseController extends Controller
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $dataType = $request->getDataType();
         $service = $this->getService($dataType);
         $request->check('delete', $service->getModel());

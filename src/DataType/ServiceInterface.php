@@ -40,6 +40,7 @@ interface ServiceInterface
 
     /**
      * @param array | integer | $ids
+     *
      * @return mixed
      */
     public function destroy($ids);

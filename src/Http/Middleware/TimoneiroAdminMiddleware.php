@@ -3,9 +3,6 @@
 namespace Isneezy\Timoneiro\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\View\View;
 use Isneezy\Timoneiro\Models\User;
 
 class TimoneiroAdminMiddleware

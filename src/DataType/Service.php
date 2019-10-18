@@ -71,10 +71,12 @@ class Service implements ServiceInterface
         return $this->insertOrUpdate($data, $dataType->slug, $dataType->field_set, $this->getModel());
     }
 
-    public function destroy($ids) {
+    public function destroy($ids)
+    {
         if (!is_array($ids)) {
             $ids = [$ids];
         }
+
         return $this->getModel()->destroy($ids);
     }
 
