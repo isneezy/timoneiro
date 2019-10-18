@@ -86,12 +86,12 @@ class Timoneiro
 
     public function routes()
     {
-        require __DIR__.'/../routes/routes.php';
+        require __DIR__ . '/../routes/routes.php';
     }
 
     /**
      * @param string $group
-     * @param array  $permissions
+     * @param array $permissions
      */
     public function mergePermissions($group, array $permissions)
     {
@@ -133,8 +133,8 @@ class Timoneiro
 
     /**
      * @param DataTypeField $field
-     * @param DataType      $dataType
-     * @param Model         $data
+     * @param DataType $dataType
+     * @param Model $data
      *
      * @throws ErrorException
      *
@@ -189,23 +189,28 @@ class Timoneiro
         return $dimmers;
     }
 
-    public function pushNotification($message, $title = null, $type = 'success') {
-        if (empty($title)) {
-            switch ($type) {
-                default:
-                    $title = 'Good job!';
-            }
+    public function pushNotification($message, $title = null, $type = 'success')
+    {
+        switch ($type) {
+            case 'warning':
+                $variant = 'warning';
+                $title = $title ?? 'Attention!';
+                break;
+            case 'error':
+                $title = $title ?? 'Oops!';
+                $variant = 'danger';
+                break;
+            default:
+                $variant =  $variant ?? 'success';
+                $title = $title ?? 'Good job!';
         }
 
-        array_push($this->notifications, [
-            'text' => $message,
-            'title' => $title,
-            'type' => $type
-        ]);
+        array_push($this->notifications, compact('message', 'type', 'title', 'variant'));
         return $this;
     }
 
-    public function notifications () {
+    public function notifications()
+    {
         return $this->notifications;
     }
 }

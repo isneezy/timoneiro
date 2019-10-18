@@ -1,4 +1,5 @@
 import { alert } from './alert'
+import { uuidv4 } from '../utils'
 
 export function initDeleteActions () {
   const root = document.querySelector('#app')
@@ -29,7 +30,10 @@ export function initDeleteActions () {
   })
 }
 
+/*---- Notifications Helpers ------*/
+
 let onNotifyFn = () => {}
+
 export function onNotify (callback) {
   onNotifyFn = callback
 }
@@ -37,12 +41,16 @@ export function onNotify (callback) {
 export const pushNotification = (notification) => onNotifyFn(notification)
 
 export function initNotifications() {
-  const { message } = window.timoneiro
-  if (message) {
-    pushNotification({
-      id: new Date().toUTCString(),
-      timeOut: 5000,
-      ...message
-    })
-  }
+  const { messages } = window.timoneiro
+  let timeout = 0
+  messages.forEach(message => {
+    setTimeout(() => {
+      pushNotification({
+        id: uuidv4(),
+        timeOut: 5000,
+        ...message
+      })
+    }, timeout)
+    timeout += 350
+  })
 }

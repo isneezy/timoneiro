@@ -23,7 +23,6 @@
       const items = ref([])
 
       onNotify(pushNotification => {
-        console.log(pushNotification)
         items.value.push(pushNotification)
       })
 
@@ -32,7 +31,7 @@
       })
 
       function close(notification) {
-        // todo implement
+        items.value = items.value.filter(item => item.id !== notification.id)
       }
 
       return { notifications, close }

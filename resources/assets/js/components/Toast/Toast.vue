@@ -1,19 +1,19 @@
 <template>
-  <div :id="`toast-${notification.id}`" class="w-42 relative card bg-white shadow rounded p-5 mb-2">
-    <div class="card-body no-gutters row" :class="className">
-      <div class="col-2 align-self-center text-center text-success">
-        <!--<Icon :icon="icon" :class="className" />-->
+  <div :id="`toast-${notification.id}`" class="w-56 relative card bg-white shadow rounded mb-2 overflow-hidden">
+    <div class="flex items-center border-l-4 px-4 py-2 pl-0" :class="className">
+      <div class="w-10 text-center text-xl">
+        <i class="mdi mdi-check"></i>
       </div>
-      <div class="col-10 row no-gutters">
-        <div class="col-12 text-bold mt-1">
+      <div class="flex-1">
+        <h5 class="font-bold text-dark">
           {{ notification.title }}
-        </div>
-        <div class="col-12 text-muted mb-1">
+        </h5>
+        <div class="text-secondary">
           {{ notification.message }}
         </div>
       </div>
-      <div class="close" @click="close">
-        <!--<Icon icon="close" />-->
+      <div class="absolute top-0 right-0 h-8 w-8 flex items-center justify-center cursor-pointer text-base text-danger" @click="close">
+        <i class="mdi mdi-close"></i>
       </div>
     </div>
   </div>
@@ -29,19 +29,17 @@
         type: Object
       }
     },
-    setup(props) {
+    setup(props, { emit }) {
       let timer = null
       const className = computed(() => {
         const className = {}
-        className[`toast-${props.notification.variant}`] = !!props.notification
-          .variant
-        className[`text-${props.notification.variant}`] = !!props.notification
-          .variant
+        className[`border-${props.notification.variant}`] = true
+        className[`text-${props.notification.variant}`] = true
         return className
       })
 
       function close() {
-        this.$emit('close')
+        emit('close')
       }
 
       onMounted(() => {
@@ -58,36 +56,3 @@
     }
   }
 </script>
-
-<!--<style lang="scss" scoped>-->
-  <!--@import '~assets/scss/design';-->
-  <!--.card {-->
-    <!--border: none;-->
-    <!--width: 20rem;-->
-    <!--position: relative;-->
-    <!--.card-body {-->
-      <!--padding: 0.4rem;-->
-      <!--&.toast-success {-->
-        <!--border-left: 6px solid $success;-->
-      <!--}-->
-      <!--&.toast-warning {-->
-        <!--border-left: 6px solid $warning;-->
-      <!--}-->
-      <!--&.toast-info {-->
-        <!--border-left: 6px solid $info;-->
-      <!--}-->
-      <!--&.toast-danger {-->
-        <!--border-left: 6px solid $danger;-->
-      <!--}-->
-      <!--.close {-->
-        <!--position: absolute;-->
-        <!--top: 0.2rem;-->
-        <!--right: 0.5rem;-->
-        <!--cursor: pointer;-->
-        <!--font-size: 1rem;-->
-        <!--width: 50px;-->
-        <!--text-align: center;-->
-      <!--}-->
-    <!--}-->
-  <!--}-->
-<!--</style>-->
