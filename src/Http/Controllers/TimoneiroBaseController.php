@@ -154,4 +154,22 @@ class TimoneiroBaseController extends Controller
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
+
+    public function destroy(Request $request, $id)
+    {
+        $dataType = $request->getDataType();
+        $service = $this->getService($dataType);
+        $request->check('delete', $service->getModel());
+        $ids = [];
+
+        if (empty($id)) {
+            $ids = explode(',', $request->ids);
+        } else {
+            $ids[] = $id;
+        }
+
+        $service->destroy($ids);
+
+        return redirect()->route("timoneiro.{$dataType->slug}.index");
+    }
 }

@@ -64,7 +64,7 @@ class Request extends FormRequest
         $table = app($this->dataType->model_name)->getTable();
         $isUpdate = $this->action === 'edit' && $id;
 
-        if ($this->isMethod('get')) {
+        if ($this->isMethod('get') || $this->isMethod('delete')) {
             return [];
         }
 
