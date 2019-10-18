@@ -41,7 +41,13 @@
         </div>
     </div>
     <portal-target name="modals" multiple></portal-target>
+    <toast-notifications></toast-notifications>
 </div>
+<script>
+    const timoneiro = {}
+    timoneiro.messages = {!! json_encode(Timoneiro::notifications()) !!}
+    window.timoneiro  = timoneiro
+</script>
 <script src="{{ timoneiro_assets('/js/app.js') }}"></script>
 </body>
 </html>
