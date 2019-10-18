@@ -87,12 +87,12 @@ class Timoneiro
 
     public function routes()
     {
-        require __DIR__ . '/../routes/routes.php';
+        require __DIR__.'/../routes/routes.php';
     }
 
     /**
      * @param string $group
-     * @param array $permissions
+     * @param array  $permissions
      */
     public function mergePermissions($group, array $permissions)
     {
@@ -134,8 +134,8 @@ class Timoneiro
 
     /**
      * @param DataTypeField $field
-     * @param DataType $dataType
-     * @param Model $data
+     * @param DataType      $dataType
+     * @param Model         $data
      *
      * @throws ErrorException
      *
@@ -203,12 +203,13 @@ class Timoneiro
                 $variant = 'danger';
                 break;
             default:
-                $variant =  $variant ?? 'success';
+                $variant = $variant ?? 'success';
                 $title = $title ?? 'Good job!';
         }
 
         array_push($notifications, compact('message', 'type', 'title', 'variant'));
         Session::put('messages', $notifications);
+
         return $this;
     }
 
@@ -218,6 +219,7 @@ class Timoneiro
         if (!$keep) {
             Session::forget('messages');
         }
+
         return $notifications;
     }
 }

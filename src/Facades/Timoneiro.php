@@ -26,7 +26,6 @@ use Isneezy\Timoneiro\DataType\DataType;
  * @method static WidgetGroup dimmers()
  * @method static static pushNotification($message, $title = null, $type = 'success')
  * @method static array notifications()
- *
  */
 class Timoneiro extends Facade
 {

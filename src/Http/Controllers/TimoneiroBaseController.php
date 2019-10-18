@@ -14,8 +14,9 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      *
-     * @return Factory|\Illuminate\View\View
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -80,8 +81,10 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      * @param $id
-     * @return \Illuminate\View\View
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\View\View
      */
     public function edit(Request $request, $id)
     {
@@ -111,8 +114,9 @@ class TimoneiroBaseController extends Controller
      * @param Request $request
      * @param $id
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -129,13 +133,16 @@ class TimoneiroBaseController extends Controller
         $this->getService($dataType)->update($data, $request->all());
 
         Timoneiro::pushNotification("Successfully Updated $dataType->display_name_singular");
+
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\View\View
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\View\View
      */
     public function create(Request $request)
     {
@@ -157,8 +164,9 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -168,14 +176,17 @@ class TimoneiroBaseController extends Controller
         $this->getService($dataType)->create($request->all());
 
         Timoneiro::pushNotification("Successfully Created $dataType->display_name_singular");
+
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
     /**
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {

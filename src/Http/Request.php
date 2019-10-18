@@ -30,21 +30,23 @@ class Request extends FormRequest
         return $this;
     }
 
-
     /**
      * @param $action
      * @param null $model
+     *
      * @throws ValidationException
      */
     public function check($action, $model = null)
     {
         $this->action = $action;
         $this->model = $model ?? app($this->dataType->model_name);
+
         try {
             $this->validateResolved();
         } catch (ValidationException $e) {
             $count = count($e->errors());
-            Timoneiro::pushNotification("There are errors in your form. Please review carefully and resubmit.", null, 'warning');
+            Timoneiro::pushNotification('There are errors in your form. Please review carefully and resubmit.', null, 'warning');
+
             throw $e;
         }
     }
