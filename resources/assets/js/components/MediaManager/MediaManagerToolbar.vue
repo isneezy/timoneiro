@@ -40,6 +40,8 @@
 
 <script>
   import axios from 'axios'
+  import { notification } from '../../helpers/notifications'
+
   export default {
     name: 'MediaManagerToolbar',
     props: {
@@ -74,6 +76,7 @@
           onUploadProgress: this.onDownloadProgress,
         })
         this.progress = 0
+        notification().success().message('Successfully uploaded file(s).').toast()
         this.$emit('refresh')
       },
       onUploadProgress(e) {
@@ -90,6 +93,7 @@
             file: this.selected,
             name
           })
+          notification().success().message('Successfully renamed file.').toast()
           this.$emit('refresh')
         }
       },
@@ -101,6 +105,7 @@
             files: [this.selected],
             destination
           })
+          notification().success().message('Successfully moved file.').toast()
           this.$emit('refresh')
         }
       },
@@ -111,6 +116,7 @@
             path: this.current,
             files: [this.selected]
           })
+          notification().success().message('Successfully deleted file.').toast()
           this.$emit('refresh')
         }
       }

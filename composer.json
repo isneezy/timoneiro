@@ -22,5 +22,12 @@
     },
     "require-dev": {
         "laravel/framework": "^6.0"
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Isneezy\\Timoneiro\\TimoneiroServiceProvider"
+        ]
+      }
     }
 }

@@ -7,6 +7,7 @@ use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Isneezy\Timoneiro\Actions\DeleteAction;
 use Isneezy\Timoneiro\Actions\EditAction;
 use Isneezy\Timoneiro\Actions\RestoreAction;
@@ -32,6 +33,7 @@ class Timoneiro
         DeleteAction::class,
         RestoreAction::class,
     ];
+    protected $notifications = [];
 
     protected $permissions = [
         'System' => [
@@ -186,5 +188,38 @@ class Timoneiro
         }
 
         return $dimmers;
+    }
+
+    public function pushNotification($message, $title = null, $type = 'success')
+    {
+        $notifications = Session::get('messages', []);
+        switch ($type) {
+            case 'warning':
+                $variant = 'warning';
+                $title = $title ?? 'Attention!';
+                break;
+            case 'error':
+                $title = $title ?? 'Oops!';
+                $variant = 'danger';
+                break;
+            default:
+                $variant = $variant ?? 'success';
+                $title = $title ?? 'Good job!';
+        }
+
+        array_push($notifications, compact('message', 'type', 'title', 'variant'));
+        Session::put('messages', $notifications);
+
+        return $this;
+    }
+
+    public function notifications($keep = false)
+    {
+        $notifications = Session::get('messages', []);
+        if (!$keep) {
+            Session::forget('messages');
+        }
+
+        return $notifications;
     }
 }
