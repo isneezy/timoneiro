@@ -172,6 +172,7 @@ class Timoneiro
         }
 
         $value = Arr::get($this->settings, $key);
+
         return empty($value) ? $default : $value;
     }
 
