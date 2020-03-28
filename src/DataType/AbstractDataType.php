@@ -33,7 +33,8 @@ use Isneezy\Timoneiro\Http\Controllers\Traits\RelationShipParser;
  */
 class AbstractDataType
 {
-    use HasOptions, RelationShipParser;
+    use HasOptions;
+    use RelationShipParser;
 
     protected $table = [];
 

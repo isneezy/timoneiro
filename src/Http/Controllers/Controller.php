@@ -11,7 +11,9 @@ use Isneezy\Timoneiro\Http\Controllers\ContentTypes\Text;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     public function getSlug(Request $request)
     {
