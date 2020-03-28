@@ -12,14 +12,15 @@ Todo document
 Todo document
 ### Settings
 ```php
-[
+<?php
+return [
     'settings' => [
         'Exchange Rates' => [
-          'exchange-rate-usd' => ['type' => 'text', 'display_name' => 'USD']
-          'exchange-rate-zar' => ['type' => 'text',  'display_name' => 'ZAR']
-        ]
-    ]
-]
+          'exchange-rate-usd' => ['type' => 'text', 'display_name' => 'USD'],
+          'exchange-rate-zar' => ['type' => 'text',  'display_name' => 'ZAR'],
+        ],
+    ],
+];
 ```
 You can configure some variables/settings that your application will need to use and a panel with 
 editing capabilities will be generated so you can manage your settings.  
