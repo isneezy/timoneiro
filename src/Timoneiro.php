@@ -171,7 +171,8 @@ class Timoneiro
             }
         }
 
-        return Arr::get($this->settings, $key, $default);
+        $value = Arr::get($this->settings, $key);
+        return empty($value) ? $default : $value;
     }
 
     public function dimmers()
