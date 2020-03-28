@@ -13,6 +13,7 @@
     <link href="https://unpkg.com/@mdi/font@4.4.95/css/materialdesignicons.min.css" rel="stylesheet">
 
     <!-- App css -->
+    <link rel="stylesheet" href="{{ timoneiro_assets('css/choices.css') }}">
     <link rel="stylesheet" href="{{ timoneiro_assets('css/style.css') }}">
 
     @include('timoneiro::theme')
@@ -39,7 +40,14 @@
             </div>
         </div>
     </div>
+    <portal-target name="modals" multiple></portal-target>
+    <toast-notifications></toast-notifications>
 </div>
-<script src="{{ timoneiro_assets('/js/app.js') }}" type="text/javascript"></script>
+<script>
+    const timoneiro = {}
+    timoneiro.messages = {!! json_encode(Timoneiro::notifications()) !!}
+    window.timoneiro  = timoneiro
+</script>
+<script src="{{ timoneiro_assets('/js/app.js') }}"></script>
 </body>
 </html>

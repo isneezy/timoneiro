@@ -3,16 +3,29 @@
 namespace Isneezy\Timoneiro;
 
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Isneezy\Timoneiro\Commands\AdminCommand;
 use Isneezy\Timoneiro\Commands\InstallCommand;
+use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\Facades\Timoneiro as TimoneiroFacade;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroAdminMiddleware;
 use Isneezy\Timoneiro\Http\Middleware\TimoneiroDataTypeMiddleware;
+use Isneezy\Timoneiro\Models\User;
+use Isneezy\Timoneiro\Policies\BasePolicy;
 
 class TimoneiroServiceProvider extends ServiceProvider
 {
+    protected $policies = [];
+
+    protected $gates = [
+        'browse_admin',
+        'browse_media',
+        'browse_settings',
+    ];
+
     /**
      * Register services.
      *
@@ -49,6 +62,8 @@ class TimoneiroServiceProvider extends ServiceProvider
         $router->aliasMiddleware('admin.user', TimoneiroAdminMiddleware::class);
         $router->aliasMiddleware('timoneiro', TimoneiroDataTypeMiddleware::class);
         $this->loadMigrationsFrom(realpath(__DIR__.'/../migrations'));
+
+        $this->loadAuth();
     }
 
     public function loadHelpers()
@@ -63,9 +78,43 @@ class TimoneiroServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(dirname(__DIR__).'/publishable/config/timoneiro.php', 'timoneiro');
     }
 
+    public function loadAuth()
+    {
+        // DataType Policies
+        foreach (TimoneiroFacade::dataTypes() as $dataType) {
+            $policyClass = BasePolicy::class;
+            if ($dataType->policy_name && $dataType->policy_name != '' && class_exists($dataType->policy_name)) {
+                $policyClass = $dataType->policy_name;
+            }
+            $this->policies[$dataType->model_name] = $policyClass;
+        }
+        $this->registerPolicies();
+
+        // Gates
+        foreach ($this->gates as $gate) {
+            Gate::define($gate, function (User $user) use ($gate) {
+                return $user->hasPermission($gate);
+            });
+        }
+
+        // permissions
+        foreach (TimoneiroFacade::dataTypes() as $dataType) {
+            /* @var AbstractDataType $dataType */
+            TimoneiroFacade::mergePermissions($dataType->display_name_plural, [
+                [
+                    "browse_$dataType->slug",
+                    "read_$dataType->slug",
+                    "edit_$dataType->slug",
+                    "add_$dataType->slug",
+                    "delete_$dataType->slug",
+                ],
+            ]);
+        }
+    }
+
     public function registerFormFields()
     {
-        $formFields = ['date', 'number', 'select_dropdown', 'text', 'text_area'];
+        $formFields = ['date', 'file', 'number', 'password', 'select_dropdown', 'select_multiple', 'text', 'text_area'];
 
         foreach ($formFields as $formField) {
             $class = Str::studly("{$formField}_handler");
@@ -77,7 +126,7 @@ class TimoneiroServiceProvider extends ServiceProvider
     {
         $path = sprintf('%s/publishable', dirname(__DIR__));
         $publishable = [
-            'timoneiro-config' => [
+            'config' => [
                 "{$path}/config/timoneiro.php" => config_path('timoneiro.php'),
             ],
         ];
@@ -90,5 +139,6 @@ class TimoneiroServiceProvider extends ServiceProvider
     private function registerConsoleCommands()
     {
         $this->commands(InstallCommand::class);
+        $this->commands(AdminCommand::class);
     }
 }

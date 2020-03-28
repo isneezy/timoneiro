@@ -29,9 +29,12 @@ class TimoneiroController extends Controller
             }
 
             $response = response(File::get($path), 200, ['Content-Type' => $mime]);
-            $response->setSharedMaxAge(31536000);
-            $response->setMaxAge(31536000);
-            $response->setExpires(new \DateTime('+1 year'));
+
+            if (app()->environment('production')) {
+                $response->setSharedMaxAge(31536000);
+                $response->setMaxAge(31536000);
+                $response->setExpires(new \DateTime('+1 year'));
+            }
 
             return $response;
         }

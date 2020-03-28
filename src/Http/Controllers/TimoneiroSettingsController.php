@@ -5,12 +5,14 @@ namespace Isneezy\Timoneiro\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Isneezy\Timoneiro\DataType\DataTypeField;
+use Isneezy\Timoneiro\DataType\Service;
 use Isneezy\Timoneiro\Models\Setting;
 
 class TimoneiroSettingsController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('browse_settings');
         $groups = array_keys(config('timoneiro.settings', []));
         $active = $request->get('group', Arr::first($groups));
         $settings = $this->getSettings($active);
@@ -22,15 +24,17 @@ class TimoneiroSettingsController extends Controller
 
     public function update(Request $request)
     {
+        $this->authorize('browse_settings');
         $active = $request->get('_group');
         $settings = $this->getSettings($active);
         $data = $this->queryData($settings, false);
+        $service = app(Service::class);
 
         foreach ($settings as $setting) {
-            $value = $this->getContentBasedOnType($request, 'settings', $setting);
-            $data = $data->get($setting->name);
-            $data->value = $value;
-            $data->save();
+            $value = $service->getContentBasedOnType($request->all(), 'settings', $setting, $data);
+            $setting = $data->get($setting->name);
+            $setting->value = $value;
+            $setting->save();
         }
 
         $redirect = $request->fullUrlWithQuery(['group' => $active]);

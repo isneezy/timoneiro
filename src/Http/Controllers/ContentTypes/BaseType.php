@@ -2,26 +2,30 @@
 
 namespace Isneezy\Timoneiro\Http\Controllers\ContentTypes;
 
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 use Isneezy\Timoneiro\DataType\DataTypeField;
 
 abstract class BaseType
 {
-    /**
-     * @var Request
-     */
-    protected $request;
     protected $slug;
     /**
      * @var DataTypeField
      */
     protected $field;
+    /**
+     * @var array
+     */
+    protected $data;
 
-    public function __construct(Request $request, $slug, $field)
+    /** @var Model */
+    protected $model;
+
+    public function __construct(array $data, $slug, $field, $model)
     {
-        $this->request = $request;
         $this->slug = $slug;
         $this->field = $field;
+        $this->data = $data;
+        $this->model = $model;
     }
 
     abstract public function handle();

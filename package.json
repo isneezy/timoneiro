@@ -1,6 +1,6 @@
 {
   "name": "@isneezy/timoneiro",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.4",
   "main": "index.js",
   "author": "Ivan Vilanculo<vilanculoivan@gmail.com>",
   "license": "MIT",
@@ -9,18 +9,28 @@
     "development": "cross-env NODE_ENV=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "yarn development --watch",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production webpack --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "prod": "yarn run production",
+    "production": "cross-env NODE_ENV=production webpack --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "release": "./release.js"
   },
   "dependencies": {
-    "datatables.net": "^1.10.19",
+    "@vue/composition-api": "^0.3.2",
+    "axios": "^0.19.0",
+    "choices.js": "^7.0.2",
     "jquery": "^3.4.1",
-    "vue": "^2.6.10"
+    "portal-vue": "^2.1.6",
+    "sweetalert2": "^8.18.4",
+    "vue": "^2.6.10",
+    "vue-click-outside": "^1.0.7"
   },
   "devDependencies": {
+    "commander": "^3.0.2",
     "cross-env": "^6.0.0",
     "laravel-mix": "^5.0.0",
     "laravel-mix-tailwind": "^0.1.0",
+    "resolve-url-loader": "3.1.0",
+    "sass": "^1.23.0",
+    "sass-loader": "^8.0.0",
     "tailwindcss": "^1.1.2",
     "vue-template-compiler": "^2.6.10"
   }

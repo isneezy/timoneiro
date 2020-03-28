@@ -3,7 +3,6 @@
 namespace Isneezy\Timoneiro\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Isneezy\Timoneiro\Actions\AbstractAction;
@@ -15,6 +14,8 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *
      * @return Factory|\Illuminate\View\View
      */
     public function index(Request $request)
@@ -23,31 +24,15 @@ class TimoneiroBaseController extends Controller
 
         /** @var Model $model */
         $model = app($dataType->model_name);
-        $request->check('index');
+        $request->check('browse');
         $search = $request->get('s');
 
         $dataType->removeRelationshipFields();
-        $query = $model->query();
 
-        if ($search) {
-            $searchable = array_keys($dataType->field_set);
-            $query->where(function (Builder $query) use ($search, $searchable) {
-                foreach ($searchable as $column) {
-                    $query->orWhere($column, 'LIKE', "%$search%");
-                }
-            });
-        }
-
-        foreach ($dataType->scopes as $scope) {
-            $query->{$scope}();
-        }
+        $data = $this->getService($dataType)->findAll($search, $request->all());
 
         $orderBy = request('sort.column', null);
         $sortOrder = request('sort.direction', null);
-
-        if ($orderBy && $sortOrder) {
-            $query->orderBy($orderBy, $sortOrder);
-        }
 
         $useSoftDeletes = false;
         $showSoftDeleted = false;
@@ -56,12 +41,10 @@ class TimoneiroBaseController extends Controller
             $useSoftDeletes = true;
             if ($request->get('showSoftDeleted')) {
                 $showSoftDeleted = true;
-                $query = $query->withTrashed();
             }
         }
 
-        $perPage = $request->get('limit', 10);
-        $data = $query->paginate($perPage);
+        $perPage = $data->perPage();
         $data->defaultView('timoneiro::pagination');
 
         // Actions
@@ -95,6 +78,14 @@ class TimoneiroBaseController extends Controller
         return Timoneiro::view($view, $viewData);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\View\View
+     */
     public function edit(Request $request, $id)
     {
         $dataType = $request->getDataType();
@@ -106,7 +97,7 @@ class TimoneiroBaseController extends Controller
         }
 
         $dataType->removeRelationshipFields('edit');
-        $data = $model->findOrFail($id);
+        $data = $this->getService($dataType)->find($id);
 
         $request->check('edit', $data);
 
@@ -123,6 +114,8 @@ class TimoneiroBaseController extends Controller
      * @param Request $request
      * @param $id
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
@@ -135,24 +128,31 @@ class TimoneiroBaseController extends Controller
             $model = $model->{$scope}();
         }
 
-        /** @var Model $data */
-        $data = $model->findOrFail($id);
-
+        $data = $this->getService($dataType)->find($id);
         $request->check('edit', $data);
-        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, $data);
+        $this->getService($dataType)->update($data, $request->all());
+
+        Timoneiro::pushNotification("Successfully Updated $dataType->display_name_singular");
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }
 
+    /**
+     * @param Request $request
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\View\View
+     */
     public function create(Request $request)
     {
         $dataType = $request->getDataType();
 
         $dataType->removeRelationshipFields('create');
         /** @var Model $data */
-        $data = app($dataType->model_name);
+        $data = $this->getService($dataType)->getModel();
 
-        $request->check('create', $data);
+        $request->check('add', $data);
         $view = 'timoneiro::_models.edit-add';
         if (view()->exists("timoneiro::{$dataType->slug}.edit-add")) {
             $view = "timoneiro::{$dataType->slug}.edit-add";
@@ -164,14 +164,51 @@ class TimoneiroBaseController extends Controller
     /**
      * @param Request $request
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $dataType = $request->getDataType();
 
-        $request->check('create');
-        $this->insertOrUpdateData($request, $dataType->slug, $dataType->field_set, app($dataType->model_name));
+        $request->check('add');
+        $this->getService($dataType)->create($request->all());
+
+        Timoneiro::pushNotification("Successfully Created $dataType->display_name_singular");
+
+        return redirect()->route("timoneiro.{$dataType->slug}.index");
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Request $request, $id)
+    {
+        $dataType = $request->getDataType();
+        $service = $this->getService($dataType);
+        $request->check('delete', $service->getModel());
+        $ids = [];
+
+        $displayName = count($ids) > 1 ? $dataType->display_name_plural : $dataType->display_name_singular;
+
+        if (empty($id)) {
+            $ids = explode(',', $request->ids);
+        } else {
+            $ids[] = $id;
+        }
+
+        try {
+            $service->destroy($ids);
+            Timoneiro::pushNotification("Successfully deleted {$displayName}");
+        } catch (\Exception $e) {
+            Timoneiro::pushNotification("Sorry it appears there was a problem deleting this {$displayName}", null, 'error');
+        }
 
         return redirect()->route("timoneiro.{$dataType->slug}.index");
     }

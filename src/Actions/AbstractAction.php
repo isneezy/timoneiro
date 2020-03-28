@@ -3,6 +3,7 @@
 namespace Isneezy\Timoneiro\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\DataType\DataType;
 
 abstract class AbstractAction implements ActionInterface
@@ -19,10 +20,10 @@ abstract class AbstractAction implements ActionInterface
     /**
      * AbstractAction constructor.
      *
-     * @param DataType $dataType
-     * @param Model    $data
+     * @param AbstractDataType $dataType
+     * @param Model            $data
      */
-    public function __construct(DataType $dataType, $data)
+    public function __construct(AbstractDataType $dataType, $data)
     {
         $this->dataType = $dataType;
         $this->data = $data;
@@ -55,7 +56,7 @@ abstract class AbstractAction implements ActionInterface
     {
         $result = '';
         foreach ($this->getAttributes() as $key => $attribute) {
-            $result .= $key.'="'.$attribute.'"';
+            $result .= $key.'="'.$attribute.'" ';
         }
 
         return $result;

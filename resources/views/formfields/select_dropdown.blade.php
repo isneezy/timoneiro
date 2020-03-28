@@ -18,10 +18,15 @@
     @endif
 @endif
 
-<select
+<form-select
     class="w-full py-2 px-3 font-semibold text-dark bg-white rounded border focus:border-gray-500 appearance-none"
-    name="{{ $field->name }}">
+    name="{{ $field->name }}"
+    placeholder="{{ $field->placeholder }}"
+>
     @foreach($field->options ?? [] as $option)
-        <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+        @php
+            $selected = $option['value'] == $selectedValue;
+        @endphp
+        <option @if($selected) selected @endif value="{{ $option['value'] }}">{{ $option['label'] }}</option>
     @endforeach
-</select>
+</form-select>

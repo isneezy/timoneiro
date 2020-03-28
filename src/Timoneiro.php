@@ -7,6 +7,7 @@ use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Isneezy\Timoneiro\Actions\DeleteAction;
 use Isneezy\Timoneiro\Actions\EditAction;
 use Isneezy\Timoneiro\Actions\RestoreAction;
@@ -14,6 +15,8 @@ use Isneezy\Timoneiro\Actions\ViewAction;
 use Isneezy\Timoneiro\DataType\AbstractDataType;
 use Isneezy\Timoneiro\DataType\DataType;
 use Isneezy\Timoneiro\DataType\DataTypeField;
+use Isneezy\Timoneiro\DataType\RoleDataType;
+use Isneezy\Timoneiro\DataType\UserDataType;
 use Isneezy\Timoneiro\FormFields\HandlerInterface;
 use Isneezy\Timoneiro\Models\Setting;
 use Isneezy\Timoneiro\Widgets\BaseDimmer;
@@ -30,6 +33,15 @@ class Timoneiro
         DeleteAction::class,
         RestoreAction::class,
     ];
+    protected $notifications = [];
+
+    protected $permissions = [
+        'System' => [
+            'browse_admin',
+            'browse_media',
+            'browse_settings',
+        ],
+    ];
 
     public function loadDataTypes()
     {
@@ -38,6 +50,8 @@ class Timoneiro
                 $dataType = DataType::make($model);
                 $this->useDataType($dataType);
             }
+            $this->useDataType(new UserDataType());
+            $this->useDataType(new RoleDataType());
         }
     }
 
@@ -74,6 +88,27 @@ class Timoneiro
     public function routes()
     {
         require __DIR__.'/../routes/routes.php';
+    }
+
+    /**
+     * @param string $group
+     * @param array  $permissions
+     */
+    public function mergePermissions($group, array $permissions)
+    {
+        $_permissions = Arr::get($this->permissions, $group, []);
+        $permissions = collect(array_merge($_permissions, $permissions))->flatten()->all();
+        $this->permissions[$group] = $permissions;
+    }
+
+    public function permissions($grouped = false)
+    {
+        $permissions = collect($this->permissions);
+        if (!$grouped) {
+            return collect($this->permissions)->flatten();
+        }
+
+        return $permissions;
     }
 
     public function view($name, array $params = [])
@@ -136,7 +171,9 @@ class Timoneiro
             }
         }
 
-        return Arr::get($this->settings, $key, $default);
+        $value = Arr::get($this->settings, $key);
+
+        return empty($value) ? $default : $value;
     }
 
     public function dimmers()
@@ -153,5 +190,38 @@ class Timoneiro
         }
 
         return $dimmers;
+    }
+
+    public function pushNotification($message, $title = null, $type = 'success')
+    {
+        $notifications = Session::get('messages', []);
+        switch ($type) {
+            case 'warning':
+                $variant = 'warning';
+                $title = $title ?? 'Attention!';
+                break;
+            case 'error':
+                $title = $title ?? 'Oops!';
+                $variant = 'danger';
+                break;
+            default:
+                $variant = $variant ?? 'success';
+                $title = $title ?? 'Good job!';
+        }
+
+        array_push($notifications, compact('message', 'type', 'title', 'variant'));
+        Session::put('messages', $notifications);
+
+        return $this;
+    }
+
+    public function notifications($keep = false)
+    {
+        $notifications = Session::get('messages', []);
+        if (!$keep) {
+            Session::forget('messages');
+        }
+
+        return $notifications;
     }
 }
